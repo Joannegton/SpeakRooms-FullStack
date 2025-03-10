@@ -20,6 +20,8 @@ module.exports = {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
+    'semi': ['error', 'never'],
+    'no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0 }],
+    'prettier/prettier': ['error', { 'semi': false, 'endOfLine': 'auto', 'tabWidth': 4 }],
   },
 };
