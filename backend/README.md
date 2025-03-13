@@ -24,6 +24,8 @@
 
 ## Description
 
+não usamos trycatch no back pois temo resultAsync que cuida disso
+
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Project setup

@@ -1,11 +1,13 @@
 import { ResultAsync } from 'src/utils/result'
 import { Usuario } from '../models/usuario.model'
-import { RepositoryException } from 'src/utils/exception'
+import { InvalidPropsException, RepositoryException } from 'src/utils/exception'
 
-export type UsuarioRepositoryExceptions = RepositoryException
+export type UsuarioRepositoryExceptions =
+    | RepositoryException
+    | InvalidPropsException
 
 export interface UsuarioRepository {
-    save(usuario: Usuario): ResultAsync<UsuarioRepositoryExceptions, void>
+    save(props: Usuario): ResultAsync<UsuarioRepositoryExceptions, void>
     findByEmail(
         email: string,
     ): ResultAsync<UsuarioRepositoryExceptions, Usuario>

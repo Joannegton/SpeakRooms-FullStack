@@ -1,4 +1,14 @@
-import { Controller } from '@nestjs/common'
+import { Body, Controller, Post } from '@nestjs/common'
+import { SalvarUsuarioUseCase } from './usuario/application/useCases/SalvarUsuario.usecase';
+import { UsuarioDto } from './usuario/application/dtos/Usuario.dto';
 
-@Controller()
-export class UsuarioController {}
+@Controller('usuario')
+export class UsuarioController {
+    constructor(private readonly salvarUsuarioUseCase: SalvarUsuarioUseCase) {}
+
+    @Post('/cadastro')
+    async salvarUsuario(@Body() params: UsuarioDto) {
+        return await this.salvarUsuarioUseCase.execute(params)
+        //entender a resposta do outro projeto e implementar ja com as modificações para portugues
+    }
+}

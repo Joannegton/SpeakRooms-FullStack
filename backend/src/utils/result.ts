@@ -36,4 +36,4 @@ export declare abstract class R {
         rightValue: A,
     ): Result<L, A>
 }
-export {}
+export {} 
