@@ -1,5 +1,5 @@
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { UsuarioController } from './../usuario.controller'
+import { UsuarioController } from './usuario.controller'
 import { Module } from '@nestjs/common'
 import { OrmConfig } from 'ormConfig'
 import { UsuarioRepositoryImpl } from './infra/repositories/Usuario.repository'

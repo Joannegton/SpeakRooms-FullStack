@@ -1,11 +1,14 @@
-import { R, Result } from 'src/utils/result'
+import { ResultadoUtil, Resultado } from 'src/utils/result'
 import { Usuario } from '../../domain/models/usuario.model'
 import { UsuarioDto } from '../dtos/Usuario.dto'
-import { InvalidPropsException, RepositoryException } from 'src/utils/exception'
+import {
+    PropriedadesInvalidasExcecao,
+    RepositorioExcecao,
+} from 'src/utils/exception'
 
 export type UsuarioMapperExceptions =
-    | RepositoryException
-    | InvalidPropsException
+    | RepositorioExcecao
+    | PropriedadesInvalidasExcecao
 
 export class UsuarioMapper {
     toDto(dominio: Usuario): UsuarioDto {
@@ -26,10 +29,10 @@ export class UsuarioMapper {
     }
 
     // ver se é assim que faz
-    toDomain(usuario: UsuarioDto): Result<UsuarioMapperExceptions, Usuario> {
+    toDomain(usuario: UsuarioDto): Resultado<UsuarioMapperExceptions, Usuario> {
         if (!usuario) {
-            return R.failure(
-                new InvalidPropsException('Usuário não pode ser nulo'),
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Usuário não pode ser nulo'),
             )
         }
         const domain = Usuario.criar({

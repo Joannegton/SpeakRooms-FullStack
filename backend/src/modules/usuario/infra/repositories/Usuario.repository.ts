@@ -1,43 +1,46 @@
-import { ResultAsync } from 'src/utils/result'
+import { ResultadoUtil, ResultadoAssincrono } from 'src/utils/result'
 import { Usuario } from '../../domain/models/usuario.model'
 import {
     UsuarioRepository,
     UsuarioRepositoryExceptions,
 } from '../../domain/repositories/usuario.repository'
 import { UsuarioMapper } from '../mappers/Usuario.mapper'
-import { R } from 'src/utils/resultAsync'
-import { RepositoryException } from 'src/utils/exception'
+import { RepositorioExcecao } from 'src/utils/exception'
 
 export class UsuarioRepositoryImpl implements UsuarioRepository {
     constructor(private readonly usuarioMapper: UsuarioMapper) {}
 
     async save(
         usuario: Usuario,
-    ): ResultAsync<UsuarioRepositoryExceptions, void> {
+    ): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
         try {
             const model = this.usuarioMapper.domainToModel(usuario)
             await model.save()
-            return R.ok()
+            return ResultadoUtil.sucesso()
         } catch (error) {
-            return R.failure(new RepositoryException(error))
+            return ResultadoUtil.falha(new RepositorioExcecao(error))
         }
     }
 
     findByEmail(
         email: string,
-    ): ResultAsync<UsuarioRepositoryExceptions, Usuario> {
+    ): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario> {
         throw new Error(`Method not implemented. ${email}`)
     }
-    findById(id: string): ResultAsync<UsuarioRepositoryExceptions, Usuario> {
+    findById(
+        id: string,
+    ): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario> {
         throw new Error(`Method not implemented.${id}`)
     }
-    delete(id: string): ResultAsync<UsuarioRepositoryExceptions, void> {
+    delete(id: string): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
         throw new Error(`Method not implemented.${id}`)
     }
-    update(usuario: Usuario): ResultAsync<UsuarioRepositoryExceptions, void> {
+    update(
+        usuario: Usuario,
+    ): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
         throw new Error(`Method not implemented.${usuario}`)
     }
-    findAll(): ResultAsync<UsuarioRepositoryExceptions, Usuario[]> {
+    findAll(): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario[]> {
         throw new Error(`Method not implemented.`)
     }
 }

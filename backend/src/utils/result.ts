@@ -1,39 +1,123 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Exception } from './exception'
+import { Excecao } from './exception'
 
-export type Result<L, A> = Failure<L, A> | Ok<L, A>
-export type ResultAsync<L, A> = Promise<Result<L, A>>
-interface IResult<L, A> {
-    isOk(): this is Ok<L, A>
-    isFailure(): this is Failure<L, A>
+export type Resultado<E, V> = Falha<E, V> | Sucesso<E, V>
+export type ResultadoAssincrono<E, V> = Promise<Resultado<E, V>>
+
+interface IResultado<E, V> {
+    /**
+     * Usado para verificar se um `Resultado` é um `Sucesso`
+     *
+     * @returns `true` se o resultado for uma variante `Sucesso` de Resultado
+     */
+    ehSucesso(): this is Sucesso<E, V>
+
+    /**
+     * Usado para verificar se um `Resultado` é uma `Falha`
+     *
+     * @returns `true` se o resultado for uma variante `Falha` de Resultado
+     */
+    ehFalha(): this is Falha<E, V>
 }
-export declare class Failure<L, A> implements IResult<L, A> {
-    readonly error: L
-    constructor(error: L)
-    isFailure(): this is Failure<L, A>
-    isOk(): this is Ok<L, A>
-    applyOnRight<B>(_: (a: A) => B): Result<L, B>
+
+export class Falha<E, V> implements IResultado<E, V> {
+    readonly erro: E
+
+    constructor(erro: E) {
+        this.erro = erro
+    }
+
+    ehFalha(): this is Falha<E, V> {
+        return true
+    }
+
+    ehSucesso(): this is Sucesso<E, V> {
+        return false
+    }
+
+    aplicarNoValor<B>(_: (valor: V) => B): Resultado<E, B> {
+        return this as any
+    }
 }
-export declare class Ok<L, A> implements IResult<L, A> {
-    readonly value: A
-    constructor(value?: A)
-    isFailure(): this is Failure<L, A>
-    isOk(): this is Ok<L, A>
-    applyOnRight<B>(func: (a: A) => B): Result<L, B>
+
+export class Sucesso<E, V> implements IResultado<E, V> {
+    readonly valor: V
+
+    constructor(valor?: V) {
+        this.valor = valor
+    }
+
+    ehFalha(): this is Falha<E, V> {
+        return false
+    }
+
+    ehSucesso(): this is Sucesso<E, V> {
+        return true
+    }
+
+    aplicarNoValor<B>(func: (valor: V) => B): Resultado<E, B> {
+        return new Sucesso(func(this.valor))
+    }
 }
-export declare abstract class R {
-    static ok<A = void, L = any>(value?: A): Result<L, A>
-    static failure<L extends Exception, A>(value: L): Result<L, A>
-    static isOk<L, A>(eitherList: Array<IResult<L, A>>): boolean
-    static hasFailure<L, A = any>(
-        either: IResult<L, A> | IResult<L, A>[],
-    ): boolean
-    static listFailure<L, A = any>(either: IResult<L, A>[]): Failure<L[], A>
-    static getFailure<L, A = any>(either: IResult<L, A>[]): Failure<L, A>
-    static getValue<L, A = any>(either: IResult<L, A>): A
-    static getResult<L, A>(
-        eitherList: IResult<L, unknown>[],
-        rightValue: A,
-    ): Result<L, A>
+
+export abstract class ResultadoUtil {
+    public static sucesso<V = void, E = any>(valor?: V): Resultado<E, V> {
+        return new Sucesso(valor)
+    }
+
+    public static falha<E extends Excecao, V>(valor: E): Resultado<E, V> {
+        return new Falha(valor)
+    }
+
+    public static ehSucesso<E, V>(
+        listaResultados: Array<IResultado<E, V>>,
+    ): boolean {
+        return listaResultados.find((resultado) => resultado.ehFalha())
+            ? false
+            : true
+    }
+
+    public static possuiFalha<E, V = any>(
+        resultado: IResultado<E, V> | IResultado<E, V>[],
+    ): boolean {
+        if (Array.isArray(resultado)) {
+            return resultado.find((r) => r.ehFalha()) ? true : false
+        } else {
+            return resultado.ehSucesso() ? false : true
+        }
+    }
+
+    public static listarFalhas<E, V = any>(
+        resultados: IResultado<E, V>[],
+    ): Falha<E[], V> {
+        const erros: E[] = []
+        for (const r of resultados) {
+            if (r.ehFalha()) {
+                erros.push(r.erro)
+            }
+        }
+
+        return new Falha<E[], V>(erros)
+    }
+
+    public static obterFalha<E, V = any>(
+        resultados: IResultado<E, V>[],
+    ): Falha<E, V> {
+        return resultados.find((r) => r.ehFalha()) as Falha<E, V>
+    }
+
+    public static obterValor<E, V = any>(resultado: IResultado<E, V>): V {
+        if (resultado.ehSucesso()) return resultado.valor
+        else throw new Error(`Resultado não possui valor`)
+    }
+
+    public static obterResultado<E, V>(
+        listaResultados: IResultado<E, unknown>[],
+        valorSucesso: V,
+    ): Resultado<E, V> {
+        return this.possuiFalha(listaResultados)
+            ? this.obterFalha<E>(listaResultados)
+            : new Sucesso(valorSucesso)
+    }
 }
-export {} 

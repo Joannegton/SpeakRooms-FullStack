@@ -1,16 +1,16 @@
-import { R, Result } from 'src/utils/result'
+import { ResultadoUtil, Resultado } from 'src/utils/result'
 import { Usuario } from '../../domain/models/usuario.model'
 import { UsuarioRepositoryExceptions } from '../../domain/repositories/usuario.repository'
 import { UsuarioModel } from '../models/Usuario.model'
-import { InvalidPropsException } from 'src/utils/exception'
+import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
 
 export class UsuarioMapper {
     public modelToDomain(
         model: UsuarioModel,
-    ): Result<UsuarioRepositoryExceptions, Usuario> {
+    ): Resultado<UsuarioRepositoryExceptions, Usuario> {
         if (!model)
-            return R.failure(
-                new InvalidPropsException('Carrossel não encontrado.'),
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Carrossel não encontrado.'),
             )
 
         const domain = Usuario.carregar(
@@ -29,8 +29,8 @@ export class UsuarioMapper {
             },
             model.usuario_id,
         )
-        if (domain.isFailure()) return R.failure(domain.error)
-        return R.ok(domain.value)
+        if (domain.ehFalha()) return ResultadoUtil.falha(domain.erro)
+        return ResultadoUtil.sucesso(domain.valor)
     }
 
     domainToModel(domain: Usuario): UsuarioModel {

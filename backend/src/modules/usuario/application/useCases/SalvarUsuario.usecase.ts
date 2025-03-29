@@ -1,14 +1,17 @@
 import { Inject } from '@nestjs/common'
+import { UsuarioRepository } from '../../domain/repositories/usuario.repository'
 import {
-    UsuarioRepository,
-    UsuarioRepositoryExceptions,
-} from '../../domain/repositories/usuario.repository'
-import { R, ResultAsync } from 'src/utils/resultAsync'
-import { InvalidPropsException } from 'src/utils/exception'
+    PropriedadesInvalidasExcecao,
+    RepositorioExcecao,
+} from 'src/utils/exception'
 import { UsuarioMapper } from '../mappers/Usuario.mapper'
 import { UsuarioDto } from '../dtos/Usuario.dto'
+import { ResultadoUtil, ResultadoAssincrono } from 'src/utils/result'
 
-// adicionar exceptions UsuarioExceptions
+export type SalvarUsuarioUseCaseExceptions =
+    | RepositorioExcecao
+    | PropriedadesInvalidasExcecao
+
 export class SalvarUsuarioUseCase {
     constructor(
         @Inject('UsuarioRepository')
@@ -17,20 +20,19 @@ export class SalvarUsuarioUseCase {
 
     async execute(
         usuario: UsuarioDto, //ver se ta certo
-    ): Promise<ResultAsync<UsuarioRepositoryExceptions, void>> {
-        //melhorar validação
+    ): Promise<ResultadoAssincrono<SalvarUsuarioUseCaseExceptions, void>> {
         if (usuario === null || usuario === undefined) {
-            return R.failure(
-                new InvalidPropsException('Usuario não pode ser nulo'),
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Usuario não pode ser nulo'),
             )
         }
 
         const domain = new UsuarioMapper().toDomain(usuario)
-        if (domain.isFailure()) return R.failure(domain.error)
+        if (domain.ehFalha()) return ResultadoUtil.falha(domain.erro)
 
-        const result = await this.usuarioRepository.save(domain.value)
-        if (result.isFailure()) return R.failure(result.error)
+        const result = await this.usuarioRepository.save(domain.valor)
+        if (result.ehFalha()) return ResultadoUtil.falha(result.erro)
 
-        return R.ok()
+        return ResultadoUtil.sucesso()
     }
 }

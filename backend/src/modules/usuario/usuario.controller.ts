@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common'
-import { SalvarUsuarioUseCase } from './usuario/application/useCases/SalvarUsuario.usecase';
-import { UsuarioDto } from './usuario/application/dtos/Usuario.dto';
+import { SalvarUsuarioUseCase } from './application/useCases/SalvarUsuario.usecase'
+import { UsuarioDto } from './application/dtos/Usuario.dto'
 
 @Controller('usuario')
 export class UsuarioController {

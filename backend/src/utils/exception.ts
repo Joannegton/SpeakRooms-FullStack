@@ -1,58 +1,164 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+export abstract class Excecao extends Error {
+    detalhe: string
 
-export declare abstract class Exception extends Error {
-    detail: string
-    constructor(creationProps?: Error | string)
-    abstract getName(): string
-    abstract getInstance(): this
-    setMessage(message: string): this
-    setStack(stack: string): this
-    setDetail(detail: string): this
-    toString(): string
+    constructor(propriedadesCriacao?: Error | string) {
+        super()
+        if (propriedadesCriacao instanceof Error) {
+            this.message = propriedadesCriacao.message
+            this.stack = propriedadesCriacao.stack
+        } else {
+            this.detalhe = propriedadesCriacao
+            this.message = propriedadesCriacao
+        }
+
+        this.name = this.obterNome()
+    }
+
+    abstract obterNome(): string
+
+    abstract obterInstancia(): this
+
+    definirMensagem(mensagem: string): this {
+        this.message = mensagem
+        return this.obterInstancia()
+    }
+
+    definirStack(stack: string): this {
+        this.stack = stack
+        return this.obterInstancia()
+    }
+
+    definirDetalhe(detalhe: string): this {
+        this.detalhe = detalhe
+        return this.obterInstancia()
+    }
+
+    toString(): string {
+        return `${this.name}: ${this.message}. ${this.detalhe} - ${this.stack}`
+    }
 }
-export declare class RepositoryException extends Exception {
-    RepositoryException: string
-    getMessage(): string
-    getName(): string
-    getInstance(): this
+
+export class RepositorioExcecao extends Excecao {
+    excecaoRepositorio = 'chave'
+
+    obterMensagem(): string {
+        return `Erro ao realizar ação no repositório`
+    }
+
+    obterNome(): string {
+        return RepositorioExcecao.name
+    }
+
+    obterInstancia(): this {
+        return this
+    }
 }
-export declare class ServiceException extends Exception {
-    ServiceException: string
-    getMessage(): string
-    getName(): string
-    getInstance(): this
+
+export class ServicoExcecao extends Excecao {
+    excecaoServico = 'chave'
+
+    obterMensagem(): string {
+        return `Erro ao realizar ação no serviço`
+    }
+
+    obterNome(): string {
+        return ServicoExcecao.name
+    }
+
+    obterInstancia(): this {
+        return this
+    }
 }
-export declare class QQFrameworkException extends Exception {
-    QQFrameworkException: string
-    getMessage(): string
-    getName(): string
-    getInstance(): this
+
+export class QQFrameworkExcecao extends Excecao {
+    excecaoQQFramework = 'chave'
+
+    obterMensagem(): string {
+        return `Erro lançado pelo QQFramework`
+    }
+
+    obterNome(): string {
+        return QQFrameworkExcecao.name
+    }
+
+    obterInstancia(): this {
+        return this
+    }
 }
-export declare class InvalidPropsException extends Exception {
-    InvalidPropsException: string
-    getInstance(): this
-    getMessage(): string
-    getName(): string
+
+export class PropriedadesInvalidasExcecao extends Excecao {
+    excecaoPropriedadesInvalidas = 'chave'
+
+    obterInstancia(): this {
+        return this
+    }
+
+    obterMensagem(): string {
+        return `Propriedades inválidas!`
+    }
+
+    obterNome(): string {
+        return PropriedadesInvalidasExcecao.name
+    }
 }
-export declare class HttpException extends Exception {
-    HttpException: string
+
+export class HttpExcecao extends Excecao {
+    excecaoHttp = 'chave'
     status: number
-    data: any
-    getInstance(): this
-    getMessage(): string
-    getName(): string
-    setData(data: any): HttpException
-    setStatus(status: number): HttpException
+    dados: any
+
+    obterInstancia(): this {
+        return this
+    }
+
+    obterMensagem(): string {
+        return `Erro ao tentar realizar uma requisição HTTP`
+    }
+
+    obterNome(): string {
+        return HttpExcecao.name
+    }
+
+    definirDados(dados: any): HttpExcecao {
+        this.dados = dados
+        return this
+    }
+
+    definirStatus(status: number): HttpExcecao {
+        this.status = status
+        return this
+    }
 }
-export declare class ProcessRunningException extends Exception {
-    ProcessRunningException: string
-    getInstance(): this
-    getMessage(): string
-    getName(): string
+
+export class ProcessoExecutandoExcecao extends Excecao {
+    excecaoProcessoExecutando = 'chave'
+
+    obterInstancia(): this {
+        return this
+    }
+
+    obterMensagem(): string {
+        return `Processo já está em execução`
+    }
+
+    obterNome(): string {
+        return ProcessoExecutandoExcecao.name
+    }
 }
-export declare class RepositoryNoDataFoundException extends Exception {
-    RepositoryNoDataFoundException: string
-    getInstance(): this
-    getMessage(): string
-    getName(): string
+
+export class RepositorioSemDadosExcecao extends Excecao {
+    excecaoRepositorioSemDados = 'chave'
+
+    obterInstancia() {
+        return this
+    }
+
+    obterMensagem(): string {
+        return this.message
+    }
+
+    obterNome(): string {
+        return RepositorioSemDadosExcecao.name
+    }
 }

@@ -1,6 +1,6 @@
-import { R, Result } from 'src/utils/result'
+import { ResultadoUtil, Resultado } from 'src/utils/result'
 import { UsuarioRepositoryExceptions } from '../repositories/usuario.repository'
-import { InvalidPropsException } from 'src/utils/exception'
+import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
 
 export interface CriarUsuarioProps {
     nomeUsuario: string
@@ -45,7 +45,7 @@ export class Usuario {
 
     public static criar(
         props: CriarUsuarioProps,
-    ): Result<UsuarioRepositoryExceptions, Usuario> {
+    ): Resultado<UsuarioRepositoryExceptions, Usuario> {
         const usuario = new Usuario()
         const setNomeUsuario = usuario.setNomeUsuario(props.nomeUsuario)
         const setEmail = usuario.setEmail(props.email)
@@ -54,7 +54,7 @@ export class Usuario {
         const setSobrenome = usuario.setSobrenome(props.sobrenome)
         const setNivelInglesId = usuario.setNivelInglesId(props.nivelInglesId)
 
-        return R.getResult(
+        return ResultadoUtil.obterResultado(
             [
                 setNomeUsuario,
                 setEmail,
@@ -70,7 +70,7 @@ export class Usuario {
     public static carregar(
         props: CarregarUsuarioProps,
         id: number,
-    ): Result<UsuarioRepositoryExceptions, Usuario> {
+    ): Resultado<UsuarioRepositoryExceptions, Usuario> {
         const usuario = new Usuario(id)
         const setNomeUsuario = usuario.setNomeUsuario(props.nomeUsuario)
         const setEmail = usuario.setEmail(props.email)
@@ -84,7 +84,7 @@ export class Usuario {
         const setUpdatedAt = usuario.setUpdatedAt(props.updated_at)
         const setAtivo = usuario.setAtivo(props.ativo)
 
-        return R.getResult(
+        return ResultadoUtil.obterResultado(
             [
                 setNomeUsuario,
                 setEmail,
@@ -104,122 +104,134 @@ export class Usuario {
 
     private setNomeUsuario(
         nomeUsuario: string,
-    ): Result<UsuarioRepositoryExceptions, void> {
+    ): Resultado<UsuarioRepositoryExceptions, void> {
         if (!nomeUsuario || nomeUsuario.trim().length < 3) {
-            return R.failure(
-                new InvalidPropsException('Nome de usuário inválido.'),
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Nome de usuário inválido.'),
             )
         }
         this._nomeUsuario = nomeUsuario
-        return R.ok()
+        return ResultadoUtil.sucesso()
     }
 
-    private setEmail(email: string): Result<UsuarioRepositoryExceptions, void> {
+    private setEmail(
+        email: string,
+    ): Resultado<UsuarioRepositoryExceptions, void> {
         if (!email || email.trim().length < 3) {
-            return R.failure(new InvalidPropsException('Email inválido.'))
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Email inválido.'),
+            )
         }
         this._email = email
-        return R.ok()
+        return ResultadoUtil.sucesso()
     }
 
     private setHashSenha(
         hashSenha: string,
-    ): Result<UsuarioRepositoryExceptions, void> {
+    ): Resultado<UsuarioRepositoryExceptions, void> {
         if (!hashSenha || hashSenha.trim().length < 3) {
-            return R.failure(new InvalidPropsException('Senha inválida.'))
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Senha inválida.'),
+            )
         }
         this._hashSenha = hashSenha
-        return R.ok()
+        return ResultadoUtil.sucesso()
     }
 
     private setPrimeiroNome(
         primeiroNome: string,
-    ): Result<UsuarioRepositoryExceptions, void> {
+    ): Resultado<UsuarioRepositoryExceptions, void> {
         if (!primeiroNome || primeiroNome.trim().length < 3) {
-            return R.failure(
-                new InvalidPropsException('Primeiro nome inválido.'),
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Primeiro nome inválido.'),
             )
         }
         this._primeiroNome = primeiroNome
-        return R.ok()
+        return ResultadoUtil.sucesso()
     }
 
     private setSobrenome(
         sobrenome: string,
-    ): Result<UsuarioRepositoryExceptions, void> {
+    ): Resultado<UsuarioRepositoryExceptions, void> {
         if (!sobrenome || sobrenome.trim().length < 3) {
-            return R.failure(new InvalidPropsException('Sobrenome inválido.'))
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Sobrenome inválido.'),
+            )
         }
         this._sobrenome = sobrenome
-        return R.ok()
+        return ResultadoUtil.sucesso()
     }
 
     private setUrlAvatar(
         urlAvatar: string,
-    ): Result<UsuarioRepositoryExceptions, void> {
+    ): Resultado<UsuarioRepositoryExceptions, void> {
         if (!urlAvatar || urlAvatar.trim().length < 3) {
-            return R.failure(
-                new InvalidPropsException('URL do avatar inválida.'),
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('URL do avatar inválida.'),
             )
         }
         this._urlAvatar = urlAvatar
-        return R.ok()
+        return ResultadoUtil.sucesso()
     }
 
     private setNivelInglesId(
         nivelInglesId: number,
-    ): Result<UsuarioRepositoryExceptions, void> {
+    ): Resultado<UsuarioRepositoryExceptions, void> {
         if (!nivelInglesId) {
-            return R.failure(
-                new InvalidPropsException('Nível de inglês inválido.'),
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Nível de inglês inválido.'),
             )
         }
         this._nivelInglesId = nivelInglesId
-        return R.ok()
+        return ResultadoUtil.sucesso()
     }
 
     private setPontos(
         pontos: number,
-    ): Result<UsuarioRepositoryExceptions, void> {
+    ): Resultado<UsuarioRepositoryExceptions, void> {
         if (!pontos) {
-            return R.failure(new InvalidPropsException('Pontos inválidos.'))
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Pontos inválidos.'),
+            )
         }
         this._pontos = pontos
-        return R.ok()
+        return ResultadoUtil.sucesso()
     }
 
     private setAtivo(
         ativo: boolean,
-    ): Result<UsuarioRepositoryExceptions, void> {
+    ): Resultado<UsuarioRepositoryExceptions, void> {
         if (!ativo) {
-            return R.failure(new InvalidPropsException('Ativo inválido.'))
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Ativo inválido.'),
+            )
         }
         this._ativo = ativo
-        return R.ok()
+        return ResultadoUtil.sucesso()
     }
 
     private setCreatedAt(
         created_at: Date,
-    ): Result<UsuarioRepositoryExceptions, void> {
+    ): Resultado<UsuarioRepositoryExceptions, void> {
         if (!created_at) {
-            return R.failure(
-                new InvalidPropsException('Data de criação invalida.'),
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Data de criação invalida.'),
             )
         }
         this._created_at = created_at
-        return R.ok()
+        return ResultadoUtil.sucesso()
     }
 
     private setUpdatedAt(
         updated_at: Date,
-    ): Result<UsuarioRepositoryExceptions, void> {
+    ): Resultado<UsuarioRepositoryExceptions, void> {
         if (!updated_at) {
-            return R.failure(
-                new InvalidPropsException('Data de alteração inválida.'),
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Data de alteração inválida.'),
             )
         }
         this._updated_at = updated_at
-        return R.ok()
+        return ResultadoUtil.sucesso()
     }
 
     get id(): number {
