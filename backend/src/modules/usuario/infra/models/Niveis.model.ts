@@ -5,20 +5,20 @@ import { MaterialModel } from './Materiais.model'
 @Entity('niveis')
 export class NivelModel {
     @PrimaryGeneratedColumn()
-    nivel_id: number // ID do nível (chave primária)
+    nivel_id: number
 
     @Column({ length: 50 })
-    nome_nivel: string // Nome do nível
+    nome_nivel: string
 
     @Column({ length: 10 })
-    codigo_nivel: string // Código do nível
+    codigo_nivel: string
 
     @Column({ type: 'text', nullable: true })
-    descricao: string // Descrição do nível
+    descricao: string
 
     @OneToMany(() => UsuarioModel, (usuario) => usuario.nivel)
-    usuarios: UsuarioModel[] // Relacionamento com a tabela de usuários
+    usuarios: UsuarioModel[]
 
     @OneToMany(() => MaterialModel, (material) => material.nivel)
-    materiais: MaterialModel[] // Relacionamento com a tabela de materiais
+    materiais: MaterialModel[]
 }

@@ -16,7 +16,7 @@ export class UsuarioMapper {
             usuario_id: dominio.id,
             nomeUsuario: dominio.nomeUsuario,
             email: dominio.email,
-            hashSenha: dominio.hashSenha,
+            senha: dominio.hashSenha,
             primeiroNome: dominio.primeiroNome,
             sobrenome: dominio.sobrenome,
             urlAvatar: dominio.urlAvatar,
@@ -38,7 +38,7 @@ export class UsuarioMapper {
         const domain = Usuario.criar({
             nomeUsuario: usuario.nomeUsuario,
             email: usuario.email,
-            hashSenha: usuario.hashSenha,
+            hashSenha: usuario.senha,
             primeiroNome: usuario.primeiroNome,
             sobrenome: usuario.sobrenome,
             nivelInglesId: usuario.nivelInglesId,

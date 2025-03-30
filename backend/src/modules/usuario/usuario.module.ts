@@ -4,6 +4,7 @@ import { Module } from '@nestjs/common'
 import { OrmConfig } from 'ormConfig'
 import { UsuarioRepositoryImpl } from './infra/repositories/Usuario.repository'
 import { SalvarUsuarioUseCase } from './application/useCases/SalvarUsuario.usecase'
+import { UsuarioMapper } from './infra/mappers/Usuario.mapper'
 
 @Module({
     imports: [TypeOrmModule.forRoot({ ...OrmConfig })],
@@ -14,6 +15,7 @@ import { SalvarUsuarioUseCase } from './application/useCases/SalvarUsuario.useca
             useClass: UsuarioRepositoryImpl,
         },
         SalvarUsuarioUseCase,
+        UsuarioMapper,
     ],
 })
 export class UsuarioModule {}

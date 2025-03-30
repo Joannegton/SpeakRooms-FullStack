@@ -17,7 +17,7 @@ export const OrmConfig: TypeOrmModuleOptions = {
     dropSchema: true,
     migrationsRun: true,
     logging: true,
-    entities: ['dist/src/modules/**/infra/models/*.model.ts'],
+    entities: ['dist/src/modules/**/infra/models/*.model{.ts,.js}'],
     migrations: ['dist/src/shared/infra/migrations/**/*.ts'],
 }
 

@@ -6,7 +6,9 @@ import {
 } from '../../domain/repositories/usuario.repository'
 import { UsuarioMapper } from '../mappers/Usuario.mapper'
 import { RepositorioExcecao } from 'src/utils/exception'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 export class UsuarioRepositoryImpl implements UsuarioRepository {
     constructor(private readonly usuarioMapper: UsuarioMapper) {}
 

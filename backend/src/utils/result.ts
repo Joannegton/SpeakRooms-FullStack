@@ -101,13 +101,13 @@ export abstract class ResultadoUtil {
         return new Falha<E[], V>(erros)
     }
 
-    public static obterFalha<E, V = any>(
+    public static getFalha<E, V = any>(
         resultados: IResultado<E, V>[],
     ): Falha<E, V> {
         return resultados.find((r) => r.ehFalha()) as Falha<E, V>
     }
 
-    public static obterValor<E, V = any>(resultado: IResultado<E, V>): V {
+    public static getValor<E, V = any>(resultado: IResultado<E, V>): V {
         if (resultado.ehSucesso()) return resultado.valor
         else throw new Error(`Resultado não possui valor`)
     }
@@ -117,7 +117,7 @@ export abstract class ResultadoUtil {
         valorSucesso: V,
     ): Resultado<E, V> {
         return this.possuiFalha(listaResultados)
-            ? this.obterFalha<E>(listaResultados)
+            ? this.getFalha<E>(listaResultados)
             : new Sucesso(valorSucesso)
     }
 }

@@ -1,126 +1,106 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export abstract class Excecao extends Error {
-    detalhe: string
-
-    constructor(propriedadesCriacao?: Error | string) {
+    constructor(props?: Error | string) {
         super()
-        if (propriedadesCriacao instanceof Error) {
-            this.message = propriedadesCriacao.message
-            this.stack = propriedadesCriacao.stack
+        if (props instanceof Error) {
+            this.message = props.message
+            this.stack = props.stack
         } else {
-            this.detalhe = propriedadesCriacao
-            this.message = propriedadesCriacao
+            this.message = props
         }
 
-        this.name = this.obterNome()
+        this.name = this.getNome()
     }
 
-    abstract obterNome(): string
+    abstract getNome(): string
 
-    abstract obterInstancia(): this
+    abstract getInstancia(): this
 
-    definirMensagem(mensagem: string): this {
+    setMensagem(mensagem: string): this {
         this.message = mensagem
-        return this.obterInstancia()
+        return this.getInstancia()
     }
 
-    definirStack(stack: string): this {
+    setStack(stack: string): this {
         this.stack = stack
-        return this.obterInstancia()
+        return this.getInstancia()
     }
 
-    definirDetalhe(detalhe: string): this {
-        this.detalhe = detalhe
-        return this.obterInstancia()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setDetalhes(detalhe: string): this {
+        //this.detalhe = detalhe
+        return this.getInstancia()
     }
 
     toString(): string {
-        return `${this.name}: ${this.message}. ${this.detalhe} - ${this.stack}`
+        return `${this.name}: ${this.message}. - ${this.stack}`
     }
 }
 
 export class RepositorioExcecao extends Excecao {
-    excecaoRepositorio = 'chave'
+    excecaoRepositorio = 'ordem'
 
-    obterMensagem(): string {
+    getMensagem(): string {
         return `Erro ao realizar ação no repositório`
     }
 
-    obterNome(): string {
+    getNome(): string {
         return RepositorioExcecao.name
     }
 
-    obterInstancia(): this {
+    getInstancia(): this {
         return this
     }
 }
 
 export class ServicoExcecao extends Excecao {
-    excecaoServico = 'chave'
+    excecaoServico = 'ordem'
 
-    obterMensagem(): string {
+    getMensagem(): string {
         return `Erro ao realizar ação no serviço`
     }
 
-    obterNome(): string {
+    getNome(): string {
         return ServicoExcecao.name
     }
 
-    obterInstancia(): this {
-        return this
-    }
-}
-
-export class QQFrameworkExcecao extends Excecao {
-    excecaoQQFramework = 'chave'
-
-    obterMensagem(): string {
-        return `Erro lançado pelo QQFramework`
-    }
-
-    obterNome(): string {
-        return QQFrameworkExcecao.name
-    }
-
-    obterInstancia(): this {
+    getInstancia(): this {
         return this
     }
 }
 
 export class PropriedadesInvalidasExcecao extends Excecao {
-    excecaoPropriedadesInvalidas = 'chave'
-
-    obterInstancia(): this {
+    getInstancia(): this {
         return this
     }
 
-    obterMensagem(): string {
+    getMensagem(): string {
         return `Propriedades inválidas!`
     }
 
-    obterNome(): string {
+    getNome(): string {
         return PropriedadesInvalidasExcecao.name
     }
 }
 
 export class HttpExcecao extends Excecao {
-    excecaoHttp = 'chave'
+    excecaoHttp = 'ordem'
     status: number
     dados: any
 
-    obterInstancia(): this {
+    getInstancia(): this {
         return this
     }
 
-    obterMensagem(): string {
+    getMensagem(): string {
         return `Erro ao tentar realizar uma requisição HTTP`
     }
 
-    obterNome(): string {
+    getNome(): string {
         return HttpExcecao.name
     }
 
-    definirDados(dados: any): HttpExcecao {
+    setDados(dados: any): HttpExcecao {
         this.dados = dados
         return this
     }
@@ -131,34 +111,18 @@ export class HttpExcecao extends Excecao {
     }
 }
 
-export class ProcessoExecutandoExcecao extends Excecao {
-    excecaoProcessoExecutando = 'chave'
-
-    obterInstancia(): this {
-        return this
-    }
-
-    obterMensagem(): string {
-        return `Processo já está em execução`
-    }
-
-    obterNome(): string {
-        return ProcessoExecutandoExcecao.name
-    }
-}
-
 export class RepositorioSemDadosExcecao extends Excecao {
-    excecaoRepositorioSemDados = 'chave'
+    excecaoRepositorioSemDados = 'ordem'
 
-    obterInstancia() {
+    getInstancia() {
         return this
     }
 
-    obterMensagem(): string {
+    getMensagem(): string {
         return this.message
     }
 
-    obterNome(): string {
+    getNome(): string {
         return RepositorioSemDadosExcecao.name
     }
 }

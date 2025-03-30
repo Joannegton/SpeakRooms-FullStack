@@ -2,7 +2,7 @@ export interface UsuarioDto {
     usuario_id: number
     nomeUsuario: string
     email: string
-    hashSenha: string
+    senha: string
     primeiroNome: string
     sobrenome: string
     nivelInglesId: number
