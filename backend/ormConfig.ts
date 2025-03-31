@@ -14,11 +14,11 @@ export const OrmConfig: TypeOrmModuleOptions = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     synchronize: true,
-    dropSchema: true,
+    dropSchema: false,
     migrationsRun: true,
     logging: true,
     entities: ['dist/src/modules/**/infra/models/*.model{.ts,.js}'],
-    migrations: ['dist/src/shared/infra/migrations/**/*.ts'],
+    migrations: ['dist/src/shared/infra/migrations/**/*{.ts,.js}'],
 }
 
 export const OrmConfigDataSource = new DataSource(OrmConfig as any)

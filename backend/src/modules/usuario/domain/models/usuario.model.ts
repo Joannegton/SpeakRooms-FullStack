@@ -102,6 +102,19 @@ export class Usuario {
         )
     }
 
+    private setHashSenha(
+        hashSenha: string,
+    ): Resultado<UsuarioRepositoryExceptions, void> {
+        if (!hashSenha || hashSenha.trim().length < 5) {
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Senha inválida.'),
+            )
+        }
+
+        this._hashSenha = hashSenha // Apenas atribuir o hash gerado no use case
+        return ResultadoUtil.sucesso()
+    }
+
     private setNomeUsuario(
         nomeUsuario: string,
     ): Resultado<UsuarioRepositoryExceptions, void> {
@@ -117,24 +130,13 @@ export class Usuario {
     private setEmail(
         email: string,
     ): Resultado<UsuarioRepositoryExceptions, void> {
-        if (!email || email.trim().length < 3) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!email || !emailRegex.test(email)) {
             return ResultadoUtil.falha(
                 new PropriedadesInvalidasExcecao('Email inválido.'),
             )
         }
         this._email = email
-        return ResultadoUtil.sucesso()
-    }
-
-    private setHashSenha(
-        hashSenha: string,
-    ): Resultado<UsuarioRepositoryExceptions, void> {
-        if (!hashSenha || hashSenha.trim().length < 3) {
-            return ResultadoUtil.falha(
-                new PropriedadesInvalidasExcecao('Senha inválida.'),
-            )
-        }
-        this._hashSenha = hashSenha
         return ResultadoUtil.sucesso()
     }
 

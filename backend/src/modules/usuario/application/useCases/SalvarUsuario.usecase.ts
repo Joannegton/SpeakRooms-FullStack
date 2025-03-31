@@ -4,9 +4,10 @@ import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
 } from 'src/utils/exception'
-import { UsuarioMapper } from '../mappers/Usuario.mapper'
+import { UsuarioMapperApplication } from '../mappers/Usuario.mapper'
 import { UsuarioDto } from '../dtos/Usuario.dto'
 import { ResultadoUtil, ResultadoAssincrono } from 'src/utils/result'
+import { HashService } from 'src/shared/services/Hash.service'
 
 export type SalvarUsuarioUseCaseExceptions =
     | RepositorioExcecao
@@ -16,18 +17,27 @@ export class SalvarUsuarioUseCase {
     constructor(
         @Inject('UsuarioRepository')
         private readonly usuarioRepository: UsuarioRepository,
+        private readonly usuarioMapper: UsuarioMapperApplication,
+        private readonly hashService: HashService,
     ) {}
 
     async execute(
-        usuario: UsuarioDto, //ver se ta certo
+        usuario: UsuarioDto,
     ): Promise<ResultadoAssincrono<SalvarUsuarioUseCaseExceptions, void>> {
-        if (usuario === null || usuario === undefined) {
+        if (!usuario || !usuario.nomeUsuario || !usuario.email) {
             return ResultadoUtil.falha(
-                new PropriedadesInvalidasExcecao('Usuario não pode ser nulo'),
+                new PropriedadesInvalidasExcecao('Dados do usuário inválidos.'),
             )
         }
+        const hashSenhaResult = await this.hashService.hashPassword(
+            usuario.senha,
+        )
+        if (hashSenhaResult.ehFalha()) {
+            return ResultadoUtil.falha(hashSenhaResult.erro)
+        }
+        usuario.senha = hashSenhaResult.valor
 
-        const domain = new UsuarioMapper().toDomain(usuario)
+        const domain = this.usuarioMapper.toDomain(usuario)
         if (domain.ehFalha()) return ResultadoUtil.falha(domain.erro)
 
         const result = await this.usuarioRepository.save(domain.valor)
