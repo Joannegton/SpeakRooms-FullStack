@@ -126,3 +126,17 @@ export class RepositorioSemDadosExcecao extends Excecao {
         return RepositorioSemDadosExcecao.name
     }
 }
+
+export class UsuarioBloqueadoException extends Excecao {
+    getInstancia() {
+        return this
+    }
+
+    getMensagem(): string {
+        return this.message
+    }
+
+    getNome(): string {
+        return UsuarioBloqueadoException.name
+    }
+}

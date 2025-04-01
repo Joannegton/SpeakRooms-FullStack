@@ -1,6 +1,9 @@
 import { ResultadoUtil, Resultado } from 'src/utils/result'
 import { UsuarioRepositoryExceptions } from '../repositories/usuario.repository'
-import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
+import {
+    PropriedadesInvalidasExcecao,
+    UsuarioBloqueadoException,
+} from 'src/utils/exception'
 
 export interface CriarUsuarioProps {
     nomeUsuario: string
@@ -38,6 +41,9 @@ export class Usuario {
     private _created_at: Date
     private _updated_at: Date
     private _ativo: boolean
+    private quantidadeTentativasLogin: number = 0
+    private _hashRecuperarSenha: string
+    private _bloqueado: boolean = false
 
     private constructor(id?: number) {
         this._id = id
@@ -167,11 +173,6 @@ export class Usuario {
     private setUrlAvatar(
         urlAvatar: string,
     ): Resultado<UsuarioRepositoryExceptions, void> {
-        if (!urlAvatar || urlAvatar.trim().length < 3) {
-            return ResultadoUtil.falha(
-                new PropriedadesInvalidasExcecao('URL do avatar inválida.'),
-            )
-        }
         this._urlAvatar = urlAvatar
         return ResultadoUtil.sucesso()
     }
@@ -191,11 +192,6 @@ export class Usuario {
     private setPontos(
         pontos: number,
     ): Resultado<UsuarioRepositoryExceptions, void> {
-        if (!pontos) {
-            return ResultadoUtil.falha(
-                new PropriedadesInvalidasExcecao('Pontos inválidos.'),
-            )
-        }
         this._pontos = pontos
         return ResultadoUtil.sucesso()
     }
@@ -203,11 +199,6 @@ export class Usuario {
     private setAtivo(
         ativo: boolean,
     ): Resultado<UsuarioRepositoryExceptions, void> {
-        if (!ativo) {
-            return ResultadoUtil.falha(
-                new PropriedadesInvalidasExcecao('Ativo inválido.'),
-            )
-        }
         this._ativo = ativo
         return ResultadoUtil.sucesso()
     }
@@ -215,11 +206,6 @@ export class Usuario {
     private setCreatedAt(
         created_at: Date,
     ): Resultado<UsuarioRepositoryExceptions, void> {
-        if (!created_at) {
-            return ResultadoUtil.falha(
-                new PropriedadesInvalidasExcecao('Data de criação invalida.'),
-            )
-        }
         this._created_at = created_at
         return ResultadoUtil.sucesso()
     }
@@ -227,13 +213,30 @@ export class Usuario {
     private setUpdatedAt(
         updated_at: Date,
     ): Resultado<UsuarioRepositoryExceptions, void> {
-        if (!updated_at) {
-            return ResultadoUtil.falha(
-                new PropriedadesInvalidasExcecao('Data de alteração inválida.'),
-            )
-        }
         this._updated_at = updated_at
         return ResultadoUtil.sucesso()
+    }
+    //talvez não funcione pois tem que adc um novo campo no banco
+    incrementarTentativasLogin(
+        bloqueado: boolean,
+    ): Resultado<UsuarioBloqueadoException, void> {
+        this.quantidadeTentativasLogin++
+        if (this.quantidadeTentativasLogin === 3 && !bloqueado) {
+            return ResultadoUtil.falha(
+                new UsuarioBloqueadoException(
+                    'Usuário bloqueado. Favor entre em /esqueci-senha para desbloquear.',
+                ),
+            )
+        }
+
+        return ResultadoUtil.sucesso()
+    }
+
+    // melhorar implementação
+    bloquearUsuario(): void {
+        this._hashSenha = ''
+        this._hashRecuperarSenha = 'MelhorarAqui'
+        this._bloqueado = true
     }
 
     get id(): number {
@@ -286,5 +289,13 @@ export class Usuario {
 
     get updated_at(): Date {
         return this._updated_at
+    }
+
+    get hashRecuperarSenha(): string {
+        return this._hashRecuperarSenha
+    }
+
+    get bloqueado(): boolean {
+        return this._bloqueado
     }
 }

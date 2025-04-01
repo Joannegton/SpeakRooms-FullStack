@@ -32,10 +32,7 @@ export class SalvarUsuarioUseCase {
         const hashSenhaResult = await this.hashService.hashPassword(
             usuario.senha,
         )
-        if (hashSenhaResult.ehFalha()) {
-            return ResultadoUtil.falha(hashSenhaResult.erro)
-        }
-        usuario.senha = hashSenhaResult.valor
+        usuario.senha = hashSenhaResult
 
         const domain = this.usuarioMapper.toDomain(usuario)
         if (domain.ehFalha()) return ResultadoUtil.falha(domain.erro)

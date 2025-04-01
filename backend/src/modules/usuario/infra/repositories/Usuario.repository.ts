@@ -7,6 +7,7 @@ import {
 import { UsuarioMapper } from '../mappers/Usuario.mapper'
 import { RepositorioExcecao } from 'src/utils/exception'
 import { Injectable } from '@nestjs/common'
+import { UsuarioModel } from '../models/Usuario.model'
 
 @Injectable()
 export class UsuarioRepositoryImpl implements UsuarioRepository {
@@ -17,18 +18,41 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
         try {
             const model = this.usuarioMapper.domainToModel(usuario)
-            await model.save()
+            if (model.ehFalha()) return ResultadoUtil.falha(model.erro)
+
+            await model.valor.save()
             return ResultadoUtil.sucesso()
         } catch (error) {
             return ResultadoUtil.falha(new RepositorioExcecao(error))
         }
     }
 
-    findByEmail(
-        email: string,
+    async findByUsuarioOrEmail(
+        usuarioOuEmail: string,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario> {
-        throw new Error(`Method not implemented. ${email}`)
+        try {
+            const model = await UsuarioModel.findOne({
+                where: [
+                    { email: usuarioOuEmail },
+                    { nome_usuario: usuarioOuEmail },
+                ],
+            })
+
+            if (!model) {
+                return ResultadoUtil.falha(
+                    new RepositorioExcecao('Usuário não encontrado'),
+                )
+            }
+
+            const usuario = this.usuarioMapper.modelToDomain(model)
+            if (usuario.ehFalha()) return ResultadoUtil.falha(usuario.erro)
+
+            return ResultadoUtil.sucesso(usuario.valor)
+        } catch (error) {
+            return ResultadoUtil.falha(new RepositorioExcecao(error))
+        }
     }
+
     findById(
         id: string,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario> {

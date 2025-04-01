@@ -1,19 +1,19 @@
-import { ResultadoUtil, ResultadoAssincrono } from 'src/utils/result'
+import { Resultado, ResultadoUtil } from 'src/utils/result'
 import { Usuario } from '../../domain/models/usuario.model'
 import { UsuarioRepositoryExceptions } from '../../domain/repositories/usuario.repository'
 import { UsuarioModel } from '../models/Usuario.model'
 import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
 
 export class UsuarioMapper {
-    public async modelToDomain(
+    public modelToDomain(
         model: UsuarioModel,
-    ): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario> {
+    ): Resultado<UsuarioRepositoryExceptions, Usuario> {
         if (!model)
             return ResultadoUtil.falha(
-                new PropriedadesInvalidasExcecao('Carrossel não encontrado.'),
+                new PropriedadesInvalidasExcecao('Usuário não encontrado.'),
             )
 
-        const domain = await Usuario.carregar(
+        const domain = Usuario.carregar(
             {
                 nomeUsuario: model.nome_usuario,
                 email: model.email,
@@ -33,7 +33,14 @@ export class UsuarioMapper {
         return ResultadoUtil.sucesso(domain.valor)
     }
 
-    domainToModel(domain: Usuario): UsuarioModel {
+    domainToModel(
+        domain: Usuario,
+    ): Resultado<PropriedadesInvalidasExcecao, UsuarioModel> {
+        if (!domain)
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Usuário não encontrado.'),
+            )
+
         const model = UsuarioModel.create({
             nome_usuario: domain.nomeUsuario,
             email: domain.email,
@@ -48,6 +55,7 @@ export class UsuarioMapper {
             ativo: domain.ativo,
             usuario_id: domain.id,
         })
-        return model
+
+        return ResultadoUtil.sucesso(model)
     }
 }
