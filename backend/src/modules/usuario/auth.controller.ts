@@ -6,6 +6,7 @@ import {
 } from 'src/utils/AbstractControler'
 import { LoginUseCase } from './application/useCases/Login.usecase'
 import { LoginParamsDto } from './application/dtos/Login.dto'
+import { Public } from './infra/decorators/public.decorator'
 
 const httpCodeMap: HttpCodeMap = {
     PropriedadesInvalidasExcecao: 400,
@@ -23,6 +24,7 @@ export class AuthController extends AbstractController {
         super(httpResponseConfig)
     }
 
+    @Public()
     @Post('/login')
     async login(@Body() params: LoginParamsDto) {
         const result = await this.loginUseCase.execute(params)
