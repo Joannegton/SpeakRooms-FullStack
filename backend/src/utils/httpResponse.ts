@@ -16,7 +16,7 @@ export class HttpResponse {
 export class HttpResponseOK extends HttpResponse {
     constructor(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        public _data: any,
+        public data: any,
         httpResponse?: HttpResponseProps,
     ) {
         super({ ...httpResponse, statusCode: httpResponse?.statusCode || 200 })

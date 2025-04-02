@@ -1,3 +1,5 @@
+import { HttpException, HttpStatus } from '@nestjs/common'
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export abstract class Excecao extends Error {
     constructor(props?: Error | string) {
@@ -138,5 +140,19 @@ export class UsuarioBloqueadoException extends Excecao {
 
     getNome(): string {
         return UsuarioBloqueadoException.name
+    }
+}
+
+//usar isso de referencia para criar novas exceções
+export class NaoAutorizadoException extends HttpException {
+    constructor(message: string = 'Acesso não autorizado') {
+        super(
+            {
+                statusCode: HttpStatus.UNAUTHORIZED,
+                error: 'Não autorizado',
+                message,
+            },
+            HttpStatus.UNAUTHORIZED,
+        )
     }
 }

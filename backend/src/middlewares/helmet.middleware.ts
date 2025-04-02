@@ -7,7 +7,7 @@ export class HelmetMiddleware implements NestMiddleware {
     use(req: Request, res: Response, next: () => void) {
         helmet({
             contentSecurityPolicy: false,
-            crossOriginResourcePolicy: { policy: 'cross-origin' },
+            crossOriginResourcePolicy: { policy: 'same-origin' },
             dnsPrefetchControl: { allow: true },
             frameguard: { action: 'deny' },
             hsts: { maxAge: 31536000, includeSubDomains: true },
@@ -15,7 +15,6 @@ export class HelmetMiddleware implements NestMiddleware {
             noSniff: true,
             permittedCrossDomainPolicies: { permittedPolicies: 'none' },
             referrerPolicy: { policy: 'no-referrer' },
-            xssFilter: true,
         })(req, res, next)
     }
 }
