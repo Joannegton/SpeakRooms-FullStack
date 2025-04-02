@@ -11,7 +11,7 @@ export type UsuarioRepositoryExceptions =
 
 export interface UsuarioRepository {
     save(props: Usuario): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
-    findByEmail(
+    findByUsuarioOrEmail(
         email: string,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario>
     findById(

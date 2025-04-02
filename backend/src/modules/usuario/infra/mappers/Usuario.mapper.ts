@@ -1,4 +1,4 @@
-import { ResultadoUtil, Resultado } from 'src/utils/result'
+import { Resultado, ResultadoUtil } from 'src/utils/result'
 import { Usuario } from '../../domain/models/usuario.model'
 import { UsuarioRepositoryExceptions } from '../../domain/repositories/usuario.repository'
 import { UsuarioModel } from '../models/Usuario.model'
@@ -10,7 +10,7 @@ export class UsuarioMapper {
     ): Resultado<UsuarioRepositoryExceptions, Usuario> {
         if (!model)
             return ResultadoUtil.falha(
-                new PropriedadesInvalidasExcecao('Carrossel não encontrado.'),
+                new PropriedadesInvalidasExcecao('Usuário não encontrado.'),
             )
 
         const domain = Usuario.carregar(
@@ -33,7 +33,14 @@ export class UsuarioMapper {
         return ResultadoUtil.sucesso(domain.valor)
     }
 
-    domainToModel(domain: Usuario): UsuarioModel {
+    domainToModel(
+        domain: Usuario,
+    ): Resultado<PropriedadesInvalidasExcecao, UsuarioModel> {
+        if (!domain)
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Usuário não encontrado.'),
+            )
+
         const model = UsuarioModel.create({
             nome_usuario: domain.nomeUsuario,
             email: domain.email,
@@ -48,6 +55,7 @@ export class UsuarioMapper {
             ativo: domain.ativo,
             usuario_id: domain.id,
         })
-        return model
+
+        return ResultadoUtil.sucesso(model)
     }
 }

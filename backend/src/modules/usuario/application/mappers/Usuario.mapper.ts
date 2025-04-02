@@ -10,7 +10,7 @@ export type UsuarioMapperExceptions =
     | RepositorioExcecao
     | PropriedadesInvalidasExcecao
 
-export class UsuarioMapper {
+export class UsuarioMapperApplication {
     toDto(dominio: Usuario): UsuarioDto {
         return {
             usuario_id: dominio.id,
@@ -28,14 +28,14 @@ export class UsuarioMapper {
         }
     }
 
-    // ver se é assim que faz
     toDomain(usuario: UsuarioDto): Resultado<UsuarioMapperExceptions, Usuario> {
         if (!usuario) {
             return ResultadoUtil.falha(
                 new PropriedadesInvalidasExcecao('Usuário não pode ser nulo'),
             )
         }
-        const domain = Usuario.criar({
+
+        const domainResult = Usuario.criar({
             nomeUsuario: usuario.nomeUsuario,
             email: usuario.email,
             hashSenha: usuario.senha,
@@ -44,6 +44,10 @@ export class UsuarioMapper {
             nivelInglesId: usuario.nivelInglesId,
         })
 
-        return domain
+        if (domainResult.ehFalha()) {
+            return ResultadoUtil.falha(domainResult.erro)
+        }
+
+        return ResultadoUtil.sucesso(domainResult.valor)
     }
 }
