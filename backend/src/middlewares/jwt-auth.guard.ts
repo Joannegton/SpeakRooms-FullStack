@@ -36,7 +36,7 @@ export class JwtAuthGuard implements CanActivate {
         const request = context.switchToHttp().getRequest()
         const token = this.extractTokenFromHeader(request)
         if (!token && !isPublicAuth) {
-            throw new UnauthorizedException('Token não informado')
+            throw new NaoAutorizadoException('Token não informado')
         }
         try {
             const jwtVerify = await this.jwtService.verifyAsync(token, {
@@ -46,6 +46,7 @@ export class JwtAuthGuard implements CanActivate {
                 this.hashService.decryptString(jwtVerify.encrypt),
             )
             request.user = payload
+            return true // Garantir que o acesso seja permitido
         } catch (error) {
             if (isPublicAuth) return true
             console.error('Token inválido ou expirado', error)
