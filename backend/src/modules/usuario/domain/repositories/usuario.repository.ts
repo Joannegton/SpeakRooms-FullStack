@@ -3,11 +3,13 @@ import { Usuario } from '../models/usuario.model'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
+    RepositorioSemDadosExcecao,
 } from 'src/utils/exception'
 
 export type UsuarioRepositoryExceptions =
     | RepositorioExcecao
     | PropriedadesInvalidasExcecao
+    | RepositorioSemDadosExcecao
 
 export interface UsuarioRepository {
     save(props: Usuario): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
@@ -15,7 +17,7 @@ export interface UsuarioRepository {
         email: string,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario>
     findById(
-        id: string,
+        id: number,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario>
     delete(id: string): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
     update(
