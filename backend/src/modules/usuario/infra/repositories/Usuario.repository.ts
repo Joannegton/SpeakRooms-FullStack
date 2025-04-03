@@ -80,10 +80,12 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
     }
 
     async delete(
-        id: number,
+        nomeUsuario: string,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
         try {
-            const result = await UsuarioModel.delete({ usuario_id: id })
+            const result = await UsuarioModel.delete({
+                nome_usuario: nomeUsuario,
+            })
             if (result.affected === 0) {
                 return ResultadoUtil.falha(
                     new RepositorioSemDadosExcecao(

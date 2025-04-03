@@ -14,14 +14,16 @@ export type UsuarioRepositoryExceptions =
 export interface UsuarioRepository {
     save(props: Usuario): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
     findByUsuarioOrEmail(
-        email: string,
+        emailOrUsuario: string,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario>
+    findAll(): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario[]>
     findById(
         id: number,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario>
-    delete(id: string): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
+    delete(
+        nomeUsuario: string,
+    ): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
     update(
         usuario: Usuario,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
-    findAll(): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario[]>
 }
