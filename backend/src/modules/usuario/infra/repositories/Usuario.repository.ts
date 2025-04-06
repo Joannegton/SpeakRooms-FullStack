@@ -5,7 +5,10 @@ import {
     UsuarioRepositoryExceptions,
 } from '../../domain/repositories/usuario.repository'
 import { UsuarioMapper } from '../mappers/Usuario.mapper'
-import { RepositorioExcecao } from 'src/utils/exception'
+import {
+    RepositorioExcecao,
+    RepositorioSemDadosExcecao,
+} from 'src/utils/exception'
 import { Injectable } from '@nestjs/common'
 import { UsuarioModel } from '../models/Usuario.model'
 
@@ -40,7 +43,7 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
 
             if (!model) {
                 return ResultadoUtil.falha(
-                    new RepositorioExcecao('Usuário não encontrado'),
+                    new RepositorioSemDadosExcecao('Usuário não encontrado'),
                 )
             }
 
@@ -53,20 +56,97 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
         }
     }
 
-    findById(
-        id: string,
+    async findById(
+        id: number,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario> {
-        throw new Error(`Method not implemented.${id}`)
+        try {
+            const model = await UsuarioModel.findOne({
+                where: { usuario_id: id },
+            })
+
+            if (!model) {
+                return ResultadoUtil.falha(
+                    new RepositorioSemDadosExcecao('Usuário não encontrado'),
+                )
+            }
+
+            const usuario = this.usuarioMapper.modelToDomain(model)
+            if (usuario.ehFalha()) return ResultadoUtil.falha(usuario.erro)
+
+            return ResultadoUtil.sucesso(usuario.valor)
+        } catch (error) {
+            return ResultadoUtil.falha(new RepositorioExcecao(error))
+        }
     }
-    delete(id: string): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
-        throw new Error(`Method not implemented.${id}`)
+
+    async delete(
+        nomeUsuario: string,
+    ): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
+        try {
+            const result = await UsuarioModel.delete({
+                nome_usuario: nomeUsuario,
+            })
+            if (result.affected === 0) {
+                return ResultadoUtil.falha(
+                    new RepositorioSemDadosExcecao(
+                        'Usuário não encontrado para exclusão',
+                    ),
+                )
+            }
+            return ResultadoUtil.sucesso()
+        } catch (error) {
+            console.error('Erro ao excluir usuario', error)
+            return ResultadoUtil.falha(
+                new RepositorioExcecao('Erro ao excluir usuário.'),
+            )
+        }
     }
-    update(
+
+    async update(
         usuario: Usuario,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
-        throw new Error(`Method not implemented.${usuario}`)
+        try {
+            const model = this.usuarioMapper.domainToModel(usuario)
+            if (model.ehFalha()) return ResultadoUtil.falha(model.erro)
+
+            await model.valor.save()
+            return ResultadoUtil.sucesso()
+        } catch (error) {
+            console.error('Erro ao atualizar usuario', error)
+            return ResultadoUtil.falha(new RepositorioExcecao(error))
+        }
     }
-    findAll(): ResultadoAssincrono<UsuarioRepositoryExceptions, Usuario[]> {
-        throw new Error(`Method not implemented.`)
+
+    async findAll(): ResultadoAssincrono<
+        UsuarioRepositoryExceptions,
+        Usuario[]
+    > {
+        try {
+            const models = await UsuarioModel.find()
+            if (!models || models.length === 0) {
+                return ResultadoUtil.falha(
+                    new RepositorioSemDadosExcecao('Nenhum usuário encontrado'),
+                )
+            }
+
+            const usuarios: Usuario[] = []
+            for (const model of models) {
+                const usuario = this.usuarioMapper.modelToDomain(model)
+                if (usuario.ehFalha()) {
+                    return ResultadoUtil.falha(usuario.erro)
+                }
+                usuarios.push(usuario.valor)
+            }
+
+            if (usuarios.length === 0) {
+                return ResultadoUtil.falha(
+                    new RepositorioSemDadosExcecao('Nenhum usuário encontrado'),
+                )
+            }
+
+            return ResultadoUtil.sucesso(usuarios)
+        } catch (error) {
+            return ResultadoUtil.falha(new RepositorioExcecao(error))
+        }
     }
 }

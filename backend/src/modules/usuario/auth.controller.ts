@@ -14,7 +14,7 @@ const httpCodeMap: HttpCodeMap = {
     ServicoExcecao: 500,
 }
 
-@Controller()
+@Controller('auth')
 export class AuthController extends AbstractController {
     constructor(private readonly loginUseCase: LoginUseCase) {
         const httpResponseConfig: HttpResponseConfig = {
