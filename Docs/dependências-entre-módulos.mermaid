@@ -1,0 +1,31 @@
+graph TD;
+    Core["Core Module"]
+    Shared["Shared Module"]
+    Users["Users Module"]
+    Materials["Materials Module"]
+    Sessions["Sessions Module"]
+    PeerMatching["Peer Matching Module"]
+    Communication["Communication Module"]
+    Progress["Progress Module"]
+    
+    Users-->Core
+    Materials-->Core
+    Sessions-->Core
+    PeerMatching-->Core
+    Communication-->Core
+    Progress-->Core
+    
+    Users-->Shared
+    Materials-->Shared
+    Sessions-->Shared
+    PeerMatching-->Shared
+    Communication-->Shared
+    Progress-->Shared
+    
+    Sessions-->Users
+    PeerMatching-->Users
+    Communication-->Users
+    Progress-->Users
+    
+    Sessions-->Materials
+    Progress-->Sessions

@@ -3,12 +3,11 @@ import {
     ExecutionContext,
     Inject,
     Injectable,
-    UnauthorizedException,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { JwtService } from '@nestjs/jwt'
 import { Request } from 'express'
-import { HashService } from 'src/shared/services/Hash.service'
+import { HashService } from 'src/modules/core/domain/services/Hash.service'
 import { NaoAutorizadoException } from 'src/utils/exception'
 
 @Injectable()
