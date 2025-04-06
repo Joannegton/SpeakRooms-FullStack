@@ -23,7 +23,7 @@ export class SalvarUsuarioUseCase {
 
     async execute(
         usuario: UsuarioDto,
-    ): Promise<ResultadoAssincrono<SalvarUsuarioUseCaseExceptions, void>> {
+    ): ResultadoAssincrono<SalvarUsuarioUseCaseExceptions, void> {
         if (!usuario || !usuario.nomeUsuario || !usuario.email) {
             return ResultadoUtil.falha(
                 new PropriedadesInvalidasExcecao('Dados do usuário inválidos.'),
