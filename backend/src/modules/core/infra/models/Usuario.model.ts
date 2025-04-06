@@ -20,7 +20,7 @@ import {
     Min,
 } from 'class-validator'
 import { NivelModel } from './Niveis.model'
-import { MaterialModel } from './Materiais.model'
+import { MaterialModel } from '../../../materiais/infra/models/Materiais.model'
 import { InteressesModel } from './Interesses.model'
 
 @Entity('usuarios')

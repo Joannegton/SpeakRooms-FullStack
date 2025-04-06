@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm'
 import { UsuarioModel } from './Usuario.model'
-import { MaterialModel } from './Materiais.model'
+import { MaterialModel } from '../../../materiais/infra/models/Materiais.model'
 
 @Entity('niveis')
 export class NivelModel {

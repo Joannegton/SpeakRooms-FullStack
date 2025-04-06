@@ -5,7 +5,7 @@ import {
     OneToMany,
     BaseEntity,
 } from 'typeorm'
-import { MaterialModel } from './Materiais.model'
+import { MaterialModel } from '../../../materiais/infra/models/Materiais.model'
 
 @Entity('categorias')
 export class CategoriaModel extends BaseEntity {

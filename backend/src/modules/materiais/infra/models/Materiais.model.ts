@@ -8,10 +8,12 @@ import {
     OneToMany,
     JoinColumn,
     BaseEntity,
+    Index,
 } from 'typeorm'
-import { UsuarioModel } from './Usuario.model'
-import { NivelModel } from './Niveis.model'
-import { CategoriaModel } from './Categorias.model'
+import { Length, IsNotEmpty } from 'class-validator'
+import { UsuarioModel } from '../../../core/infra/models/Usuario.model'
+import { NivelModel } from '../../../core/infra/models/Niveis.model'
+import { CategoriaModel } from '../../../core/infra/models/Categorias.model'
 import { FileModel } from './Files.model'
 
 @Entity('materiais')
@@ -20,21 +22,26 @@ export class MaterialModel extends BaseEntity {
     material_id: number
 
     @Column({ length: 255 })
+    @Length(1, 255, { message: 'O título deve ter entre 1 e 255 caracteres.' })
     titulo: string
 
     @Column({ type: 'text' })
     descricao: string
 
     @Column()
+    @IsNotEmpty({ message: 'O usuario_id não pode estar vazio.' })
     usuario_id: number
 
     @Column()
+    @IsNotEmpty({ message: 'O nível não pode estar vazio.' })
     nivel_id: number
 
     @Column()
+    @IsNotEmpty({ message: 'A categoria não pode estar vazia.' })
     categoria_id: number
 
     @Column({ length: 50 })
+    @Length(1, 50, { message: 'A duração deve ter entre 1 e 50 caracteres.' })
     duracao: string
 
     @CreateDateColumn()
@@ -44,6 +51,7 @@ export class MaterialModel extends BaseEntity {
     atualizado_em: Date
 
     @Column({ default: false })
+    @Index()
     aprovado: boolean
 
     @Column({ default: false })
