@@ -22,6 +22,7 @@ import {
 import { NivelModel } from './Niveis.model'
 import { MaterialModel } from '../../../materiais/infra/models/Materiais.model'
 import { InteressesModel } from './Interesses.model'
+import { FileModel } from 'src/modules/materiais/infra/models/Files.model'
 
 @Entity('usuarios')
 export class UsuarioModel extends BaseEntity {
@@ -54,7 +55,7 @@ export class UsuarioModel extends BaseEntity {
 
     @Column()
     @IsInt()
-    nivel_ingles_id: number //chave estrangeira
+    nivel_ingles_id: number
 
     @Column({ type: 'int', default: 0 })
     @IsInt()
@@ -81,6 +82,9 @@ export class UsuarioModel extends BaseEntity {
 
     @OneToMany(() => MaterialModel, (material) => material.autor)
     materiais: MaterialModel[]
+
+    @OneToMany(() => FileModel, (file) => file.usuario)
+    file: FileModel
 
     @ManyToMany(() => InteressesModel, (interesse) => interesse.usuarios)
     @JoinTable({

@@ -11,7 +11,7 @@ export class Material {
     private _usuario_id: number
     private _nivel_id: number
     private _categoria_id: number
-    private _duracao: string
+    private _duracao: number
     private _criado_em: Date
     private _atualizado_em: Date
     private _aprovado: boolean
@@ -38,7 +38,7 @@ export class Material {
         usuario_id: number,
         nivel_id: number,
         categoria_id: number,
-        duracao: string,
+        duracao: number,
     ): Resultado<PropriedadesInvalidasExcecao, Material> {
         const material = new Material()
         const setTitulo = material.setTitulo(titulo)
@@ -68,7 +68,7 @@ export class Material {
         usuario_id: number,
         nivel_id: number,
         categoria_id: number,
-        duracao: string,
+        duracao: number,
         criado_em: Date,
         atualizado_em: Date,
         aprovado: boolean,
@@ -116,7 +116,7 @@ export class Material {
     atualizarPropriedades(
         titulo?: string,
         descricao?: string,
-        duracao?: string,
+        duracao?: number,
     ): Resultado<PropriedadesInvalidasExcecao, void> {
         const resultados = []
         if (titulo) resultados.push(this.setTitulo(titulo))
@@ -239,7 +239,7 @@ export class Material {
     }
 
     private setDuracao(
-        duracao: string,
+        duracao: number,
     ): Resultado<PropriedadesInvalidasExcecao, void> {
         this._duracao = duracao
         return ResultadoUtil.sucesso()
@@ -292,6 +292,10 @@ export class Material {
         return ResultadoUtil.sucesso()
     }
 
+    get id(): number {
+        return this._id
+    }
+
     get titulo(): string {
         return this._titulo
     }
@@ -311,7 +315,7 @@ export class Material {
         return this._categoria_id
     }
 
-    get duracao(): string {
+    get duracao(): number {
         return this._duracao
     }
 

@@ -1,6 +1,13 @@
-import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator'
+import {
+    IsNotEmpty,
+    IsNumber,
+    IsString,
+    IsOptional,
+    Min,
+    Max,
+} from 'class-validator'
 
-export class CreateMaterialDTO {
+export class CriarMaterialDTO {
     @IsString({ message: 'O nome do material deve ser uma string.' })
     @IsNotEmpty({ message: 'O nome do material é obrigatório.' })
     titulo: string
@@ -22,6 +29,8 @@ export class CreateMaterialDTO {
     categoria_id: number
 
     @IsNumber({}, { message: 'A duração deve ser um número.' })
+    @Min(20, { message: 'A duração deve ser no mínimo 1.' })
+    @Max(60, { message: 'A duração deve ser no máximo 60.' })
     @IsOptional()
     duracao: number
 }

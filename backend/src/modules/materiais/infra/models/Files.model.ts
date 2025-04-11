@@ -5,8 +5,10 @@ import {
     ManyToOne,
     JoinColumn,
     BaseEntity,
+    CreateDateColumn,
 } from 'typeorm'
 import { MaterialModel } from './Materiais.model'
+import { UsuarioModel } from 'src/modules/core/infra/models/Usuario.model'
 
 @Entity('arquivos')
 export class FileModel extends BaseEntity {
@@ -16,8 +18,11 @@ export class FileModel extends BaseEntity {
     @Column()
     material_id: number
 
+    @Column()
+    usuario_id: number
+
     @Column({ length: 255 })
-    nome_arquivo: string
+    cloudinary_id: string
 
     @Column({ length: 255 })
     url: string
@@ -28,8 +33,12 @@ export class FileModel extends BaseEntity {
     @Column()
     tamanho_arquivo: number
 
-    @Column()
+    @CreateDateColumn()
     enviado_em: Date
+
+    @ManyToOne(() => UsuarioModel, (usuario) => usuario.usuario_id)
+    @JoinColumn({ name: 'usuario_id' })
+    usuario: UsuarioModel
 
     @ManyToOne(() => MaterialModel, (material) => material.arquivos)
     @JoinColumn({ name: 'material_id' })

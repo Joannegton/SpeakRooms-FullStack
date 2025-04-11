@@ -10,7 +10,7 @@ import {
     BaseEntity,
     Index,
 } from 'typeorm'
-import { Length, IsNotEmpty } from 'class-validator'
+import { Length, IsNotEmpty, IsNumber } from 'class-validator'
 import { UsuarioModel } from '../../../core/infra/models/Usuario.model'
 import { NivelModel } from '../../../core/infra/models/Niveis.model'
 import { CategoriaModel } from '../../../core/infra/models/Categorias.model'
@@ -25,7 +25,7 @@ export class MaterialModel extends BaseEntity {
     @Length(1, 255, { message: 'O título deve ter entre 1 e 255 caracteres.' })
     titulo: string
 
-    @Column({ type: 'text' })
+    @Column({ type: 'text', nullable: true })
     descricao: string
 
     @Column()
@@ -40,9 +40,9 @@ export class MaterialModel extends BaseEntity {
     @IsNotEmpty({ message: 'A categoria não pode estar vazia.' })
     categoria_id: number
 
-    @Column({ length: 50 })
-    @Length(1, 50, { message: 'A duração deve ter entre 1 e 50 caracteres.' })
-    duracao: string
+    @Column({ nullable: true })
+    @IsNumber({}, { message: 'A duração deve ser um número.' })
+    duracao: number
 
     @CreateDateColumn()
     criado_em: Date
