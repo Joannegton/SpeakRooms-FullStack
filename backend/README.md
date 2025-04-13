@@ -23,18 +23,21 @@
 
 ## Description
 
-
 ## Envio de Arquivos e Segurança
 
 O sistema implementa um fluxo seguro para o envio de arquivos, garantindo a integridade e a proteção contra arquivos maliciosos. Abaixo estão os principais pontos do processo:
 
 ### 1. Verificação de Segurança com VirusTotal
-Antes de realizar o upload do arquivo para o Cloudinary, o sistema utiliza a API do **VirusTotal** para verificar se o arquivo está livre de vírus ou outras ameaças. 
+
+Antes de realizar o upload do arquivo para o Cloudinary, o sistema utiliza a API do **VirusTotal** para verificar se o arquivo está livre de vírus ou outras ameaças.
 
 ### 2. Limitação de Tamanho do Arquivo
+
 Para evitar problemas de desempenho e abusos, o sistema impõe um limite de tamanho máximo para os arquivos enviados: 4MB.
 
 ### 3. Upload Seguro no Cloudinary
+
 Após a verificação de segurança, o arquivo é enviado para o **Cloudinary**, onde:
+
 - Apenas formatos permitidos são aceitos (`jpg`, `png`, `pdf`, `ppt`, `pptx`).
 - Transformações são aplicadas para limitar a resolução máxima do arquivo a 800x800 pixels, garantindo consistência e economia de espaço.

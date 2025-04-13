@@ -1,7 +1,7 @@
 import { FileMapperApplication } from './application/mappers/File.mapper'
 import { MaterialMapperApplication } from './application/mappers/Material.mapper'
-import { CriarMaterialUsecase } from './application/usecases/CriarMaterial.usecase'
-import { UploadFileUsecase } from './application/usecases/UploadFile.usecase'
+import { DownloadFileQuery } from './application/queries/downloadFile.query'
+import { UseCases } from './application/usecases'
 import { FileMapper } from './infra/mappers/File.mapper'
 import { MaterialMapper } from './infra/mappers/Material.mapper'
 import { FileRepositoryImpl } from './infra/repositories/File.repository'
@@ -15,8 +15,8 @@ import { Module } from '@nestjs/common'
     imports: [],
     controllers: [MaterialController],
     providers: [
-        UploadFileUsecase,
-        CriarMaterialUsecase,
+        ...UseCases,
+        DownloadFileQuery,
         FileMapper,
         FileMapperApplication,
         MaterialMapper,

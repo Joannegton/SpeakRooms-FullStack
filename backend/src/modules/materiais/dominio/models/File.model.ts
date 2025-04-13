@@ -62,20 +62,17 @@ export class File {
         url: string,
         tipo_arquivo: string,
         tamanho_arquivo: number,
-        enviado_em?: Date,
+        enviado_em: Date,
     ): Resultado<PropriedadesInvalidasExcecao, File> {
-        const resultado = new File(id)
-        const resultadoValidacao = resultado.validar()
-        if (resultadoValidacao.ehFalha())
-            return ResultadoUtil.falha(resultadoValidacao.erro)
+        const arquivo = new File(id)
 
-        const setMaterialId = resultado.setMaterialId(material_id)
-        const setUsuarioId = resultado.setUsuarioId(usuario_id)
-        const setCloudinary_id = resultado.setCloudinary_id(cloudinary_id)
-        const setUrl = resultado.setUrl(url)
-        const setTipoArquivo = resultado.setTipoArquivo(tipo_arquivo)
-        const setTamanhoArquivo = resultado.setTamanhoArquivo(tamanho_arquivo)
-        const setEnviadoEm = resultado.setEnviadoEm(enviado_em)
+        const setMaterialId = arquivo.setMaterialId(material_id)
+        const setUsuarioId = arquivo.setUsuarioId(usuario_id)
+        const setCloudinary_id = arquivo.setCloudinary_id(cloudinary_id)
+        const setUrl = arquivo.setUrl(url)
+        const setTipoArquivo = arquivo.setTipoArquivo(tipo_arquivo)
+        const setTamanhoArquivo = arquivo.setTamanhoArquivo(tamanho_arquivo)
+        const setEnviadoEm = arquivo.setEnviadoEm(enviado_em)
 
         return ResultadoUtil.obterResultado(
             [
@@ -87,25 +84,8 @@ export class File {
                 setTamanhoArquivo,
                 setEnviadoEm,
             ],
-            resultado,
+            arquivo,
         )
-    }
-
-    /**
-     * Valida todas as propriedades da entidade.
-     * @returns Resultado indicando sucesso ou falha na validação.
-     */
-    validar(): Resultado<PropriedadesInvalidasExcecao, void> {
-        const resultados = [
-            this.setMaterialId(this._material_id),
-            this.setCloudinary_id(this._cloudinary_id),
-            this.setUrl(this._url),
-            this.setTipoArquivo(this._tipo_arquivo),
-            this.setTamanhoArquivo(this._tamanho_arquivo),
-            this.setEnviadoEm(this._enviado_em),
-        ]
-
-        return ResultadoUtil.obterResultado(resultados, undefined)
     }
 
     private setTipoArquivo(
@@ -139,7 +119,7 @@ export class File {
         return ResultadoUtil.sucesso()
     }
 
-    private validarUrl(url: string): boolean {
+    validarUrl(url: string): boolean {
         try {
             const parsedUrl = new URL(url)
             return parsedUrl.protocol === 'https:'

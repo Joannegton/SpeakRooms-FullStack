@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common'
 import { FileRepository } from '../../dominio/repositories/File.repository'
-import { FileDto, UploadFileDTO } from '../dtos/FIle.dto'
+import { UploadFileDTO } from '../dtos/FIle.dto'
 import { FileMapperApplication } from '../mappers/File.mapper'
 import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
 import {
@@ -14,29 +14,30 @@ export class UploadFileUsecase {
     constructor(
         @Inject('FileRepository')
         private readonly fileRepository: FileRepository,
+        private readonly fileMapper: FileMapperApplication,
     ) {}
 
     /**
      * Faz o upload de um arquivo para o Cloudinary e salva os metadados no banco de dados.
      * @param file Arquivo a ser enviado.
      * @param metadata Metadados do arquivo.
-     * @returns Resultado do upload contendo os metadados do arquivo ou uma falha.
+     * @returns Resultado sucesso ou uma falha.
      */
     async execute(
         file: Express.Multer.File,
         metadata: UploadFileDTO,
-    ): ResultadoAssincrono<UploadUsecaseExceptions, FileDto> {
+    ): ResultadoAssincrono<UploadUsecaseExceptions, void> {
         const result = await this.fileRepository.uploadNoCloudinary(file)
         if (result.ehFalha()) {
             return ResultadoUtil.falha(result.erro)
         }
 
-        metadata.url = result.valor.url
+        metadata.url = result.valor.secure_url
         metadata.tamanho_arquivo = result.valor.bytes
         metadata.tipo_arquivo = result.valor.format
         metadata.cloudinary_id = result.valor.public_id
 
-        const metadataDomain = new FileMapperApplication().toDomain(metadata)
+        const metadataDomain = this.fileMapper.toDomain(metadata)
         if (metadataDomain.ehFalha()) {
             return ResultadoUtil.falha(metadataDomain.erro)
         }
@@ -49,6 +50,6 @@ export class UploadFileUsecase {
             return ResultadoUtil.falha(resultMetadata.erro)
         }
 
-        return ResultadoUtil.sucesso(resultMetadata.valor)
+        return ResultadoUtil.sucesso()
     }
 }

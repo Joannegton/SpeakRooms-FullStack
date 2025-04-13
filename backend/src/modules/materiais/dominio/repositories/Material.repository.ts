@@ -15,4 +15,19 @@ export interface MaterialRepository {
     salvar(
         material: Material,
     ): ResultadoAssincrono<MaterialRepositoryExceptions, Material>
+    deletarMaterial(
+        material_id: number,
+    ): ResultadoAssincrono<MaterialRepositoryExceptions, void>
+    buscarMaterialPorId(
+        material_id: number,
+    ): ResultadoAssincrono<MaterialRepositoryExceptions, Material>
+    buscarMateriaisPorUsuario(
+        usuario_id: number,
+    ): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]>
+    buscarMateriaisPorTipo(
+        tipo: string,
+    ): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]>
+    buscarMateriaisPorNivel(
+        nivel: string,
+    ): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]>
 }

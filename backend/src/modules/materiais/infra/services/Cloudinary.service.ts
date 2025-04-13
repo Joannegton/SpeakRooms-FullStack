@@ -58,7 +58,7 @@ export class CloudinaryService {
                     cloudinary.uploader
                         .upload_stream(
                             {
-                                // adicionar pptx e ppt https://cloudinary.com/documentation
+                                // adicionar pptx e ppt https://cloudinary.com/documentation/upload_images
                                 resource_type: 'auto',
                                 folder: 'speackRoomFiles',
                                 public_id: file.originalname,
@@ -88,6 +88,20 @@ export class CloudinaryService {
             console.error('Erro ao fazer upload no Cloudinary:', error)
             return ResultadoUtil.falha(
                 new ServicoExcecao(error.message || 'Erro ao fazer upload'),
+            )
+        }
+    }
+
+    async deleteFileFromCloudinary(
+        publicId: string,
+    ): ResultadoAssincrono<ServicoExcecao, string> {
+        try {
+            const result = await cloudinary.uploader.destroy(publicId)
+            return ResultadoUtil.sucesso(result.result)
+        } catch (error) {
+            console.error('Erro ao deletar arquivo do Cloudinary:', error)
+            return ResultadoUtil.falha(
+                new ServicoExcecao(error.message || 'Erro ao deletar arquivo'),
             )
         }
     }

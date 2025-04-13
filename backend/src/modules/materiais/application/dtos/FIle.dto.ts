@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios'
 import { Transform } from 'class-transformer'
 import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator'
 
@@ -49,11 +50,9 @@ export class UpdateFileDTO {
 }
 
 export class FileDto {
-    id: number
     cloudinary_id: string
     url: string
     tipo_arquivo: string
     tamanho_arquivo: number
-    enviado_em: Date
-    usuario_id: number
+    arquivo: AxiosResponse
 }

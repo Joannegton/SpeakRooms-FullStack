@@ -21,6 +21,7 @@ export class FileMapper {
             model.url,
             model.tipo_arquivo,
             model.tamanho_arquivo,
+            model.enviado_em,
         )
 
         if (domain.ehFalha()) return ResultadoUtil.falha(domain.erro)

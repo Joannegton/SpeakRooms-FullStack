@@ -11,7 +11,6 @@ import { Injectable } from '@nestjs/common'
 @Injectable()
 export class MaterialRepositoryImpl implements MaterialRepository {
     constructor(private readonly materialMapper: MaterialMapper) {}
-
     async salvar(
         material: Material,
     ): ResultadoAssincrono<MaterialRepositoryExceptions, Material> {
@@ -27,5 +26,21 @@ export class MaterialRepositoryImpl implements MaterialRepository {
                 new ServicoExcecao('Erro ao salvar material'),
             )
         }
+    }
+
+    deletarMaterial(material_id: number): ResultadoAssincrono<MaterialRepositoryExceptions, void> {
+        throw new Error('Method not implemented.')
+    }
+    buscarMaterialPorId(material_id: number): ResultadoAssincrono<MaterialRepositoryExceptions, Material> {
+        throw new Error('Method not implemented.')
+    }
+    buscarMateriaisPorUsuario(usuario_id: number): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]> {
+        throw new Error('Method not implemented.')
+    }
+    buscarMateriaisPorTipo(tipo: string): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]> {
+        throw new Error('Method not implemented.')
+    }
+    buscarMateriaisPorNivel(nivel: string): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]> {
+        throw new Error('Method not implemented.')
     }
 }

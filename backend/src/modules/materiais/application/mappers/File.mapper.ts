@@ -17,9 +17,7 @@ export class FileMapperApplication {
             cloudinary_id: dominio.cloudinary_id,
             tipo_arquivo: dominio.tipo_arquivo,
             tamanho_arquivo: dominio.tamanho_arquivo,
-            enviado_em: dominio.enviado_em,
-            usuario_id: dominio.usuario_id,
-            id: dominio.id,
+            arquivo: null, // O arquivo não está disponível no domínio
         }
     }
 
