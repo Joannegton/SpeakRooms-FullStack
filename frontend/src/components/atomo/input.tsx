@@ -3,7 +3,7 @@ import { useState, ChangeEvent } from 'react'
 
 interface InputProps {
     defaultValue: string
-    name: string
+    name?: string
     requiredValue: boolean
     inputType: 'text' | 'password' | 'email' | 'number'
     placeholderText?: string
@@ -35,7 +35,7 @@ export const Input = ({
     return (
         <div className={`relative w-full ${className}`}>
             <input
-                className="w-full rounded-md border border-border-color bg-transparent px-2 py-1 text-sm text-text-black focus:outline-primary"
+                className="w-full border-b border-b-black bg-transparent px-2 py-1 text-sm text-text-black focus:border-b-blue-600 outline-none mb-[12px] p-2 items-center"
                 type={inputType === 'password' && mostrarSenha ? 'text' : inputType}
                 defaultValue={defaultValue}
                 placeholder={placeholderText}
@@ -44,11 +44,12 @@ export const Input = ({
                 }}
             />
             {inputType === 'password' && (
+                
                 <button
                     type="button"
                     onClick={alternarVisibilidade}
                     aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 transform text-gray-400"
+                    className="absolute right-2 top-3 -translate-y-1/2 transform text-gray-400"
                 >
                     {mostrarSenha ? <VisibilityOff aria-hidden="true" /> : <Visibility aria-hidden="true" />}
                 </button>
