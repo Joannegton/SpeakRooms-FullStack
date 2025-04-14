@@ -5,8 +5,9 @@ import {
     HttpResponseConfig,
 } from 'src/utils/AbstractControler'
 import { LoginUseCase } from '../application/useCases/Login.usecase'
-import { LoginParamsDto } from '../application/dtos/Login.dto'
+import { LoginParamsDto, LoginResultDto } from '../application/dtos/Login.dto'
 import { Public } from '../../../decorators/public.decorator'
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 const httpCodeMap: HttpCodeMap = {
     PropriedadesInvalidasExcecao: 400,
@@ -14,6 +15,10 @@ const httpCodeMap: HttpCodeMap = {
     ServicoExcecao: 500,
 }
 
+@ApiTags('Auth')
+@ApiResponse({ status: 400, description: 'Propriedades invalidas' })
+@ApiResponse({ status: 401, description: 'Não autorizado' })
+@ApiResponse({ status: 500, description: 'Erro interno no servidor.' })
 @Controller('auth')
 export class AuthController extends AbstractController {
     constructor(private readonly loginUseCase: LoginUseCase) {
@@ -25,9 +30,17 @@ export class AuthController extends AbstractController {
     }
 
     @Public()
+    @ApiOperation({ summary: 'Realiza o login do usuário' })
+    @ApiResponse({
+        status: 200,
+        description: 'Login realizado com sucesso',
+        type: LoginResultDto,
+    })
+    @ApiBody({ type: LoginParamsDto })
     @Post('/login')
     async login(@Body() params: LoginParamsDto) {
         const result = await this.loginUseCase.execute(params)
+        // modificar para enviar o token nos cookies
         return super.buildResponse({ result })
     }
 
