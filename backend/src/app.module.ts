@@ -1,47 +1,13 @@
-import { UsuarioModule } from './modules/usuario/usuario.module'
-import { MiddlewareConsumer, Module } from '@nestjs/common'
+import { SharedModule } from './shared/shared.module'
+import { CoreModule } from './modules/core/core.module'
+import { Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { RateLimitMiddleware } from './middlewares/rate-limit.middleware'
-import { HelmetMiddleware } from './middlewares/helmet.middleware'
-import { CorsMiddleware } from './middlewares/cors.middleware'
-import { APP_GUARD, Reflector, APP_INTERCEPTOR } from '@nestjs/core'
-import { JwtAuthGuard } from './middlewares/jwt-auth.guard'
-import { JwtService } from '@nestjs/jwt'
-import { HashService } from './shared/services/Hash.service'
-import { HttpInterceptor } from './utils/http.interceptor'
+import { MateriaisModule } from './modules/materiais/materiais.module'
 
 @Module({
-    imports: [UsuarioModule],
+    imports: [SharedModule, CoreModule, MateriaisModule],
     controllers: [AppController],
-    providers: [
-        JwtService,
-        AppService,
-        {
-            provide: 'HashService',
-            useClass: HashService,
-        },
-        {
-            provide: APP_GUARD,
-            useFactory(
-                jwtService: JwtService,
-                reflector: Reflector,
-                hashService: HashService,
-            ) {
-                return new JwtAuthGuard(jwtService, reflector, hashService)
-            },
-            inject: [JwtService, Reflector, 'HashService'],
-        },
-        {
-            provide: APP_INTERCEPTOR,
-            useClass: HttpInterceptor,
-        },
-    ],
+    providers: [AppService],
 })
-export class AppModule {
-    configure(consumer: MiddlewareConsumer) {
-        consumer.apply(RateLimitMiddleware).forRoutes('*')
-        consumer.apply(HelmetMiddleware).forRoutes('*')
-        consumer.apply(CorsMiddleware).forRoutes('*')
-    }
-}
+export class AppModule {}
