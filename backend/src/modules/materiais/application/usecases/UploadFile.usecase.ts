@@ -17,16 +17,16 @@ export class UploadFileUsecase {
         private readonly fileMapper: FileMapperApplication,
     ) {}
 
-    /**
-     * Faz o upload de um arquivo para o Cloudinary e salva os metadados no banco de dados.
-     * @param file Arquivo a ser enviado.
-     * @param metadata Metadados do arquivo.
-     * @returns Resultado sucesso ou uma falha.
-     */
     async execute(
         file: Express.Multer.File,
         metadata: UploadFileDTO,
     ): ResultadoAssincrono<UploadUsecaseExceptions, void> {
+        if (!file) {
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Arquivo não encontrado'),
+            )
+        }
+
         const result = await this.fileRepository.uploadNoCloudinary(file)
         if (result.ehFalha()) {
             return ResultadoUtil.falha(result.erro)

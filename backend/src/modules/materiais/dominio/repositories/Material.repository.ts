@@ -24,10 +24,10 @@ export interface MaterialRepository {
     buscarMateriaisPorUsuario(
         usuario_id: number,
     ): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]>
-    buscarMateriaisPorTipo(
-        tipo: string,
+    buscarMateriaisPorCategoria(
+        categoria: string[],
     ): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]>
     buscarMateriaisPorNivel(
-        nivel: string,
+        nivel: string[],
     ): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]>
 }

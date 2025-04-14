@@ -5,8 +5,10 @@ import {
 } from '../../dominio/repositories/Material.repository'
 import { Material } from '../../dominio/models/Materiais.model'
 import { MaterialMapper } from '../mappers/Material.mapper'
-import { ServicoExcecao } from 'src/utils/exception'
+import { RepositorioSemDadosExcecao, ServicoExcecao } from 'src/utils/exception'
 import { Injectable } from '@nestjs/common'
+import { MaterialModel } from '../models/Materiais.model'
+import { In } from 'typeorm'
 
 @Injectable()
 export class MaterialRepositoryImpl implements MaterialRepository {
@@ -16,7 +18,6 @@ export class MaterialRepositoryImpl implements MaterialRepository {
     ): ResultadoAssincrono<MaterialRepositoryExceptions, Material> {
         try {
             const model = this.materialMapper.domainToModel(material)
-
             await model.save()
 
             return ResultadoUtil.sucesso()
@@ -28,19 +29,99 @@ export class MaterialRepositoryImpl implements MaterialRepository {
         }
     }
 
-    deletarMaterial(material_id: number): ResultadoAssincrono<MaterialRepositoryExceptions, void> {
-        throw new Error('Method not implemented.')
+    async deletarMaterial(
+        material_id: number,
+    ): ResultadoAssincrono<MaterialRepositoryExceptions, void> {
+        const model = await MaterialModel.delete({ material_id: material_id })
+        if (!model) {
+            return ResultadoUtil.falha(
+                new RepositorioSemDadosExcecao('Material não encontrado'),
+            )
+        }
+
+        return ResultadoUtil.sucesso()
     }
-    buscarMaterialPorId(material_id: number): ResultadoAssincrono<MaterialRepositoryExceptions, Material> {
-        throw new Error('Method not implemented.')
+
+    async buscarMaterialPorId(
+        material_id: number,
+    ): ResultadoAssincrono<MaterialRepositoryExceptions, Material> {
+        const model = await MaterialModel.findOne({
+            where: { material_id: material_id },
+        })
+
+        if (!model) {
+            return ResultadoUtil.falha(
+                new RepositorioSemDadosExcecao('Material não encontrado'),
+            )
+        }
+
+        const domain = this.materialMapper.modelToDomain(model)
+        if (domain.ehFalha()) {
+            return ResultadoUtil.falha(domain.erro)
+        }
+
+        return ResultadoUtil.sucesso(domain.valor)
     }
-    buscarMateriaisPorUsuario(usuario_id: number): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]> {
-        throw new Error('Method not implemented.')
+
+    async buscarMateriaisPorUsuario(
+        usuario_id: number,
+    ): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]> {
+        const model = await MaterialModel.find({
+            where: { usuario_id: usuario_id },
+        })
+
+        if (!model) {
+            return ResultadoUtil.falha(
+                new RepositorioSemDadosExcecao('Materiais não encontrados'),
+            )
+        }
+
+        const domain = this.materialMapper.modelToDomainList(model)
+        if (domain.ehFalha()) {
+            return ResultadoUtil.falha(domain.erro)
+        }
+
+        return ResultadoUtil.sucesso(domain.valor)
     }
-    buscarMateriaisPorTipo(tipo: string): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]> {
-        throw new Error('Method not implemented.')
+
+    async buscarMateriaisPorCategoria(
+        categoria: string[],
+    ): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]> {
+        const model = await MaterialModel.find({
+            where: { categoria_id: In(categoria) },
+        })
+
+        if (!model) {
+            return ResultadoUtil.falha(
+                new RepositorioSemDadosExcecao('Materiais não encontrados'),
+            )
+        }
+
+        const domain = this.materialMapper.modelToDomainList(model)
+        if (domain.ehFalha()) {
+            return ResultadoUtil.falha(domain.erro)
+        }
+
+        return ResultadoUtil.sucesso(domain.valor)
     }
-    buscarMateriaisPorNivel(nivel: string): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]> {
-        throw new Error('Method not implemented.')
+    async buscarMateriaisPorNivel(
+        nivel: string[],
+    ): ResultadoAssincrono<MaterialRepositoryExceptions, Material[]> {
+        const model = await MaterialModel.find({
+            where: { nivel_id: In(nivel) },
+        })
+
+        if (!model) {
+            return ResultadoUtil.falha(
+                new RepositorioSemDadosExcecao('Materiais não encontrados'),
+            )
+        }
+
+        const domain = this.materialMapper.modelToDomainList(model)
+        if (domain.ehFalha()) {
+            return ResultadoUtil.falha(domain.erro)
+        }
+
+        return ResultadoUtil.sucesso(domain.valor)
     }
 }

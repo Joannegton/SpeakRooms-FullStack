@@ -1,6 +1,6 @@
 import { FileMapperApplication } from './application/mappers/File.mapper'
 import { MaterialMapperApplication } from './application/mappers/Material.mapper'
-import { DownloadFileQuery } from './application/queries/downloadFile.query'
+import { Queries } from './application/queries'
 import { UseCases } from './application/usecases'
 import { FileMapper } from './infra/mappers/File.mapper'
 import { MaterialMapper } from './infra/mappers/Material.mapper'
@@ -16,7 +16,7 @@ import { Module } from '@nestjs/common'
     controllers: [MaterialController],
     providers: [
         ...UseCases,
-        DownloadFileQuery,
+        ...Queries,
         FileMapper,
         FileMapperApplication,
         MaterialMapper,

@@ -29,6 +29,10 @@ export class MaterialMapperApplication {
         }
     }
 
+    toDtoList(domains: Material[]): MaterialDto[] {
+        return domains.map((domain) => this.toDto(domain))
+    }
+
     toDomain(
         dto: CriarMaterialDTO,
     ): Resultado<MaterialMapperExceptions, Material> {

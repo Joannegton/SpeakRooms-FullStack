@@ -35,6 +35,22 @@ export class MaterialMapper {
         return ResultadoUtil.sucesso(domain.valor)
     }
 
+    public modelToDomainList(
+        models: MaterialModel[],
+    ): Resultado<MaterialRepositoryExceptions, Material[]> {
+        const domains: Material[] = []
+
+        for (const model of models) {
+            const resultado = this.modelToDomain(model)
+            if (resultado.ehFalha()) {
+                return ResultadoUtil.falha(resultado.erro)
+            }
+            domains.push(resultado.valor)
+        }
+
+        return ResultadoUtil.sucesso(domains)
+    }
+
     public domainToModel(domain: Material): MaterialModel {
         if (!domain) {
             throw new Error('Domain object is undefined or null.')
