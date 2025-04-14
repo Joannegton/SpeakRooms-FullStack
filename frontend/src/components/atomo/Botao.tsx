@@ -9,6 +9,7 @@ interface BotaoProps {
     desabilitado?: boolean;
     className?: string;
     iconePosicao?: 'esquerda' | 'direita';
+    type?: string
 }
 
 export function Botao({
@@ -16,6 +17,7 @@ export function Botao({
     onClick,
     tamanho = 'medio',
     icone,
+    type,
     desabilitado = false,
     className = '',
     iconePosicao = 'esquerda',
@@ -30,6 +32,7 @@ export function Botao({
         <button
             onClick={onClick}
             disabled={desabilitado}
+            typeof={type}
             className={`flex items-center justify-center gap-2 rounded ${tamanhos[tamanho]}  
                 ${desabilitado ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md'} ${className}
                 bg-primary hover:bg-primary-hover
