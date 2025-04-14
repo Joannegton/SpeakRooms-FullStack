@@ -92,7 +92,7 @@ export class File {
         tipo_arquivo: string,
     ): Resultado<PropriedadesInvalidasExcecao, void> {
         const tiposImagem = ['jpeg', 'png']
-        const tiposPermitidos = [...tiposImagem, 'pdf', 'vnd.ms-powerpoint'] // arrumar
+        const tiposPermitidos = [...tiposImagem, 'pdf']
 
         if (!tipo_arquivo || !tiposPermitidos.includes(tipo_arquivo)) {
             return ResultadoUtil.falha(

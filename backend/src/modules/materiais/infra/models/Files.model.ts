@@ -15,8 +15,7 @@ export class FileModel extends BaseEntity {
     @PrimaryGeneratedColumn()
     arquivo_id: number
 
-    //arrumar para não repetir material_id, entre outros
-    @Column()
+    @Column({ unique: true })
     material_id: number
 
     @Column()
