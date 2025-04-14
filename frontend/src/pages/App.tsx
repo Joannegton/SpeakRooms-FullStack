@@ -1,6 +1,6 @@
 import { Botao } from '../components/atomo/Botao'
-import { EntradaTexto } from '../components/atomo/EntradaTexto'
 import ChatRoomCard from '../components/molecula/ChatRoomCard'
+import { LoginForm } from '../components/organismo/form'
 
 export const App = () => {
     return (
@@ -16,6 +16,6 @@ export const App = () => {
                 className='p-7'
             />
             <ChatRoomCard title={'Iniciando na plataforma'} level={'Beginner'} participants={7} />
-            <EntradaTexto label='Número' type={'password'} placeholder='Número' />
+            <LoginForm/>
         </div>
     )}
