@@ -11,12 +11,26 @@ import { AtualizarUsuarioUseCase } from '../application/useCases/AtualizarUsuari
 import { DeletarUsuarioUseCase } from '../application/useCases/DeletarUsuario.usecase'
 import { BuscarUsuarioQuery } from '../application/queries/BuscarUsuarioEmailUsuario.query'
 import { Public } from '../../../decorators/public.decorator'
+import {
+    ApiBody,
+    ApiOperation,
+    ApiParam,
+    ApiResponse,
+    ApiSecurity,
+    ApiTags,
+} from '@nestjs/swagger'
 
 const httpCodeMap: HttpCodeMap = {
     PropriedadesInvalidasExcecao: 400,
+    NaoAutorizadoException: 401,
     RepositorioExcecao: 500,
+    ServicoExcecao: 500,
 }
 
+@ApiTags('Usuario')
+@ApiResponse({ status: 400, description: 'Propriedades invalidas' })
+@ApiResponse({ status: 401, description: 'Não autorizado' })
+@ApiResponse({ status: 500, description: 'Erro interno no servidor.' })
 @Controller('usuario')
 export class UsuarioController extends AbstractController {
     constructor(
@@ -34,13 +48,22 @@ export class UsuarioController extends AbstractController {
     }
 
     @Public()
-    @Post('/cadastro')
+    @ApiOperation({ summary: 'Cadastra um novo usuário no sistema' })
+    @ApiBody({ type: UsuarioDto })
+    @ApiResponse({
+        status: 200,
+        description: 'Usuário cadastrado com sucesso.',
+    })
+    @Post()
     async salvarUsuario(@Body() params: UsuarioDto) {
         const result = await this.salvarUsuarioUseCase.execute(params)
 
         return super.buildResponse({ result })
     }
 
+    @ApiSecurity('accessToken')
+    @ApiOperation({ summary: 'Lista todos os usuários do sistema' })
+    @ApiResponse({ status: 200, type: [UsuarioDto] })
     @Get()
     async listarUsuarios() {
         const result = await this.listarUsuariosUseCase.execute()
@@ -48,6 +71,10 @@ export class UsuarioController extends AbstractController {
         return super.buildResponse({ result })
     }
 
+    @ApiSecurity('accessToken')
+    @ApiOperation({ summary: 'Lista um usuário pelo email ou nome de usuário' })
+    @ApiResponse({ status: 200, type: UsuarioDto })
+    @ApiParam({ name: 'emailOuUsuario', type: String })
     @Get('/:emailOuUsuario')
     async listarUsuarioPorId(@Param('emailOuUsuario') emailOuUsuario: string) {
         const result = await this.listarUsuarioUseCase.execute(emailOuUsuario)
@@ -55,17 +82,31 @@ export class UsuarioController extends AbstractController {
         return super.buildResponse({ result })
     }
 
-    @Put('/atualizar/:id')
+    @ApiSecurity('accessToken')
+    @ApiOperation({ summary: 'Atualiza um usuário no sistema' })
+    @ApiBody({ type: UsuarioDto })
+    @ApiResponse({
+        status: 200,
+        description: 'Usuário atualizado com sucesso.',
+    })
+    @ApiParam({ name: 'id', type: String })
+    @Put('/:id')
     async atualizarUsuario(@Body() params: UsuarioDto) {
         const result = await this.atualizarUsuarioUseCase.execute(params)
 
         return super.buildResponse({ result })
     }
 
-    @Delete('/deletar/:nomeUsuario')
+    @ApiSecurity('accessToken')
+    @ApiOperation({ summary: 'Deleta um usuário do sistema' })
+    @ApiResponse({
+        status: 200,
+        description: 'Usuário deletado com sucesso.',
+    })
+    @ApiParam({ name: 'nomeUsuario', type: String })
+    @Delete('/:nomeUsuario')
     async deletarUsuario(@Param('nomeUsuario') nomeUsuario: string) {
         const result = await this.deletarUsuarioUseCase.execute(nomeUsuario)
-
         return super.buildResponse({ result })
     }
 }

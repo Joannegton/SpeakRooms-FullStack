@@ -206,6 +206,7 @@ export class Usuario {
     private setInteressesId(
         interessesId: number[],
     ): Resultado<UsuarioRepositoryExceptions, void> {
+        console.log('interesses domain', interessesId)
         this._interessesId = interessesId
         return ResultadoUtil.sucesso()
     }

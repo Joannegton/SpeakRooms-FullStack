@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import { Body, Controller, Post, Res } from '@nestjs/common'
 import {
     AbstractController,
     HttpCodeMap,
@@ -8,11 +8,14 @@ import { LoginUseCase } from '../application/useCases/Login.usecase'
 import { LoginParamsDto, LoginResultDto } from '../application/dtos/Login.dto'
 import { Public } from '../../../decorators/public.decorator'
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Response } from 'express'
+import { ResultadoUtil } from 'src/utils/result'
 
 const httpCodeMap: HttpCodeMap = {
     PropriedadesInvalidasExcecao: 400,
     RepositorioExcecao: 500,
     ServicoExcecao: 500,
+    NaoAutorizadoException: 401,
 }
 
 @ApiTags('Auth')
@@ -38,10 +41,26 @@ export class AuthController extends AbstractController {
     })
     @ApiBody({ type: LoginParamsDto })
     @Post('/login')
-    async login(@Body() params: LoginParamsDto) {
+    async login(
+        @Body() params: LoginParamsDto,
+        @Res({ passthrough: true }) response: Response,
+    ) {
         const result = await this.loginUseCase.execute(params)
-        // modificar para enviar o token nos cookies
-        return super.buildResponse({ result })
+        if (result.ehFalha()) {
+            return ResultadoUtil.falha(result.erro)
+        }
+
+        response.cookie('acessToken', result.valor.accessToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: 3600000, // 1 hora
+        })
+
+        return super.buildResponse({
+            result: ResultadoUtil.sucesso(result.valor.usuario),
+            successStatusCode: 200,
+        })
     }
 
     @Post('/logout')

@@ -107,13 +107,28 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
         try {
             const model = this.usuarioMapper.domainToModel(usuario)
-            if (model.ehFalha()) return ResultadoUtil.falha(model.erro)
+            if (model.ehFalha()) {
+                return ResultadoUtil.falha(model.erro)
+            }
 
-            await model.valor.save()
+            console.log('model', model.valor)
+            const result = await UsuarioModel.update(
+                { usuario_id: model.valor.usuario_id },
+                model.valor,
+            )
+
+            if (result.affected === 0) {
+                return ResultadoUtil.falha(
+                    new RepositorioSemDadosExcecao(
+                        'Usuário não encontrado para atualização',
+                    ),
+                )
+            }
+
             return ResultadoUtil.sucesso()
         } catch (error) {
-            console.error('Erro ao atualizar usuario', error)
-            return ResultadoUtil.falha(new RepositorioExcecao(error))
+            console.error('Erro ao atualizar usuário:', error)
+            return ResultadoUtil.falha(new RepositorioExcecao('Erro ao atualizar usuário.'))
         }
     }
 

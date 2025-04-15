@@ -15,6 +15,11 @@ type LoginUseCaseExceptions =
     | ServicoExcecao
     | RepositorioExcecao
 
+type LoginResultToken = {
+    accessToken: string
+    usuario: LoginResultDto
+}
+
 @Injectable()
 export class LoginUseCase {
     constructor(
@@ -26,7 +31,7 @@ export class LoginUseCase {
 
     async execute(
         login: LoginParamsDto,
-    ): ResultadoAssincrono<LoginUseCaseExceptions, LoginResultDto> {
+    ): ResultadoAssincrono<LoginUseCaseExceptions, LoginResultToken> {
         const { emailOuUsuario, senha } = login
 
         if (!emailOuUsuario || !senha) {
@@ -55,8 +60,10 @@ export class LoginUseCase {
 
         return ResultadoUtil.sucesso({
             accessToken: autenticar.valor.access_token,
-            usuario_id: autenticar.valor.usuario_id,
-            nome_usuario: autenticar.valor.nome_usuario,
+            usuario: {
+                usuario_id: autenticar.valor.usuario_id,
+                nome_usuario: autenticar.valor.nome_usuario,
+            },
         })
     }
 }

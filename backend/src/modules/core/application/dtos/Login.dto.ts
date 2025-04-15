@@ -21,12 +21,6 @@ export class LoginParamsDto {
 
 export class LoginResultDto {
     @ApiProperty({
-        description: 'Token de acesso do usuário',
-        example: 'token_de_acesso_exemplo',
-    })
-    accessToken: string
-
-    @ApiProperty({
         description: 'ID do usuário',
         example: 1,
     })
