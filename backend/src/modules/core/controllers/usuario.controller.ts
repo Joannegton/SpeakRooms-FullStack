@@ -1,6 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { SalvarUsuarioUseCase } from '../application/useCases/SalvarUsuario.usecase'
-import { UsuarioDto } from '../application/dtos/Usuario.dto'
+import {
+    AtualizarUsuarioDto,
+    CriarUsuarioDto,
+    UsuarioDto,
+} from '../application/dtos/Usuario.dto'
 import {
     AbstractController,
     HttpCodeMap,
@@ -49,13 +53,13 @@ export class UsuarioController extends AbstractController {
 
     @Public()
     @ApiOperation({ summary: 'Cadastra um novo usuário no sistema' })
-    @ApiBody({ type: UsuarioDto })
+    @ApiBody({ type: CriarUsuarioDto })
     @ApiResponse({
         status: 200,
         description: 'Usuário cadastrado com sucesso.',
     })
     @Post()
-    async salvarUsuario(@Body() params: UsuarioDto) {
+    async salvarUsuario(@Body() params: CriarUsuarioDto) {
         const result = await this.salvarUsuarioUseCase.execute(params)
 
         return super.buildResponse({ result })
@@ -84,15 +88,18 @@ export class UsuarioController extends AbstractController {
 
     @ApiSecurity('accessToken')
     @ApiOperation({ summary: 'Atualiza um usuário no sistema' })
-    @ApiBody({ type: UsuarioDto })
+    @ApiBody({ type: AtualizarUsuarioDto })
     @ApiResponse({
         status: 200,
         description: 'Usuário atualizado com sucesso.',
     })
     @ApiParam({ name: 'id', type: String })
     @Put('/:id')
-    async atualizarUsuario(@Body() params: UsuarioDto) {
-        const result = await this.atualizarUsuarioUseCase.execute(params)
+    async atualizarUsuario(
+        @Body() params: AtualizarUsuarioDto,
+        @Param('id') id: number,
+    ) {
+        const result = await this.atualizarUsuarioUseCase.execute(id, params)
 
         return super.buildResponse({ result })
     }

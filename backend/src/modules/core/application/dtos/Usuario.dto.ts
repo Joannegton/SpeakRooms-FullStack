@@ -9,11 +9,7 @@ import {
 } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
 
-export class UsuarioDto {
-    @ApiProperty({ description: 'ID do usuário', example: 1 })
-    @IsNumber({}, { message: 'O ID inválido.' })
-    usuario_id: number
-
+export class CriarUsuarioDto {
     @ApiProperty({ description: 'Nome de usuário', example: 'johndoe' })
     @IsString({ message: 'O nome de usuário deve ser uma string.' })
     @IsNotEmpty({ message: 'O nome de usuário é obrigatório.' })
@@ -51,6 +47,107 @@ export class UsuarioDto {
         example: [1, 2, 3],
     })
     @IsNotEmpty({ message: 'Os interesses são obrigatórios.' })
+    @IsNumber({}, { each: true, message: 'Os interesses devem ser números.' })
+    interessesId: number[]
+
+    @ApiProperty({
+        description: 'URL do avatar do usuário',
+        example: 'http://example.com/avatar.jpg',
+        required: false,
+    })
+    @IsOptional()
+    @IsString({ message: 'A URL do avatar deve ser uma string.' })
+    urlAvatar?: string
+}
+
+export class AtualizarUsuarioDto {
+    @ApiProperty({
+        description: 'Primeiro nome do usuário',
+        example: 'John',
+        required: false,
+    })
+    @IsOptional()
+    @IsString({ message: 'Formato inválido.' })
+    primeiroNome?: string
+
+    @ApiProperty({
+        description: 'Sobrenome do usuário',
+        example: 'Doe',
+        required: false,
+    })
+    @IsOptional()
+    @IsString({ message: 'Formato inválido' })
+    sobrenome?: string
+
+    @ApiProperty({
+        description: 'ID do nível de inglês',
+        example: 2,
+        required: false,
+    })
+    @IsOptional()
+    @IsNumber({}, { message: 'O nível de inglês deve ser um número válido.' })
+    nivelInglesId?: number
+
+    @ApiProperty({
+        description: 'IDs dos interesses do usuário',
+        example: [1, 2, 3],
+        required: false,
+    })
+    @IsOptional()
+    @IsNumber({}, { each: true, message: 'Os interesses devem ser números.' })
+    interessesId?: number[]
+
+    @ApiProperty({
+        description: 'URL do avatar do usuário',
+        example: 'http://example.com/avatar.jpg',
+        required: false,
+    })
+    @IsOptional()
+    @IsString({ message: 'A URL do avatar deve ser uma string.' })
+    urlAvatar?: string
+
+    @ApiProperty({
+        description: 'Ativo',
+        example: true,
+        required: false,
+    })
+    @IsOptional()
+    @IsBoolean({ message: 'O campo ativo deve ser um valor booleano.' })
+    ativo?: boolean
+}
+
+export class UsuarioDto {
+    @ApiProperty({ description: 'ID do usuário', example: 1 })
+    @IsNumber({}, { message: 'O ID inválido.' })
+    usuario_id: number
+
+    @ApiProperty({ description: 'Nome de usuário', example: 'johndoe' })
+    @IsString({ message: 'O nome de usuário deve ser uma string.' })
+    nomeUsuario: string
+
+    @ApiProperty({
+        description: 'E-mail do usuário',
+        example: 'johndoe@example.com',
+    })
+    @IsEmail({}, { message: 'O e-mail deve ser válido.' })
+    email: string
+
+    @ApiProperty({ description: 'Primeiro nome do usuário', example: 'John' })
+    @IsString({ message: 'Formato inválido.' })
+    primeiroNome: string
+
+    @ApiProperty({ description: 'Sobrenome do usuário', example: 'Doe' })
+    @IsString({ message: 'Formato inválido' })
+    sobrenome: string
+
+    @ApiProperty({ description: 'ID do nível de inglês', example: 2 })
+    @IsNumber({}, { message: 'O nível de inglês deve ser um número válido.' })
+    nivelInglesId: number
+
+    @ApiProperty({
+        description: 'IDs dos interesses do usuário',
+        example: [1, 2, 3],
+    })
     @IsNumber({}, { each: true, message: 'Os interesses devem ser números.' })
     interessesId: number[]
 

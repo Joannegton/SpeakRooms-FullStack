@@ -8,7 +8,7 @@ import {
 export interface CriarUsuarioProps {
     nomeUsuario: string
     email: string
-    hashSenha: string
+    hashSenha?: string
     primeiroNome: string
     sobrenome: string
     nivelInglesId: number
@@ -28,6 +28,15 @@ export interface CarregarUsuarioProps {
     created_at: Date
     updated_at: Date
     ativo: boolean
+}
+
+export interface AtualizarUsuarioProps {
+    primeiroNome?: string
+    sobrenome?: string
+    urlAvatar?: string
+    nivelInglesId?: number
+    interessesId?: number[]
+    ativo?: boolean
 }
 
 export class Usuario {
@@ -110,6 +119,31 @@ export class Usuario {
                 setAtivo,
                 setCreatedAt,
                 setUpdatedAt,
+            ],
+            usuario,
+        )
+    }
+
+    public static atualizar(
+        id: number,
+        props: AtualizarUsuarioProps,
+    ): Resultado<UsuarioRepositoryExceptions, Usuario> {
+        const usuario = new Usuario(id)
+        const setPrimeiroNome = usuario.setPrimeiroNome(props.primeiroNome)
+        const setSobrenome = usuario.setSobrenome(props.sobrenome)
+        const setNivelInglesId = usuario.setNivelInglesId(props.nivelInglesId)
+        const setInteressesId = usuario.setInteressesId(props.interessesId)
+        const setUrlAvatar = usuario.setUrlAvatar(props.urlAvatar)
+        const setAtivo = usuario.setAtivo(props.ativo)
+
+        return ResultadoUtil.obterResultado(
+            [
+                setPrimeiroNome,
+                setSobrenome,
+                setNivelInglesId,
+                setInteressesId,
+                setUrlAvatar,
+                setAtivo,
             ],
             usuario,
         )
@@ -206,7 +240,6 @@ export class Usuario {
     private setInteressesId(
         interessesId: number[],
     ): Resultado<UsuarioRepositoryExceptions, void> {
-        console.log('interesses domain', interessesId)
         this._interessesId = interessesId
         return ResultadoUtil.sucesso()
     }

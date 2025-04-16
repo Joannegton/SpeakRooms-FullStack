@@ -103,6 +103,7 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
     }
 
     async update(
+        id: number,
         usuario: Usuario,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
         try {
@@ -111,9 +112,8 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
                 return ResultadoUtil.falha(model.erro)
             }
 
-            console.log('model', model.valor)
             const result = await UsuarioModel.update(
-                { usuario_id: model.valor.usuario_id },
+                { usuario_id: id },
                 model.valor,
             )
 
@@ -128,7 +128,9 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
             return ResultadoUtil.sucesso()
         } catch (error) {
             console.error('Erro ao atualizar usuário:', error)
-            return ResultadoUtil.falha(new RepositorioExcecao('Erro ao atualizar usuário.'))
+            return ResultadoUtil.falha(
+                new RepositorioExcecao('Erro ao atualizar usuário.'),
+            )
         }
     }
 

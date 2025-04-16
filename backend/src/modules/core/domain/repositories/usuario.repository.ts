@@ -24,6 +24,7 @@ export interface UsuarioRepository {
         nomeUsuario: string,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
     update(
+        id: number,
         usuario: Usuario,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
 }
