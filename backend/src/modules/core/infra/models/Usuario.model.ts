@@ -10,6 +10,7 @@ import {
     BaseEntity,
     ManyToMany,
     JoinTable,
+    OneToOne,
 } from 'typeorm'
 import {
     IsEmail,
@@ -23,6 +24,7 @@ import { NivelModel } from './Niveis.model'
 import { MaterialModel } from '../../../materiais/infra/models/Materiais.model'
 import { InteressesModel } from './Interesses.model'
 import { FileModel } from 'src/modules/materiais/infra/models/Files.model'
+import { RecuperarSenha } from './RecuperarSenha.model'
 
 @Entity('usuarios')
 export class UsuarioModel extends BaseEntity {
@@ -96,4 +98,8 @@ export class UsuarioModel extends BaseEntity {
         },
     })
     interesses: InteressesModel[]
+
+    @OneToOne(() => RecuperarSenha, (codigo) => codigo.usuario)
+    @JoinColumn({ name: 'usuario_id' })
+    recuperarSenha: RecuperarSenha
 }

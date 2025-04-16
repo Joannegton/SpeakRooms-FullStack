@@ -11,6 +11,7 @@ import {
 } from 'src/utils/exception'
 import { Injectable } from '@nestjs/common'
 import { UsuarioModel } from '../models/Usuario.model'
+import { RecuperarSenha } from '../models/RecuperarSenha.model'
 
 @Injectable()
 export class UsuarioRepositoryImpl implements UsuarioRepository {
@@ -164,6 +165,34 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
             return ResultadoUtil.sucesso(usuarios)
         } catch (error) {
             return ResultadoUtil.falha(new RepositorioExcecao(error))
+        }
+    }
+
+    async salvarCodigoRecuperacaoSenha(
+        id: number,
+        codigoRecuperacao: string,
+    ): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
+        try {
+            const result = await new RecuperarSenha.save({
+                usuario_id: id,
+                codigo: codigoRecuperacao,
+                criado_em: new Date(),
+            })
+
+            if (!result) {
+                return ResultadoUtil.falha(
+                    new RepositorioSemDadosExcecao(
+                        'Erro ao salvar código de recuperação.',
+                    ),
+                )
+            }
+
+            return ResultadoUtil.sucesso()
+        } catch (error) {
+            console.error('Erro ao salvar código de recuperação:', error)
+            return ResultadoUtil.falha(
+                new RepositorioExcecao('Erro ao salvar código de recuperação.'),
+            )
         }
     }
 }

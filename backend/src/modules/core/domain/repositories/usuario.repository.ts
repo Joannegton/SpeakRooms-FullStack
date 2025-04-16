@@ -27,4 +27,8 @@ export interface UsuarioRepository {
         id: number,
         usuario: Usuario,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
+    salvarCodigoRecuperacaoSenha(
+        id: number,
+        codigoRecuperacao: string,
+    ): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
 }

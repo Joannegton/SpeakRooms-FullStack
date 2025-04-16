@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common'
+import { Body, Controller, Param, Post, Res } from '@nestjs/common'
 import {
     AbstractController,
     HttpCodeMap,
@@ -7,9 +7,16 @@ import {
 import { LoginUseCase } from '../application/useCases/Login.usecase'
 import { LoginParamsDto, LoginResultDto } from '../application/dtos/Login.dto'
 import { Public } from '../../../decorators/public.decorator'
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import {
+    ApiBody,
+    ApiOperation,
+    ApiParam,
+    ApiResponse,
+    ApiTags,
+} from '@nestjs/swagger'
 import { Response } from 'express'
 import { ResultadoUtil } from 'src/utils/result'
+import { RecuperarSenhaUseCase } from '../application/useCases/RecuperarSenha.usecase'
 
 const httpCodeMap: HttpCodeMap = {
     PropriedadesInvalidasExcecao: 400,
@@ -24,7 +31,10 @@ const httpCodeMap: HttpCodeMap = {
 @ApiResponse({ status: 500, description: 'Erro interno no servidor.' })
 @Controller('auth')
 export class AuthController extends AbstractController {
-    constructor(private readonly loginUseCase: LoginUseCase) {
+    constructor(
+        private readonly loginUseCase: LoginUseCase,
+        private readonly recuperarSenhaUseCase: RecuperarSenhaUseCase,
+    ) {
         const httpResponseConfig: HttpResponseConfig = {
             httpCodeMap,
             defaultHttpCodeErrors: 500,
@@ -63,9 +73,19 @@ export class AuthController extends AbstractController {
         })
     }
 
-    @Post('/logout')
-    async logout() {
-        // Implementar lógica de logout, se necessário
-        return super.buildResponse({ result: null })
+    @ApiOperation({ summary: 'Recupera a senha do usuário' })
+    @ApiResponse({
+        status: 200,
+        description: 'Senha recuperada com sucesso',
+    })
+    @ApiParam({
+        name: 'usuarioId',
+        required: true,
+        description: 'ID do usuário para recuperação de senha',
+    })
+    @Post('/recuperarSenha/:usuarioOuEmail')
+    async recuperarSenha(@Param('usuarioOuEmail') usuarioOuEmail: string) {
+        const result = await this.recuperarSenhaUseCase.execute(usuarioOuEmail)
+        return super.buildResponse({ result })
     }
 }

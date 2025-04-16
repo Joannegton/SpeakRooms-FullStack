@@ -149,20 +149,29 @@ export class Usuario {
         )
     }
 
-    public static validarSenha(password: string): boolean {
-        // arrumar
+    public static validarSenha(
+        password: string,
+    ): Resultado<UsuarioRepositoryExceptions, void> {
+        // arrumar para usar ele ao inves do em utils
         const minimoCaracteres = 8
         const temMaiuscula = /[A-Z]/.test(password)
         const temMinuscula = /[a-z]/.test(password)
         const temNumero = /[0-9]/.test(password)
         const temCaractereEspecial = /[!@#$%^&*(),.?":{}|<>]/.test(password)
 
-        return (
+        if (
             password.length >= minimoCaracteres &&
             temMaiuscula &&
             temMinuscula &&
             temNumero &&
             temCaractereEspecial
+        )
+            return ResultadoUtil.sucesso()
+
+        return ResultadoUtil.falha(
+            new PropriedadesInvalidasExcecao(
+                'A senha deve conter pelo menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
+            ),
         )
     }
 
