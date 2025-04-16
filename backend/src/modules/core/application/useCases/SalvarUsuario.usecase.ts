@@ -8,6 +8,7 @@ import { UsuarioMapperApplication } from '../mappers/Usuario.mapper'
 import { CriarUsuarioDto } from '../dtos/Usuario.dto'
 import { ResultadoUtil, ResultadoAssincrono } from 'src/utils/result'
 import { HashService } from '../../domain/services/Hash.service'
+import { validarSenha } from 'src/utils/ValidarSenha'
 
 export type SalvarUsuarioUseCaseExceptions =
     | RepositorioExcecao
@@ -25,9 +26,11 @@ export class SalvarUsuarioUseCase {
     async execute(
         usuario: CriarUsuarioDto,
     ): ResultadoAssincrono<SalvarUsuarioUseCaseExceptions, void> {
-        if (!usuario || !usuario.nomeUsuario || !usuario.email) {
+        if (!validarSenha(usuario.senha)) {
             return ResultadoUtil.falha(
-                new PropriedadesInvalidasExcecao('Dados do usuário inválidos.'),
+                new PropriedadesInvalidasExcecao(
+                    'A senha precisa ter ao menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
+                ),
             )
         }
         const hashSenhaResult = await this.hashService.hashPassword(

@@ -8,7 +8,7 @@ import {
 export interface CriarUsuarioProps {
     nomeUsuario: string
     email: string
-    hashSenha?: string
+    senha?: string
     primeiroNome: string
     sobrenome: string
     nivelInglesId: number
@@ -67,7 +67,7 @@ export class Usuario {
         const usuario = new Usuario()
         const setNomeUsuario = usuario.setNomeUsuario(props.nomeUsuario)
         const setEmail = usuario.setEmail(props.email)
-        const setHashSenha = usuario.setHashSenha(props.hashSenha)
+        const setHashSenha = usuario.setSenha(props.senha)
         const setPrimeiroNome = usuario.setPrimeiroNome(props.primeiroNome)
         const setSobrenome = usuario.setSobrenome(props.sobrenome)
         const setNivelInglesId = usuario.setNivelInglesId(props.nivelInglesId)
@@ -94,7 +94,7 @@ export class Usuario {
         const usuario = new Usuario(id)
         const setNomeUsuario = usuario.setNomeUsuario(props.nomeUsuario)
         const setEmail = usuario.setEmail(props.email)
-        const setHashSenha = usuario.setHashSenha(props.hashSenha)
+        const setHashSenha = usuario.setSenha(props.hashSenha)
         const setPrimeiroNome = usuario.setPrimeiroNome(props.primeiroNome)
         const setSobrenome = usuario.setSobrenome(props.sobrenome)
         const setUrlAvatar = usuario.setUrlAvatar(props.urlAvatar)
@@ -149,12 +149,29 @@ export class Usuario {
         )
     }
 
-    private setHashSenha(
+    public static validarSenha(password: string): boolean {
+        // arrumar
+        const minimoCaracteres = 8
+        const temMaiuscula = /[A-Z]/.test(password)
+        const temMinuscula = /[a-z]/.test(password)
+        const temNumero = /[0-9]/.test(password)
+        const temCaractereEspecial = /[!@#$%^&*(),.?":{}|<>]/.test(password)
+
+        return (
+            password.length >= minimoCaracteres &&
+            temMaiuscula &&
+            temMinuscula &&
+            temNumero &&
+            temCaractereEspecial
+        )
+    }
+
+    private setSenha(
         hashSenha: string,
     ): Resultado<UsuarioRepositoryExceptions, void> {
-        if (!hashSenha || hashSenha.trim().length < 5) {
+        if (!hashSenha) {
             return ResultadoUtil.falha(
-                new PropriedadesInvalidasExcecao('Senha inválida.'),
+                new PropriedadesInvalidasExcecao('Hash da senha inválido.'),
             )
         }
 
@@ -264,7 +281,7 @@ export class Usuario {
         this._updated_at = updated_at
         return ResultadoUtil.sucesso()
     }
-    //talvez não funcione pois tem que adc um novo campo no banco
+    //talvez não funcione pois tem que adc um novo campo no banco arrumar
     incrementarTentativasLogin(
         bloqueado: boolean,
     ): Resultado<UsuarioBloqueadoException, void> {
@@ -280,7 +297,7 @@ export class Usuario {
         return ResultadoUtil.sucesso()
     }
 
-    // melhorar implementação
+    // melhorar implementação arrumar
     bloquearUsuario(): void {
         this._hashSenha = ''
         this._hashRecuperarSenha = 'MelhorarAqui'

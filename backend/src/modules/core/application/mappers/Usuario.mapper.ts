@@ -38,7 +38,7 @@ export class UsuarioMapperApplication {
         const domainResult = Usuario.criar({
             nomeUsuario: dto.nomeUsuario,
             email: dto.email,
-            hashSenha: dto.senha,
+            senha: dto.senha,
             primeiroNome: dto.primeiroNome,
             sobrenome: dto.sobrenome,
             nivelInglesId: dto.nivelInglesId,
