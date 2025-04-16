@@ -33,7 +33,7 @@ export class JwtAuthGuard implements CanActivate {
         }
 
         const request = context.switchToHttp().getRequest()
-        const token = this.extractTokenFromHeader(request)
+        const token = this.extractTokenFromCookie(request) // Alterado para buscar no cookie
         if (!token && !isPublicAuth) {
             throw new NaoAutorizadoException('Token não informado')
         }
@@ -45,7 +45,7 @@ export class JwtAuthGuard implements CanActivate {
                 this.hashService.decryptString(jwtVerify.encrypt),
             )
             request.user = payload
-            return true // Garantir que o acesso seja permitido
+            return true
         } catch (error) {
             if (isPublicAuth) return true
             console.error('Token inválido ou expirado', error)
@@ -53,15 +53,11 @@ export class JwtAuthGuard implements CanActivate {
         }
     }
 
-    private extractTokenFromHeader(request: Request): string | null {
-        const authorization = request.headers['authorization']
-        if (!authorization) {
+    private extractTokenFromCookie(request: Request): string | null {
+        const token = request.cookies['acessToken']
+        if (!token) {
             return null
         }
-        const parts = authorization.split(' ')
-        if (parts.length !== 2 || parts[0] !== 'Bearer') {
-            return null
-        }
-        return parts[1]
+        return token
     }
 }

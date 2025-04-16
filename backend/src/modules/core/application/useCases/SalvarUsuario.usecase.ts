@@ -5,7 +5,7 @@ import {
     RepositorioExcecao,
 } from 'src/utils/exception'
 import { UsuarioMapperApplication } from '../mappers/Usuario.mapper'
-import { UsuarioDto } from '../dtos/Usuario.dto'
+import { CriarUsuarioDto } from '../dtos/Usuario.dto'
 import { ResultadoUtil, ResultadoAssincrono } from 'src/utils/result'
 import { HashService } from '../../domain/services/Hash.service'
 
@@ -23,7 +23,7 @@ export class SalvarUsuarioUseCase {
     ) {}
 
     async execute(
-        usuario: UsuarioDto,
+        usuario: CriarUsuarioDto,
     ): ResultadoAssincrono<SalvarUsuarioUseCaseExceptions, void> {
         if (!usuario || !usuario.nomeUsuario || !usuario.email) {
             return ResultadoUtil.falha(

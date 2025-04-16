@@ -6,7 +6,7 @@ import { UsuarioRepository } from '../../domain/repositories/usuario.repository'
 import { Inject } from '@nestjs/common'
 import { UsuarioMapperApplication } from '../mappers/Usuario.mapper'
 import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
-import { UsuarioDto } from '../dtos/Usuario.dto'
+import { AtualizarUsuarioDto } from '../dtos/Usuario.dto'
 
 export type AtualizarUsuarioUseCaseExceptions =
     | RepositorioExcecao
@@ -20,26 +20,15 @@ export class AtualizarUsuarioUseCase {
     ) {}
 
     async execute(
-        usuario: UsuarioDto,
+        id: number,
+        usuario: AtualizarUsuarioDto,
     ): ResultadoAssincrono<AtualizarUsuarioUseCaseExceptions, void> {
-        const usuarioExistente =
-            await this.usuarioRepository.findByUsuarioOrEmail(
-                usuario.nomeUsuario,
-            )
-        if (usuarioExistente.ehFalha()) {
-            return ResultadoUtil.falha(usuarioExistente.erro)
-        }
-
-        if (usuarioExistente.valor.nomeUsuario !== usuario.nomeUsuario) {
-            return ResultadoUtil.falha(
-                new PropriedadesInvalidasExcecao('Credenciais invalidas.'),
-            )
-        }
-
-        const domain = this.usuarioMapper.toDomain(usuario)
+        const domain = this.usuarioMapper.toDomainUpdate(id, usuario)
         if (domain.ehFalha()) return ResultadoUtil.falha(domain.erro)
 
-        await this.usuarioRepository.update(domain.valor)
+        await this.usuarioRepository.update(id, domain.valor)
+        if (domain.ehFalha()) return ResultadoUtil.falha(domain.erro)
+
         return ResultadoUtil.sucesso()
     }
 }
