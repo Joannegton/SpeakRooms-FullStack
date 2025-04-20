@@ -1,5 +1,5 @@
 import { ResultadoAssincrono } from 'src/utils/result'
-import { Usuario } from '../models/usuario.model'
+import { Usuario } from '../models/Usuario.model'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
@@ -26,9 +26,5 @@ export interface UsuarioRepository {
     update(
         id: number,
         usuario: Usuario,
-    ): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
-    salvarCodigoRecuperacaoSenha(
-        id: number,
-        codigoRecuperacao: string,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
 }

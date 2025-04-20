@@ -6,7 +6,7 @@ import {
     RepositorioExcecao,
     ServicoExcecao,
 } from 'src/utils/exception'
-import { UsuarioRepository } from 'src/modules/core/domain/repositories/usuario.repository'
+import { UsuarioRepository } from 'src/modules/core/domain/repositories/Usuario.repository'
 import { AuthService } from '../../domain/services/Auth.service'
 
 //melhorar para nãoautorizadoexception, ver unauthorized do nest

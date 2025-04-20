@@ -10,7 +10,6 @@ import {
     BaseEntity,
     ManyToMany,
     JoinTable,
-    OneToOne,
 } from 'typeorm'
 import {
     IsEmail,
@@ -24,14 +23,13 @@ import { NivelModel } from './Niveis.model'
 import { MaterialModel } from '../../../materiais/infra/models/Materiais.model'
 import { InteressesModel } from './Interesses.model'
 import { FileModel } from 'src/modules/materiais/infra/models/Files.model'
-import { RecuperarSenha } from './RecuperarSenha.model'
 
 @Entity('usuarios')
 export class UsuarioModel extends BaseEntity {
     @PrimaryGeneratedColumn()
     usuario_id: number
 
-    @Column({ length: 50 })
+    @Column({ length: 50, unique: true })
     @IsNotEmpty()
     nome_usuario: string
 
@@ -57,6 +55,7 @@ export class UsuarioModel extends BaseEntity {
 
     @Column()
     @IsInt()
+    @IsNotEmpty()
     nivel_ingles_id: number
 
     @Column({ type: 'int', default: 0 })
@@ -78,7 +77,7 @@ export class UsuarioModel extends BaseEntity {
     @IsBoolean()
     ativo: boolean
 
-    @ManyToOne(() => NivelModel, (nivel) => nivel.usuarios)
+    @ManyToOne(() => NivelModel, (nivel) => nivel.usuarios, { eager: true })
     @JoinColumn({ name: 'nivel_ingles_id' })
     nivel: NivelModel
 
@@ -98,8 +97,4 @@ export class UsuarioModel extends BaseEntity {
         },
     })
     interesses: InteressesModel[]
-
-    @OneToOne(() => RecuperarSenha, (codigo) => codigo.usuario)
-    @JoinColumn({ name: 'usuario_id' })
-    recuperarSenha: RecuperarSenha
 }

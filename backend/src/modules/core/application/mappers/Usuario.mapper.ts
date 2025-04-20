@@ -1,5 +1,5 @@
 import { ResultadoUtil, Resultado } from 'src/utils/result'
-import { Usuario } from '../../domain/models/usuario.model'
+import { Usuario } from '../../domain/models/Usuario.model'
 import {
     AtualizarUsuarioDto,
     CriarUsuarioDto,

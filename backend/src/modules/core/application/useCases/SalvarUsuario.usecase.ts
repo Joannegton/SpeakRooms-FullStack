@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common'
-import { UsuarioRepository } from '../../domain/repositories/usuario.repository'
+import { UsuarioRepository } from '../../domain/repositories/Usuario.repository'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,

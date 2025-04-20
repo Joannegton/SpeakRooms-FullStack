@@ -1,39 +1,43 @@
 import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
-import { UsuarioRepository } from '../../domain/repositories/usuario.repository'
 import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
-import { EmailService } from '../../infra/services/EmailService'
+//import { EmailService } from '../../infra/services/EmailService'
+import { RecuperarSenhaRepository } from '../../domain/repositories/RecuperarSenha.repository'
+import { UsuarioRepository } from '../../domain/repositories/Usuario.repository'
+import { Inject } from '@nestjs/common'
+import { RecuperarSenhaMapperApplication } from '../mappers/RecuperarSenha.mapper'
 
 export class RecuperarSenhaUseCase {
     constructor(
-        private usuarioRepositorio: UsuarioRepository,
-        private emailService: EmailService,
+        @Inject('RecuperarSenhaRepository')
+        private recuperarSenhaRepositorio: RecuperarSenhaRepository,
+        @Inject('UsuarioRepository')
+        private usuarioSenhaRepositorio: UsuarioRepository,
+        private readonly recuperarSenhaMapper: RecuperarSenhaMapperApplication,
+        //private emailService: EmailService,
     ) {}
 
     async execute(
         usuarioOuEmail: string,
     ): ResultadoAssincrono<PropriedadesInvalidasExcecao, void> {
         const usuario =
-            await this.usuarioRepositorio.findByUsuarioOrEmail(usuarioOuEmail)
+            await this.usuarioSenhaRepositorio.findByUsuarioOrEmail(
+                usuarioOuEmail,
+            )
         if (usuario.ehFalha()) {
             return ResultadoUtil.falha(usuario.erro)
         }
 
-        // Gera um código de 6 dígitos aleatórios
-        const tokenRecuperacao = Math.floor(
-            100000 + Math.random() * 900000,
-        ).toString()
+        const domain = this.recuperarSenhaMapper.toDomain(usuario.valor.id)
+        if (domain.ehFalha()) return ResultadoUtil.falha(domain.erro)
 
-        // Envia o token para o e-mail do usuário
-        await this.emailService.sendEmail({
-            to: usuario.valor.email,
-            subject: 'Recuperação de Senha',
-            body: `Use este token para recuperar sua senha: ${tokenRecuperacao}`,
-        })
-
-        // Opcional: Salva o token no banco de dados para validação futura
-        await this.usuarioRepositorio.salvarCodigoRecuperacaoSenha(
-            usuario.valor.id,
-            tokenRecuperacao,
+        const instancia = await this.recuperarSenhaRepositorio.salvar(
+            domain.valor,
         )
+        if (instancia.ehFalha()) {
+            console.log('erro aqui22', instancia.erro)
+            return ResultadoUtil.falha(instancia.erro)
+        }
+
+        return ResultadoUtil.sucesso()
     }
 }

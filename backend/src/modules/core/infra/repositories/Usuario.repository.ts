@@ -1,9 +1,9 @@
 import { ResultadoUtil, ResultadoAssincrono } from 'src/utils/result'
-import { Usuario } from '../../domain/models/usuario.model'
+import { Usuario } from '../../domain/models/Usuario.model'
 import {
     UsuarioRepository,
     UsuarioRepositoryExceptions,
-} from '../../domain/repositories/usuario.repository'
+} from '../../domain/repositories/Usuario.repository'
 import { UsuarioMapper } from '../mappers/Usuario.mapper'
 import {
     RepositorioExcecao,
@@ -11,7 +11,6 @@ import {
 } from 'src/utils/exception'
 import { Injectable } from '@nestjs/common'
 import { UsuarioModel } from '../models/Usuario.model'
-import { RecuperarSenha } from '../models/RecuperarSenha.model'
 
 @Injectable()
 export class UsuarioRepositoryImpl implements UsuarioRepository {
@@ -27,7 +26,10 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
             await model.valor.save()
             return ResultadoUtil.sucesso()
         } catch (error) {
-            return ResultadoUtil.falha(new RepositorioExcecao(error))
+            console.error('Erro ao salvar usuário:', error)
+            return ResultadoUtil.falha(
+                new RepositorioExcecao('Erro ao salvar usuário'),
+            )
         }
     }
 
@@ -53,7 +55,10 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
 
             return ResultadoUtil.sucesso(usuario.valor)
         } catch (error) {
-            return ResultadoUtil.falha(new RepositorioExcecao(error))
+            console.error('Erro ao buscar usuário:', error)
+            return ResultadoUtil.falha(
+                new RepositorioExcecao('Erro ao buscar usuário'),
+            )
         }
     }
 
@@ -165,34 +170,6 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
             return ResultadoUtil.sucesso(usuarios)
         } catch (error) {
             return ResultadoUtil.falha(new RepositorioExcecao(error))
-        }
-    }
-
-    async salvarCodigoRecuperacaoSenha(
-        id: number,
-        codigoRecuperacao: string,
-    ): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
-        try {
-            const result = await new RecuperarSenha.save({
-                usuario_id: id,
-                codigo: codigoRecuperacao,
-                criado_em: new Date(),
-            })
-
-            if (!result) {
-                return ResultadoUtil.falha(
-                    new RepositorioSemDadosExcecao(
-                        'Erro ao salvar código de recuperação.',
-                    ),
-                )
-            }
-
-            return ResultadoUtil.sucesso()
-        } catch (error) {
-            console.error('Erro ao salvar código de recuperação:', error)
-            return ResultadoUtil.falha(
-                new RepositorioExcecao('Erro ao salvar código de recuperação.'),
-            )
         }
     }
 }

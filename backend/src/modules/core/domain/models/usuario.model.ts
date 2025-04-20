@@ -1,9 +1,10 @@
-import { ResultadoUtil, Resultado } from 'src/utils/result'
-import { UsuarioRepositoryExceptions } from '../repositories/usuario.repository'
+import { ResultadoUtil, Resultado, ResultadoAssincrono } from 'src/utils/result'
+import { UsuarioRepositoryExceptions } from '../repositories/Usuario.repository'
 import {
     PropriedadesInvalidasExcecao,
     UsuarioBloqueadoException,
 } from 'src/utils/exception'
+import { HashService } from '../services/Hash.service'
 
 export interface CriarUsuarioProps {
     nomeUsuario: string
@@ -149,7 +150,7 @@ export class Usuario {
         )
     }
 
-    public static validarSenha(
+    public validarSenha(
         password: string,
     ): Resultado<UsuarioRepositoryExceptions, void> {
         // arrumar para usar ele ao inves do em utils
@@ -311,6 +312,45 @@ export class Usuario {
         this._hashSenha = ''
         this._hashRecuperarSenha = 'MelhorarAqui'
         this._bloqueado = true
+    }
+
+    private atualizarSenha(
+        novaSenha: string,
+    ): Resultado<UsuarioRepositoryExceptions, void> {
+        const validarSenha = this.validarSenha(novaSenha)
+        if (validarSenha.ehFalha()) {
+            return ResultadoUtil.falha(validarSenha.erro)
+        }
+
+        this._hashSenha = novaSenha
+        return ResultadoUtil.sucesso()
+    }
+
+    public async alterarSenha(
+        novaSenha: string,
+        hashService: HashService,
+    ): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
+        const validarSenha = this.validarSenha(novaSenha)
+        if (validarSenha.ehFalha()) {
+            return ResultadoUtil.falha(validarSenha.erro)
+        }
+
+        const hashedPassword = await hashService.hashPassword(novaSenha)
+        this._hashSenha = hashedPassword
+        return ResultadoUtil.sucesso()
+    }
+
+    public alterarSenhaComHash(
+        hashedSenha: string,
+    ): Resultado<UsuarioRepositoryExceptions, void> {
+        if (!hashedSenha) {
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Hash da senha inválido'),
+            )
+        }
+
+        this._hashSenha = hashedSenha
+        return ResultadoUtil.sucesso()
     }
 
     get id(): number {

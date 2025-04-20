@@ -5,16 +5,17 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     OneToOne,
+    BaseEntity,
 } from 'typeorm'
 import { UsuarioModel } from './Usuario.model'
 
 @Entity('recuperar_senha')
-export class RecuperarSenha {
+export class RecuperarSenhaModel extends BaseEntity {
     @PrimaryGeneratedColumn()
-    id: string
+    id: number
 
     @Column()
-    usuario_id: string
+    usuario_id: number
 
     @Column()
     token: string
@@ -28,6 +29,8 @@ export class RecuperarSenha {
     @UpdateDateColumn()
     atualizado_em: Date
 
-    @OneToOne(() => UsuarioModel, (usuario) => usuario.recuperarSenha)
+    @OneToOne(() => UsuarioModel, (usuario) => usuario.usuario_id, {
+        onDelete: 'CASCADE',
+    })
     usuario: UsuarioModel
 }
