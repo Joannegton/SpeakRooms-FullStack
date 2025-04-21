@@ -73,7 +73,7 @@ export class UsuarioModel extends BaseEntity {
     @UpdateDateColumn()
     updated_at: Date
 
-    @Column({ default: true })
+    @Column({ default: false })
     @IsBoolean()
     ativo: boolean
 

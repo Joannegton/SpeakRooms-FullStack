@@ -314,18 +314,6 @@ export class Usuario {
         this._bloqueado = true
     }
 
-    private atualizarSenha(
-        novaSenha: string,
-    ): Resultado<UsuarioRepositoryExceptions, void> {
-        const validarSenha = this.validarSenha(novaSenha)
-        if (validarSenha.ehFalha()) {
-            return ResultadoUtil.falha(validarSenha.erro)
-        }
-
-        this._hashSenha = novaSenha
-        return ResultadoUtil.sucesso()
-    }
-
     public async alterarSenha(
         novaSenha: string,
         hashService: HashService,
@@ -337,6 +325,14 @@ export class Usuario {
 
         const hashedPassword = await hashService.hashPassword(novaSenha)
         this._hashSenha = hashedPassword
+        return ResultadoUtil.sucesso()
+    }
+
+    public async ativarContaUsuario(): ResultadoAssincrono<
+        UsuarioRepositoryExceptions,
+        void
+    > {
+        this._ativo = true
         return ResultadoUtil.sucesso()
     }
 

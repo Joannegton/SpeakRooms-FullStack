@@ -23,6 +23,7 @@ import {
     ApiSecurity,
     ApiTags,
 } from '@nestjs/swagger'
+import { AtivarContaUsuarioUseCase } from '../application/useCases/AtivarContaUsuario.usecase'
 
 const httpCodeMap: HttpCodeMap = {
     PropriedadesInvalidasExcecao: 400,
@@ -43,6 +44,7 @@ export class UsuarioController extends AbstractController {
         private readonly listarUsuariosUseCase: BuscarUsuariosQuery,
         private readonly atualizarUsuarioUseCase: AtualizarUsuarioUseCase,
         private readonly deletarUsuarioUseCase: DeletarUsuarioUseCase,
+        private readonly ativarContaUsuarioUsecase: AtivarContaUsuarioUseCase,
     ) {
         const httpResponseConfig: HttpResponseConfig = {
             httpCodeMap,
@@ -114,6 +116,21 @@ export class UsuarioController extends AbstractController {
     @Delete('/:nomeUsuario')
     async deletarUsuario(@Param('nomeUsuario') nomeUsuario: string) {
         const result = await this.deletarUsuarioUseCase.execute(nomeUsuario)
+        return super.buildResponse({ result })
+    }
+
+    @Public()
+    @ApiSecurity('accessToken')
+    @ApiOperation({ summary: 'Ativa uma conta de usuário' })
+    @ApiResponse({
+        status: 200,
+        description: 'Usuário ativado com sucesso.',
+    })
+    @ApiParam({ name: 'nomeUsuario', type: String })
+    @ApiParam({ name: 'id', type: Number })
+    @Put('/ativar-conta/:nomeUsuario/:id')
+    async ativarUsuario(@Param('nomeUsuario') nomeUsuario: string) {
+        const result = await this.ativarContaUsuarioUsecase.execute(nomeUsuario)
         return super.buildResponse({ result })
     }
 }

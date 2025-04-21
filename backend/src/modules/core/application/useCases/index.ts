@@ -1,4 +1,5 @@
 import { AlterarSenhaUseCase } from './ALterarSenha.usecase'
+import { AtivarContaUsuarioUseCase } from './AtivarContaUsuario.usecase'
 import { AtualizarUsuarioUseCase } from './AtualizarUsuario.usecase'
 import { DeletarUsuarioUseCase } from './DeletarUsuario.usecase'
 import { LoginUseCase } from './Login.usecase'
@@ -14,4 +15,5 @@ export const UseCases = [
     RecuperarSenhaUseCase,
     VerificarTokenRecuperarSenhaUseCase,
     AlterarSenhaUseCase,
+    AtivarContaUsuarioUseCase,
 ]

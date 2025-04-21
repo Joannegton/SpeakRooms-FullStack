@@ -20,6 +20,7 @@ import { CorsMiddleware } from 'src/middlewares/cors.middleware'
 import { RecuperarSenhaMapper } from './infra/mappers/RecuperarSenha.mapper'
 import { RecuperarSenhaRepositoryImpl } from './infra/repositories/RecuperarSenha.repository'
 import { RecuperarSenhaMapperApplication } from './application/mappers/RecuperarSenha.mapper'
+import { EmailService } from '../shared/services/EmailService'
 
 @Module({
     imports: [
@@ -38,6 +39,7 @@ import { RecuperarSenhaMapperApplication } from './application/mappers/Recuperar
         RecuperarSenhaMapper,
         RecuperarSenhaMapperApplication,
         JwtService,
+        EmailService,
         {
             provide: 'UsuarioRepository',
             useClass: UsuarioRepositoryImpl,
