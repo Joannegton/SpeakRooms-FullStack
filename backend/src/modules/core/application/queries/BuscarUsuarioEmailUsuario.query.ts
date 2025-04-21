@@ -1,5 +1,5 @@
 import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
-import { UsuarioRepository } from '../../domain/repositories/usuario.repository'
+import { UsuarioRepository } from '../../domain/repositories/Usuario.repository'
 import { UsuarioDto } from '../dtos/Usuario.dto'
 import {
     PropriedadesInvalidasExcecao,

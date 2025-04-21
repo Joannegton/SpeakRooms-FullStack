@@ -1,6 +1,6 @@
 import { Resultado, ResultadoUtil } from 'src/utils/result'
-import { Usuario } from '../../domain/models/usuario.model'
-import { UsuarioRepositoryExceptions } from '../../domain/repositories/usuario.repository'
+import { Usuario } from '../../domain/models/Usuario.model'
+import { UsuarioRepositoryExceptions } from '../../domain/repositories/Usuario.repository'
 import { UsuarioModel } from '../models/Usuario.model'
 import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
 

@@ -1,4 +1,4 @@
-import { Usuario } from 'src/modules/core/domain/models/usuario.model'
+import { Usuario } from 'src/modules/core/domain/models/Usuario.model'
 import {
     PropriedadesInvalidasExcecao,
     ServicoExcecao,
@@ -27,4 +27,7 @@ export interface AuthService {
     gerarToken(
         usuario: Usuario,
     ): ResultadoAssincrono<AutenticarExcecoes, AutenticacaoResult>
+    gerarJwtMomentaneo(
+        usuarioId: number,
+    ): ResultadoAssincrono<ServicoExcecao, string>
 }

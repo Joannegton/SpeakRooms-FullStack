@@ -2,7 +2,7 @@ import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
 } from 'src/utils/exception'
-import { UsuarioRepository } from '../../domain/repositories/usuario.repository'
+import { UsuarioRepository } from '../../domain/repositories/Usuario.repository'
 import { Inject } from '@nestjs/common'
 import { UsuarioMapperApplication } from '../mappers/Usuario.mapper'
 import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'

@@ -1,9 +1,9 @@
 import { ResultadoUtil, ResultadoAssincrono } from 'src/utils/result'
-import { Usuario } from '../../domain/models/usuario.model'
+import { Usuario } from '../../domain/models/Usuario.model'
 import {
     UsuarioRepository,
     UsuarioRepositoryExceptions,
-} from '../../domain/repositories/usuario.repository'
+} from '../../domain/repositories/Usuario.repository'
 import { UsuarioMapper } from '../mappers/Usuario.mapper'
 import {
     RepositorioExcecao,
@@ -26,7 +26,10 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
             await model.valor.save()
             return ResultadoUtil.sucesso()
         } catch (error) {
-            return ResultadoUtil.falha(new RepositorioExcecao(error))
+            console.error('Erro ao salvar usuário:', error)
+            return ResultadoUtil.falha(
+                new RepositorioExcecao('Erro ao salvar usuário'),
+            )
         }
     }
 
@@ -52,7 +55,10 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
 
             return ResultadoUtil.sucesso(usuario.valor)
         } catch (error) {
-            return ResultadoUtil.falha(new RepositorioExcecao(error))
+            console.error('Erro ao buscar usuário:', error)
+            return ResultadoUtil.falha(
+                new RepositorioExcecao('Erro ao buscar usuário'),
+            )
         }
     }
 

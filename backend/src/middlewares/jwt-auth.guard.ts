@@ -33,7 +33,7 @@ export class JwtAuthGuard implements CanActivate {
         }
 
         const request = context.switchToHttp().getRequest()
-        const token = this.extractTokenFromCookie(request) // Alterado para buscar no cookie
+        const token = this.extractTokenFromCookie(request)
         if (!token && !isPublicAuth) {
             throw new NaoAutorizadoException('Token não informado')
         }
@@ -41,10 +41,17 @@ export class JwtAuthGuard implements CanActivate {
             const jwtVerify = await this.jwtService.verifyAsync(token, {
                 secret: process.env.JWT_SECRET,
             })
-            const payload = JSON.parse(
-                this.hashService.decryptString(jwtVerify.encrypt),
-            )
-            request.user = payload
+
+            // Verificar se o token é de acesso ou de reset de senha
+            if (request.cookies['acessToken']) {
+                const payload = JSON.parse(
+                    this.hashService.decryptString(jwtVerify.encrypt),
+                )
+                request.user = payload
+            } else if (request.cookies['resetSenhaToken']) {
+                request.user = { usuarioId: jwtVerify.usuarioId } // Payload simples do resetSenhaToken
+            }
+
             return true
         } catch (error) {
             if (isPublicAuth) return true
@@ -54,10 +61,14 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     private extractTokenFromCookie(request: Request): string | null {
-        const token = request.cookies['acessToken']
-        if (!token) {
-            return null
+        const acessToken = request.cookies['acessToken']
+        const resetSenhaToken = request.cookies['resetSenhaToken']
+        if (acessToken) {
+            return acessToken
         }
-        return token
+        if (resetSenhaToken) {
+            return resetSenhaToken
+        }
+        return null
     }
 }

@@ -1,5 +1,5 @@
 import { ResultadoAssincrono } from 'src/utils/result'
-import { Usuario } from '../models/usuario.model'
+import { Usuario } from '../models/Usuario.model'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,

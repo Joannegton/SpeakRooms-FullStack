@@ -29,7 +29,7 @@ export class UsuarioModel extends BaseEntity {
     @PrimaryGeneratedColumn()
     usuario_id: number
 
-    @Column({ length: 50 })
+    @Column({ length: 50, unique: true })
     @IsNotEmpty()
     nome_usuario: string
 
@@ -55,6 +55,7 @@ export class UsuarioModel extends BaseEntity {
 
     @Column()
     @IsInt()
+    @IsNotEmpty()
     nivel_ingles_id: number
 
     @Column({ type: 'int', default: 0 })
@@ -72,11 +73,11 @@ export class UsuarioModel extends BaseEntity {
     @UpdateDateColumn()
     updated_at: Date
 
-    @Column({ default: true })
+    @Column({ default: false })
     @IsBoolean()
     ativo: boolean
 
-    @ManyToOne(() => NivelModel, (nivel) => nivel.usuarios)
+    @ManyToOne(() => NivelModel, (nivel) => nivel.usuarios, { eager: true })
     @JoinColumn({ name: 'nivel_ingles_id' })
     nivel: NivelModel
 

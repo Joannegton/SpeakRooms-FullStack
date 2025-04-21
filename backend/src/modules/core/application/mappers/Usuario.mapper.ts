@@ -1,5 +1,5 @@
 import { ResultadoUtil, Resultado } from 'src/utils/result'
-import { Usuario } from '../../domain/models/usuario.model'
+import { Usuario } from '../../domain/models/Usuario.model'
 import {
     AtualizarUsuarioDto,
     CriarUsuarioDto,
@@ -38,7 +38,7 @@ export class UsuarioMapperApplication {
         const domainResult = Usuario.criar({
             nomeUsuario: dto.nomeUsuario,
             email: dto.email,
-            hashSenha: dto.senha,
+            senha: dto.senha,
             primeiroNome: dto.primeiroNome,
             sobrenome: dto.sobrenome,
             nivelInglesId: dto.nivelInglesId,

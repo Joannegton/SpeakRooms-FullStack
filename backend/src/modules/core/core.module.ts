@@ -17,6 +17,10 @@ import { HttpInterceptor } from 'src/utils/http.interceptor'
 import { RateLimitMiddleware } from 'src/middlewares/rate-limit.middleware'
 import { HelmetMiddleware } from 'src/middlewares/helmet.middleware'
 import { CorsMiddleware } from 'src/middlewares/cors.middleware'
+import { RecuperarSenhaMapper } from './infra/mappers/RecuperarSenha.mapper'
+import { RecuperarSenhaRepositoryImpl } from './infra/repositories/RecuperarSenha.repository'
+import { RecuperarSenhaMapperApplication } from './application/mappers/RecuperarSenha.mapper'
+import { EmailService } from '../shared/services/EmailService'
 
 @Module({
     imports: [
@@ -32,10 +36,17 @@ import { CorsMiddleware } from 'src/middlewares/cors.middleware'
         ...Queries,
         UsuarioMapper,
         UsuarioMapperApplication,
+        RecuperarSenhaMapper,
+        RecuperarSenhaMapperApplication,
         JwtService,
+        EmailService,
         {
             provide: 'UsuarioRepository',
             useClass: UsuarioRepositoryImpl,
+        },
+        {
+            provide: 'RecuperarSenhaRepository',
+            useClass: RecuperarSenhaRepositoryImpl,
         },
         {
             provide: 'AuthService',
