@@ -22,7 +22,7 @@ export class AtivarContaUsuarioUseCase {
 
     async execute(
         nomeUsuario: string,
-    ): ResultadoAssincrono<AtivarContaUsuarioUseCaseExcecao, void> {
+    ): ResultadoAssincrono<AtivarContaUsuarioUseCaseExcecao, string> {
         const usuario =
             await this.usuarioRepository.findByUsuarioOrEmail(nomeUsuario)
 
@@ -46,6 +46,6 @@ export class AtivarContaUsuarioUseCase {
             return ResultadoUtil.falha(enviarEmail.erro)
         }
 
-        return ResultadoUtil.sucesso()
+        return ResultadoUtil.sucesso('Conta ativada com sucesso!')
     }
 }

@@ -120,15 +120,13 @@ export class UsuarioController extends AbstractController {
     }
 
     @Public()
-    @ApiSecurity('accessToken')
     @ApiOperation({ summary: 'Ativa uma conta de usuário' })
     @ApiResponse({
         status: 200,
         description: 'Usuário ativado com sucesso.',
     })
     @ApiParam({ name: 'nomeUsuario', type: String })
-    @ApiParam({ name: 'id', type: Number })
-    @Put('/ativar-conta/:nomeUsuario/:id')
+    @Get('/ativar-conta/:nomeUsuario')
     async ativarUsuario(@Param('nomeUsuario') nomeUsuario: string) {
         const result = await this.ativarContaUsuarioUsecase.execute(nomeUsuario)
         return super.buildResponse({ result })
