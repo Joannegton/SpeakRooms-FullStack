@@ -19,7 +19,7 @@ import {
     IsUrl,
     Min,
 } from 'class-validator'
-import { NivelModel } from './Niveis.model'
+import { NivelModel } from '../../../shared/infra/models/Niveis.model'
 import { MaterialModel } from '../../../materiais/infra/models/Materiais.model'
 import { InteressesModel } from './Interesses.model'
 import { FileModel } from 'src/modules/materiais/infra/models/Files.model'
