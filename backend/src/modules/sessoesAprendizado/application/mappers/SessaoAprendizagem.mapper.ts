@@ -10,6 +10,7 @@ export class SessaoAprendizagemMapperApplication {
     toDto(domain: SessaoAprendizagem): SessaoAprendizagemDto {
         return {
             id: domain.id,
+            criadorEmailZoom: domain.criadorEmailZoom,
             titulo: domain.titulo,
             descricao: domain.descricao,
             participantes_id: domain.participantes_id,
@@ -26,6 +27,7 @@ export class SessaoAprendizagemMapperApplication {
         dto: AgendarSessaoDto,
     ): Resultado<PropriedadesInvalidasExcecao, SessaoAprendizagem> {
         return SessaoAprendizagem.criar({
+            criador_email_zoom: dto.criadorEmailZoom,
             titulo: dto.titulo,
             descricao: dto.descricao,
             participantes_id: dto.participantes_id,

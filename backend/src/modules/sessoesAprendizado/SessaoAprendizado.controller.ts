@@ -7,6 +7,7 @@ import {
 } from 'src/utils/AbstractControler'
 import { AgendarSessaoDto } from './application/dtos/sessaoAprendizagem.dto'
 import { AgendarSessaoUseCase } from './application/usecases/AgendarSessao.usecase'
+import { Public } from 'src/decorators/public.decorator'
 
 const httpCodeMap: HttpCodeMap = {
     PropriedadesInvalidasExcecao: 400,
@@ -30,6 +31,7 @@ export class SessaoAprendizadoController extends AbstractController {
     }
 
     @Post()
+    @Public()
     async agendarSessao(@Body() props: AgendarSessaoDto) {
         const result = await this.agendarSessaoUseCase.execute(props)
 

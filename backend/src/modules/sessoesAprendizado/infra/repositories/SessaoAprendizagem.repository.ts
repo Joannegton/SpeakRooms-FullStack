@@ -7,30 +7,30 @@ import {
 import { SessaoAprendizagemMapper } from '../mappers/SessaoAprendizagem.mapper'
 import { SessaoAprendizagemModel } from '../models/SessaoAprendizagem.model'
 import { RepositorioSemDadosExcecao } from 'src/utils/exception'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 export class SessaoAprendizagemRepositoryImpl
     implements SessaoAprendizagemRepository
 {
     constructor(
-        private readonly sessapAprendizagemMapper: SessaoAprendizagemMapper,
+        private readonly sessaoAprendizagemMapper: SessaoAprendizagemMapper,
     ) {}
 
     async save(
         sessao: SessaoAprendizagem,
-    ): ResultadoAssincrono<
-        SessaoAprendizagemRepositoryExceptions,
-        SessaoAprendizagem
-    > {
-        const model = this.sessapAprendizagemMapper.domainToModel(sessao)
+    ): ResultadoAssincrono<SessaoAprendizagemRepositoryExceptions, void> {
+        const model = this.sessaoAprendizagemMapper.domainToModel(sessao)
         if (model.ehFalha()) return ResultadoUtil.falha(model.erro)
 
         const salvar = await model.valor.save()
 
-        const domain = this.sessapAprendizagemMapper.modelToDomain(salvar)
+        if (!salvar)
+            return ResultadoUtil.falha(
+                new RepositorioSemDadosExcecao('Erro ao salvar Sessão'),
+            )
 
-        if (domain.ehFalha()) return ResultadoUtil.falha(domain.erro)
-
-        return ResultadoUtil.sucesso(domain.valor)
+        return ResultadoUtil.sucesso()
     }
 
     async findById(
@@ -49,7 +49,7 @@ export class SessaoAprendizagemRepositoryImpl
                 new RepositorioSemDadosExcecao('Sessão não encontrada'),
             )
 
-        const domain = this.sessapAprendizagemMapper.modelToDomain(sessao)
+        const domain = this.sessaoAprendizagemMapper.modelToDomain(sessao)
         if (domain.ehFalha()) return ResultadoUtil.falha(domain.erro)
 
         return ResultadoUtil.sucesso(domain.valor)

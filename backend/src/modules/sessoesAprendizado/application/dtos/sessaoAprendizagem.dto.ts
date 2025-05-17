@@ -3,6 +3,14 @@ import { IsArray, IsNotEmpty, IsString } from 'class-validator'
 
 export class AgendarSessaoDto {
     @ApiProperty({
+        description: 'Email do criador da sessão no Zoom',
+        example: 'example@email.com',
+    })
+    @IsString({ message: 'Email do criador deve ser uma string.' })
+    @IsNotEmpty({ message: 'Email do criador é obrigatório.' })
+    criadorEmailZoom: string
+
+    @ApiProperty({
         description: 'Título da sessão',
         example: 'Verbo To Be',
     })

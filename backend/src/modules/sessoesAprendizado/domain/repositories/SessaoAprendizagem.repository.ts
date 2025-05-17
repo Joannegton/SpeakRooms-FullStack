@@ -12,20 +12,20 @@ export type SessaoAprendizagemRepositoryExceptions =
 export interface SessaoAprendizagemRepository {
     save(
         sessao: SessaoAprendizagem,
-    ): ResultadoAssincrono<
-        SessaoAprendizagemRepositoryExceptions,
-        SessaoAprendizagem
-    >
+    ): ResultadoAssincrono<SessaoAprendizagemRepositoryExceptions, void>
+
     findById(
         idSessao: number,
     ): ResultadoAssincrono<
         SessaoAprendizagemRepositoryExceptions,
         SessaoAprendizagem
     >
+
     findAll(): ResultadoAssincrono<
         SessaoAprendizagemRepositoryExceptions,
         SessaoAprendizagem[]
     >
+
     update(
         idSessao: number,
         sessao: SessaoAprendizagem,
@@ -33,6 +33,7 @@ export interface SessaoAprendizagemRepository {
         SessaoAprendizagemRepositoryExceptions,
         SessaoAprendizagem
     >
+
     delete(
         id: number,
     ): ResultadoAssincrono<SessaoAprendizagemRepositoryExceptions, void>

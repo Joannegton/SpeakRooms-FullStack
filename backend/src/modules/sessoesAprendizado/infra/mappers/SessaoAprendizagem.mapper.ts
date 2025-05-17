@@ -4,13 +4,14 @@ import { Resultado, ResultadoUtil } from 'src/utils/result'
 import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
 
 export class SessaoAprendizagemMapper {
-    domainToModel(
+    public domainToModel(
         domain: SessaoAprendizagem,
     ): Resultado<PropriedadesInvalidasExcecao, SessaoAprendizagemModel> {
         if (!domain)
             return ResultadoUtil.falha(
                 new PropriedadesInvalidasExcecao('Dominio não informado.'),
             )
+        console.log('SessaoAprendizagemMapper', domain)
         const model = SessaoAprendizagemModel.create({
             titulo: domain.titulo,
             descricao: domain.descricao,
@@ -24,7 +25,7 @@ export class SessaoAprendizagemMapper {
         return ResultadoUtil.sucesso(model)
     }
 
-    modelToDomain(
+    public modelToDomain(
         model: SessaoAprendizagemModel,
     ): Resultado<PropriedadesInvalidasExcecao, SessaoAprendizagem> {
         if (!model)
@@ -32,6 +33,7 @@ export class SessaoAprendizagemMapper {
                 new PropriedadesInvalidasExcecao('Modelo não informado.'),
             )
         const domain = SessaoAprendizagem.carregar({
+            criador_email_zoom: model.criador.email,
             titulo: model.titulo,
             descricao: model.descricao,
             participantes_id: model.participantes_id,

@@ -4,9 +4,15 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { MateriaisModule } from './modules/materiais/materiais.module'
 import { SharedModule } from './modules/shared/shared.module'
+import { SessaoAprendizadoModule } from './modules/sessoesAprendizado/SessaoAprendizado.module'
 
 @Module({
-    imports: [CoreModule, MateriaisModule, SharedModule],
+    imports: [
+        CoreModule,
+        MateriaisModule,
+        SharedModule,
+        SessaoAprendizadoModule,
+    ],
     controllers: [AppController],
     providers: [AppService],
 })
