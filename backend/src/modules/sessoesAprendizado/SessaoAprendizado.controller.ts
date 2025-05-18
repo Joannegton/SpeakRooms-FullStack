@@ -1,5 +1,19 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common'
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    Request,
+} from '@nestjs/common'
+import {
+    ApiBody,
+    ApiOperation,
+    ApiParam,
+    ApiResponse,
+    ApiTags,
+} from '@nestjs/swagger'
 import {
     AbstractController,
     HttpCodeMap,
@@ -9,6 +23,7 @@ import { AgendarSessaoDto } from './application/dtos/sessaoAprendizagem.dto'
 import { AgendarSessaoUseCase } from './application/usecases/AgendarSessao.usecase'
 import { Public } from 'src/decorators/public.decorator'
 import { BuscarSessaoAprendizagemIdQuery } from './application/queries/BuscarSessaoAprendizagemId.query'
+import { DeletarSessaoAprendizagemUseCase } from './application/usecases/DeletarSessaoAprendizagem.usecase'
 
 const httpCodeMap: HttpCodeMap = {
     PropriedadesInvalidasExcecao: 400,
@@ -26,6 +41,7 @@ export class SessaoAprendizadoController extends AbstractController {
     constructor(
         private readonly agendarSessaoUseCase: AgendarSessaoUseCase,
         private readonly buscarSessaoAprendizagemIdQuery: BuscarSessaoAprendizagemIdQuery,
+        private readonly deletarSessaoAprendizagemUseCase: DeletarSessaoAprendizagemUseCase,
     ) {
         const httpResponseConfig: HttpResponseConfig = {
             httpCodeMap,
@@ -58,6 +74,31 @@ export class SessaoAprendizadoController extends AbstractController {
     async buscarSessaoPorId(@Param('idSessao') idSessao: number) {
         const result =
             await this.buscarSessaoAprendizagemIdQuery.execute(idSessao)
+
+        return super.buildResponse({ result })
+    }
+
+    @Public()
+    @ApiOperation({ summary: 'Deletar uma sessão de aprendizagem' })
+    @ApiResponse({
+        status: 200,
+        description: 'Sessão deletada com sucesso',
+    })
+    @ApiParam({
+        name: 'idSessao',
+        description: 'ID da sessão de aprendizagem',
+        type: 'number',
+    })
+    @Delete(':idSessao')
+    async deletarSessao(
+        @Param('idSessao') idSessao: number,
+        @Request() req: Request,
+    ) {
+        const idUsuario = req['usuario'].id
+        const result = await this.deletarSessaoAprendizagemUseCase.execute(
+            idSessao,
+            idUsuario,
+        )
 
         return super.buildResponse({ result })
     }

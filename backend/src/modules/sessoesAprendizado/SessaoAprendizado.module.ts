@@ -7,12 +7,14 @@ import { SessaoAprendizadoController } from './SessaoAprendizado.controller'
 import { Module } from '@nestjs/common'
 import { OAuthController } from './infra/controllers/OAuth.controller'
 import { BuscarSessaoAprendizagemIdQuery } from './application/queries/BuscarSessaoAprendizagemId.query'
+import { DeletarSessaoAprendizagemUseCase } from './application/usecases/DeletarSessaoAprendizagem.usecase'
 
 @Module({
     imports: [],
     controllers: [SessaoAprendizadoController, OAuthController],
     providers: [
         AgendarSessaoUseCase,
+        DeletarSessaoAprendizagemUseCase,
         BuscarSessaoAprendizagemIdQuery,
         SessaoAprendizagemMapper,
         SessaoAprendizagemMapperApplication,

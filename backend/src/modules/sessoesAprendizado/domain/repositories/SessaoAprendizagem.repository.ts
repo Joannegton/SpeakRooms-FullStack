@@ -35,6 +35,7 @@ export interface SessaoAprendizagemRepository {
     >
 
     delete(
-        id: number,
+        idSessao: number,
+        idUsuario: number,
     ): ResultadoAssincrono<SessaoAprendizagemRepositoryExceptions, void>
 }

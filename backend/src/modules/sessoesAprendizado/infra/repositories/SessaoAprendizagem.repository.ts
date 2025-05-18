@@ -70,9 +70,21 @@ export class SessaoAprendizagemRepositoryImpl
     > {
         throw new Error('Method not implemented.')
     }
-    delete(
-        id: number,
+
+    async delete(
+        idSessao: number,
+        idUsuario: number,
     ): ResultadoAssincrono<SessaoAprendizagemRepositoryExceptions, void> {
-        throw new Error('Method not implemented.')
+        const result = await SessaoAprendizagemModel.delete({
+            id: idSessao,
+            criadorId: idUsuario,
+        })
+
+        if (!result.affected || result.affected === 0)
+            return ResultadoUtil.falha(
+                new RepositorioSemDadosExcecao('Sessão não encontrada'),
+            )
+
+        ResultadoUtil.sucesso()
     }
 }
