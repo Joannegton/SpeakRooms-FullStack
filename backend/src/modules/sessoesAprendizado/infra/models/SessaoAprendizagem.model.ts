@@ -55,7 +55,10 @@ export class SessaoAprendizagemModel extends BaseEntity {
     })
     participantes: UsuarioModel[]
 
-    @ManyToOne(() => UsuarioModel, (usuario) => usuario.email)
-    @JoinColumn({ name: 'criador_email' })
+    @Column()
+    criadorId: number
+
+    @ManyToOne(() => UsuarioModel)
+    @JoinColumn({ name: 'criadorId' })
     criador: UsuarioModel
 }

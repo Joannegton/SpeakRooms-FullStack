@@ -2,7 +2,7 @@ import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
 import { Resultado, ResultadoUtil } from 'src/utils/result'
 
 interface CriarSessaoAprendizagemProps {
-    criador_email_zoom: string
+    criadorId: number
     titulo: string
     descricao?: string
     participantes_id: number[]
@@ -20,7 +20,7 @@ interface CarregarSessaoAprendizagemProps extends CriarSessaoAprendizagemProps {
 
 export class SessaoAprendizagem {
     private _id: number
-    private _criador_email_zoom: string
+    private _criadorId: number
     private _titulo: string
     private _descricao?: string
     private _participantes_id: number[]
@@ -39,9 +39,7 @@ export class SessaoAprendizagem {
         props: CriarSessaoAprendizagemProps,
     ): Resultado<PropriedadesInvalidasExcecao, SessaoAprendizagem> {
         const sessao = new SessaoAprendizagem()
-        const setCriadorEmailZoom = sessao.setCriadorEmailZoom(
-            props.criador_email_zoom,
-        )
+        const setCriadorId = sessao.setCriadorId(props.criadorId)
         const setTitulo = sessao.setTitulo(props.titulo)
         const setDescricao = sessao.setDescricao(props.descricao)
         const setParticipantesId = sessao.setParticipantesId(
@@ -54,7 +52,7 @@ export class SessaoAprendizagem {
 
         return ResultadoUtil.obterResultado(
             [
-                setCriadorEmailZoom,
+                setCriadorId,
                 setTitulo,
                 setDescricao,
                 setParticipantesId,
@@ -71,9 +69,7 @@ export class SessaoAprendizagem {
         props: CarregarSessaoAprendizagemProps,
     ): Resultado<PropriedadesInvalidasExcecao, SessaoAprendizagem> {
         const sessao = new SessaoAprendizagem(props.id)
-        const setCriadorEmailZoom = sessao.setCriadorEmailZoom(
-            props.criador_email_zoom,
-        )
+        const setCriadorId = sessao.setCriadorId(props.criadorId)
         const setTitulo = sessao.setTitulo(props.titulo)
         const setDescricao = sessao.setDescricao(props.descricao)
         const setParticipantesId = sessao.setParticipantesId(
@@ -88,7 +84,7 @@ export class SessaoAprendizagem {
 
         return ResultadoUtil.obterResultado(
             [
-                setCriadorEmailZoom,
+                setCriadorId,
                 setTitulo,
                 setDescricao,
                 setParticipantesId,
@@ -103,15 +99,15 @@ export class SessaoAprendizagem {
         )
     }
 
-    private setCriadorEmailZoom(
-        criador_email_zoom: string,
+    private setCriadorId(
+        criadorId: number,
     ): Resultado<PropriedadesInvalidasExcecao, void> {
-        if (!criador_email_zoom) {
+        if (!criadorId || typeof criadorId !== 'number') {
             return ResultadoUtil.falha(
                 new PropriedadesInvalidasExcecao('Criador inválido'),
             )
         }
-        this._criador_email_zoom = criador_email_zoom
+        this._criadorId = criadorId
         return ResultadoUtil.sucesso()
     }
 
@@ -232,8 +228,8 @@ export class SessaoAprendizagem {
     get id(): number {
         return this._id
     }
-    get criadorEmailZoom(): string {
-        return this._criador_email_zoom
+    get criadorId(): number {
+        return this._criadorId
     }
     get titulo(): string {
         return this._titulo

@@ -11,7 +11,6 @@ export class SessaoAprendizagemMapper {
             return ResultadoUtil.falha(
                 new PropriedadesInvalidasExcecao('Dominio não informado.'),
             )
-        console.log('SessaoAprendizagemMapper', domain)
         const model = SessaoAprendizagemModel.create({
             titulo: domain.titulo,
             descricao: domain.descricao,
@@ -20,6 +19,7 @@ export class SessaoAprendizagemMapper {
             dataHoraFim: domain.dataHoraFim,
             linkVideo: domain.linkVideo,
             status: domain.status,
+            criadorId: domain.criadorId,
         })
 
         return ResultadoUtil.sucesso(model)
@@ -33,7 +33,7 @@ export class SessaoAprendizagemMapper {
                 new PropriedadesInvalidasExcecao('Modelo não informado.'),
             )
         const domain = SessaoAprendizagem.carregar({
-            criador_email_zoom: model.criador.email,
+            criadorId: model.criadorId,
             titulo: model.titulo,
             descricao: model.descricao,
             participantes_id: model.participantes_id,

@@ -1,14 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsArray, IsNotEmpty, IsString } from 'class-validator'
+import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 export class AgendarSessaoDto {
     @ApiProperty({
-        description: 'Email do criador da sessão no Zoom',
-        example: 'example@email.com',
+        description: 'Id do criador da sessão no Zoom',
+        example: 1,
     })
-    @IsString({ message: 'Email do criador deve ser uma string.' })
-    @IsNotEmpty({ message: 'Email do criador é obrigatório.' })
-    criadorEmailZoom: string
+    @IsNumber({}, { message: 'Id do criador deve ser um número.' })
+    @IsNotEmpty({ message: 'Id do criador é obrigatório.' })
+    criadorId: number
 
     @ApiProperty({
         description: 'Título da sessão',

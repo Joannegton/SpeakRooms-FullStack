@@ -6,12 +6,14 @@ import { OAuthService } from './infra/services/OAuth.service'
 import { SessaoAprendizadoController } from './SessaoAprendizado.controller'
 import { Module } from '@nestjs/common'
 import { OAuthController } from './infra/controllers/OAuth.controller'
+import { BuscarSessaoAprendizagemIdQuery } from './application/queries/BuscarSessaoAprendizagemId.query'
 
 @Module({
     imports: [],
     controllers: [SessaoAprendizadoController, OAuthController],
     providers: [
         AgendarSessaoUseCase,
+        BuscarSessaoAprendizagemIdQuery,
         SessaoAprendizagemMapper,
         SessaoAprendizagemMapperApplication,
         {
