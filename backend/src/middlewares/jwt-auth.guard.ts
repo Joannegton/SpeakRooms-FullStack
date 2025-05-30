@@ -8,7 +8,7 @@ import { Reflector } from '@nestjs/core'
 import { JwtService } from '@nestjs/jwt'
 import { Request } from 'express'
 import { HashService } from 'src/modules/core/domain/services/Hash.service'
-import { NaoAutorizadoException } from 'src/utils/exception'
+import { NaoAutorizadoExcecao } from 'http-service-result'
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -33,35 +33,42 @@ export class JwtAuthGuard implements CanActivate {
         }
 
         const request = context.switchToHttp().getRequest()
-        const token = this.extractTokenFromHeader(request)
+        const token = this.extractTokenFromCookie(request)
         if (!token && !isPublicAuth) {
-            throw new NaoAutorizadoException('Token não informado')
+            throw new NaoAutorizadoExcecao('Token não informado')
         }
         try {
             const jwtVerify = await this.jwtService.verifyAsync(token, {
                 secret: process.env.JWT_SECRET,
             })
-            const payload = JSON.parse(
-                this.hashService.decryptString(jwtVerify.encrypt),
-            )
-            request.user = payload
-            return true // Garantir que o acesso seja permitido
+
+            // Verificar se o token é de acesso ou de reset de senha
+            if (request.cookies['acessToken']) {
+                const payload = JSON.parse(
+                    this.hashService.decryptString(jwtVerify.encrypt),
+                )
+                request.user = payload
+            } else if (request.cookies['resetSenhaToken']) {
+                request.user = { usuarioId: jwtVerify.usuarioId } // Payload simples do resetSenhaToken
+            }
+
+            return true
         } catch (error) {
             if (isPublicAuth) return true
             console.error('Token inválido ou expirado', error)
-            throw new NaoAutorizadoException('Token expirado ou inválido')
+            throw new NaoAutorizadoExcecao('Token expirado ou inválido')
         }
     }
 
-    private extractTokenFromHeader(request: Request): string | null {
-        const authorization = request.headers['authorization']
-        if (!authorization) {
-            return null
+    private extractTokenFromCookie(request: Request): string | null {
+        const acessToken = request.cookies['acessToken']
+        const resetSenhaToken = request.cookies['resetSenhaToken']
+        if (acessToken) {
+            return acessToken
         }
-        const parts = authorization.split(' ')
-        if (parts.length !== 2 || parts[0] !== 'Bearer') {
-            return null
+        if (resetSenhaToken) {
+            return resetSenhaToken
         }
-        return parts[1]
+        return null
     }
 }

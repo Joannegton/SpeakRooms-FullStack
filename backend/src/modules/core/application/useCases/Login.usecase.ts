@@ -1,12 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { LoginParamsDto, LoginResultDto } from '../dtos/Login.dto'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
     ServicoExcecao,
-} from 'src/utils/exception'
-import { UsuarioRepository } from 'src/modules/core/domain/repositories/usuario.repository'
+    ResultadoAssincrono,
+    ResultadoUtil,
+} from 'http-service-result'
+import { UsuarioRepository } from 'src/modules/core/domain/repositories/Usuario.repository'
 import { AuthService } from '../../domain/services/Auth.service'
 
 //melhorar para nãoautorizadoexception, ver unauthorized do nest
@@ -14,6 +15,11 @@ type LoginUseCaseExceptions =
     | PropriedadesInvalidasExcecao
     | ServicoExcecao
     | RepositorioExcecao
+
+type LoginResultToken = {
+    accessToken: string
+    usuario: LoginResultDto
+}
 
 @Injectable()
 export class LoginUseCase {
@@ -26,7 +32,7 @@ export class LoginUseCase {
 
     async execute(
         login: LoginParamsDto,
-    ): ResultadoAssincrono<LoginUseCaseExceptions, LoginResultDto> {
+    ): ResultadoAssincrono<LoginUseCaseExceptions, LoginResultToken> {
         const { emailOuUsuario, senha } = login
 
         if (!emailOuUsuario || !senha) {
@@ -55,8 +61,10 @@ export class LoginUseCase {
 
         return ResultadoUtil.sucesso({
             accessToken: autenticar.valor.access_token,
-            usuario_id: autenticar.valor.usuario_id,
-            nome_usuario: autenticar.valor.nome_usuario,
+            usuario: {
+                usuario_id: autenticar.valor.usuario_id,
+                nome_usuario: autenticar.valor.nome_usuario,
+            },
         })
     }
 }

@@ -19,7 +19,7 @@ export const OrmConfig: TypeOrmModuleOptions = {
     migrationsRun: true,
     logging: true,
     entities: ['dist/src/modules/**/infra/models/*.model{.ts,.js}'],
-    migrations: ['dist/src/shared/infra/migrations/**/*{.ts,.js}'],
+    migrations: ['dist/src/modules/shared/infra/migrations/**/*{.ts,.js}'],
 }
 
 export const OrmConfigDataSource = new DataSource(OrmConfig as any)

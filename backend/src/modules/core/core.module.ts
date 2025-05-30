@@ -1,6 +1,6 @@
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { UsuarioController } from './controllers/usuario.controller'
-import { MiddlewareConsumer, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { OrmConfig } from 'ormConfig'
 import { UsuarioRepositoryImpl } from './infra/repositories/Usuario.repository'
 import { UsuarioMapper } from './infra/mappers/Usuario.mapper'
@@ -14,9 +14,10 @@ import { AuthServiceImpl } from './infra/services/Auth.service'
 import { APP_GUARD, APP_INTERCEPTOR, Reflector } from '@nestjs/core'
 import { JwtAuthGuard } from 'src/middlewares/jwt-auth.guard'
 import { HttpInterceptor } from 'src/utils/http.interceptor'
-import { RateLimitMiddleware } from 'src/middlewares/rate-limit.middleware'
-import { HelmetMiddleware } from 'src/middlewares/helmet.middleware'
-import { CorsMiddleware } from 'src/middlewares/cors.middleware'
+import { RecuperarSenhaMapper } from './infra/mappers/RecuperarSenha.mapper'
+import { RecuperarSenhaRepositoryImpl } from './infra/repositories/RecuperarSenha.repository'
+import { RecuperarSenhaMapperApplication } from './application/mappers/RecuperarSenha.mapper'
+import { EmailService } from '../shared/services/EmailService'
 
 @Module({
     imports: [
@@ -32,10 +33,17 @@ import { CorsMiddleware } from 'src/middlewares/cors.middleware'
         ...Queries,
         UsuarioMapper,
         UsuarioMapperApplication,
+        RecuperarSenhaMapper,
+        RecuperarSenhaMapperApplication,
         JwtService,
+        EmailService,
         {
             provide: 'UsuarioRepository',
             useClass: UsuarioRepositoryImpl,
+        },
+        {
+            provide: 'RecuperarSenhaRepository',
+            useClass: RecuperarSenhaRepositoryImpl,
         },
         {
             provide: 'AuthService',
@@ -68,10 +76,4 @@ import { CorsMiddleware } from 'src/middlewares/cors.middleware'
         },
     ],
 })
-export class CoreModule {
-    configure(consumer: MiddlewareConsumer) {
-        consumer.apply(RateLimitMiddleware).forRoutes('*')
-        consumer.apply(HelmetMiddleware).forRoutes('*')
-        consumer.apply(CorsMiddleware).forRoutes('*')
-    }
-}
+export class CoreModule {}

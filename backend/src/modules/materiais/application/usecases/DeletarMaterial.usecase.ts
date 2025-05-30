@@ -1,11 +1,11 @@
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import { Inject } from '@nestjs/common'
 import { MaterialRepository } from '../../dominio/repositories/Material.repository'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
     RepositorioSemDadosExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 
 export type MaterialUseCaseExceptions =
     | PropriedadesInvalidasExcecao

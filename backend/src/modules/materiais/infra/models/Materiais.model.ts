@@ -12,8 +12,8 @@ import {
 } from 'typeorm'
 import { Length, IsNotEmpty, IsNumber } from 'class-validator'
 import { UsuarioModel } from '../../../core/infra/models/Usuario.model'
-import { NivelModel } from '../../../core/infra/models/Niveis.model'
-import { CategoriaModel } from '../../../core/infra/models/Categorias.model'
+import { NivelModel } from '../../../shared/infra/models/Niveis.model'
+import { CategoriaModel } from '../../../shared/infra/models/Categorias.model'
 import { FileModel } from './Files.model'
 
 @Entity('materiais')

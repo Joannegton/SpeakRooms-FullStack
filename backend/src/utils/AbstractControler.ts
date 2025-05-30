@@ -1,6 +1,9 @@
-import { Excecao } from './exception'
-import { HttpResponseError, HttpResponseOK } from './httpResponse'
-import { Resultado } from './result'
+import {
+    Excecao,
+    HttpResponseError,
+    HttpResponseOK,
+    Resultado,
+} from 'http-service-result'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface HttpCodeMap {
@@ -14,7 +17,7 @@ export interface HttpResponseConfig {
 
 export interface BuildResponseProps {
     result: Resultado<Excecao, any>
-    headers?: object
+    headers?: Record<string, string>
     successStatusCode?: number
 }
 

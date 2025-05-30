@@ -1,11 +1,11 @@
 import { Inject } from '@nestjs/common'
 import { MaterialRepository } from '../../dominio/repositories/Material.repository'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
     RepositorioSemDadosExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 import { MaterialDto } from '../dtos/Material.dto'
 import { MaterialMapperApplication } from '../mappers/Material.mapper'
 

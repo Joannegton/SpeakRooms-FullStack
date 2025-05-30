@@ -1,12 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { Usuario } from 'src/modules/core/domain/models/usuario.model'
-import { UsuarioRepository } from 'src/modules/core/domain/repositories/usuario.repository'
+import { Usuario } from 'src/modules/core/domain/models/Usuario.model'
+import { UsuarioRepository } from 'src/modules/core/domain/repositories/Usuario.repository'
 import {
     PropriedadesInvalidasExcecao,
     ServicoExcecao,
-} from 'src/utils/exception'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+    ResultadoAssincrono,
+    ResultadoUtil,
+} from 'http-service-result'
 import {
     AutenticacaoResult,
     AutenticarExcecoes,
@@ -40,6 +41,7 @@ export class AuthServiceImpl implements AuthService {
             )
 
             if (!isSenhaValida) {
+                // arrumar
                 const incrementarTentativas =
                     credenciais.usuario.incrementarTentativasLogin(
                         credenciais.usuario.bloqueado,
@@ -102,6 +104,25 @@ export class AuthServiceImpl implements AuthService {
                 new ServicoExcecao(
                     'Sessão invalida, favor realizar o login novamente.',
                 ),
+            )
+        }
+    }
+
+    async gerarJwtMomentaneo(
+        usuarioId: number,
+    ): ResultadoAssincrono<ServicoExcecao, string> {
+        try {
+            const payload = { usuarioId }
+            const token = await this.jwtService.signAsync(payload, {
+                secret: process.env.JWT_SECRET,
+                algorithm: 'HS256',
+                expiresIn: '10m',
+            })
+            return ResultadoUtil.sucesso(token)
+        } catch (error) {
+            console.error('Erro ao gerar JWT momentâneo:', error)
+            return ResultadoUtil.falha(
+                new ServicoExcecao('Erro ao gerar JWT momentâneo'),
             )
         }
     }

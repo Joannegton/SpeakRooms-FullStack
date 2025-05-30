@@ -1,10 +1,10 @@
-import { ResultadoAssincrono } from 'src/utils/result'
-import { Usuario } from '../models/usuario.model'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
     RepositorioSemDadosExcecao,
-} from 'src/utils/exception'
+    ResultadoAssincrono,
+} from 'http-service-result'
+import { Usuario } from '../models/Usuario.model'
 
 export type UsuarioRepositoryExceptions =
     | RepositorioExcecao
@@ -24,6 +24,7 @@ export interface UsuarioRepository {
         nomeUsuario: string,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
     update(
+        id: number,
         usuario: Usuario,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, void>
 }

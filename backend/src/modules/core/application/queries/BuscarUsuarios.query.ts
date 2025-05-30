@@ -1,10 +1,10 @@
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
-import { UsuarioRepository } from '../../domain/repositories/usuario.repository'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
+import { UsuarioRepository } from '../../domain/repositories/Usuario.repository'
 import { UsuarioDto } from '../dtos/Usuario.dto'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 import { UsuarioMapperApplication } from '../mappers/Usuario.mapper'
 import { Inject } from '@nestjs/common'
 

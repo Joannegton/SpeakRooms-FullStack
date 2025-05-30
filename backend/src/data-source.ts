@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
     synchronize: true,
     logging: false,
     entities: ['dist/src/modules/**/infra/models/*.model{.ts,.js}'],
-    migrations: ['dist/src/shared/infra/migrations/**{.ts,.js}'],
+    migrations: ['dist/src/modules/shared/infra/migrations/**{.ts,.js}'],
     subscribers: [],
 })
 

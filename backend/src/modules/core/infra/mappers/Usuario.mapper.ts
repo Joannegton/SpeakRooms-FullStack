@@ -1,8 +1,11 @@
-import { Resultado, ResultadoUtil } from 'src/utils/result'
-import { Usuario } from '../../domain/models/usuario.model'
-import { UsuarioRepositoryExceptions } from '../../domain/repositories/usuario.repository'
+import {
+    Resultado,
+    ResultadoUtil,
+    PropriedadesInvalidasExcecao,
+} from 'http-service-result'
+import { Usuario } from '../../domain/models/Usuario.model'
+import { UsuarioRepositoryExceptions } from '../../domain/repositories/Usuario.repository'
 import { UsuarioModel } from '../models/Usuario.model'
-import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
 
 export class UsuarioMapper {
     public modelToDomain(
@@ -22,11 +25,11 @@ export class UsuarioMapper {
                 sobrenome: model.sobrenome,
                 urlAvatar: model.url_avatar,
                 nivelInglesId: model.nivel_ingles_id,
+                interessesId: model.interesses_id,
                 pontos: model.pontos,
                 created_at: model.created_at,
                 updated_at: model.updated_at,
                 ativo: model.ativo,
-                interessesId: model.interesses_id,
             },
             model.usuario_id,
         )
@@ -50,6 +53,7 @@ export class UsuarioMapper {
             sobrenome: domain.sobrenome,
             url_avatar: domain.urlAvatar,
             nivel_ingles_id: domain.nivelInglesId,
+            interesses_id: domain.interessesId,
             pontos: domain.pontos,
             created_at: domain.created_at,
             updated_at: domain.updated_at,

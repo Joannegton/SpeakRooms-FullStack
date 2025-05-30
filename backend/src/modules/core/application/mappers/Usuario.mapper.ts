@@ -1,10 +1,14 @@
-import { ResultadoUtil, Resultado } from 'src/utils/result'
-import { Usuario } from '../../domain/models/usuario.model'
-import { UsuarioDto } from '../dtos/Usuario.dto'
+import { ResultadoUtil, Resultado } from 'http-service-result'
+import { Usuario } from '../../domain/models/Usuario.model'
+import {
+    AtualizarUsuarioDto,
+    CriarUsuarioDto,
+    UsuarioDto,
+} from '../dtos/Usuario.dto'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 
 export type UsuarioMapperExceptions =
     | RepositorioExcecao
@@ -16,7 +20,6 @@ export class UsuarioMapperApplication {
             usuario_id: dominio.id,
             nomeUsuario: dominio.nomeUsuario,
             email: dominio.email,
-            senha: dominio.hashSenha,
             primeiroNome: dominio.primeiroNome,
             sobrenome: dominio.sobrenome,
             urlAvatar: dominio.urlAvatar,
@@ -29,11 +32,13 @@ export class UsuarioMapperApplication {
         }
     }
 
-    toDomain(dto: UsuarioDto): Resultado<UsuarioMapperExceptions, Usuario> {
+    toDomain(
+        dto: CriarUsuarioDto,
+    ): Resultado<UsuarioMapperExceptions, Usuario> {
         const domainResult = Usuario.criar({
             nomeUsuario: dto.nomeUsuario,
             email: dto.email,
-            hashSenha: dto.senha,
+            senha: dto.senha,
             primeiroNome: dto.primeiroNome,
             sobrenome: dto.sobrenome,
             nivelInglesId: dto.nivelInglesId,
@@ -44,6 +49,24 @@ export class UsuarioMapperApplication {
             return ResultadoUtil.falha(domainResult.erro)
         }
 
+        return ResultadoUtil.sucesso(domainResult.valor)
+    }
+
+    toDomainUpdate(
+        id: number,
+        dto: AtualizarUsuarioDto,
+    ): Resultado<UsuarioMapperExceptions, Usuario> {
+        const domainResult = Usuario.atualizar(id, {
+            primeiroNome: dto.primeiroNome,
+            sobrenome: dto.sobrenome,
+            nivelInglesId: dto.nivelInglesId,
+            interessesId: dto.interessesId,
+            urlAvatar: dto.urlAvatar,
+            ativo: dto.ativo,
+        })
+        if (domainResult.ehFalha()) {
+            return ResultadoUtil.falha(domainResult.erro)
+        }
         return ResultadoUtil.sucesso(domainResult.valor)
     }
 }

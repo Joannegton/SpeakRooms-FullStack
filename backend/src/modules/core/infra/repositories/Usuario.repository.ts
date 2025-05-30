@@ -1,14 +1,15 @@
-import { ResultadoUtil, ResultadoAssincrono } from 'src/utils/result'
-import { Usuario } from '../../domain/models/usuario.model'
+import {
+    ResultadoUtil,
+    ResultadoAssincrono,
+    RepositorioExcecao,
+    RepositorioSemDadosExcecao,
+} from 'http-service-result'
+import { Usuario } from '../../domain/models/Usuario.model'
 import {
     UsuarioRepository,
     UsuarioRepositoryExceptions,
-} from '../../domain/repositories/usuario.repository'
+} from '../../domain/repositories/Usuario.repository'
 import { UsuarioMapper } from '../mappers/Usuario.mapper'
-import {
-    RepositorioExcecao,
-    RepositorioSemDadosExcecao,
-} from 'src/utils/exception'
 import { Injectable } from '@nestjs/common'
 import { UsuarioModel } from '../models/Usuario.model'
 
@@ -26,7 +27,10 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
             await model.valor.save()
             return ResultadoUtil.sucesso()
         } catch (error) {
-            return ResultadoUtil.falha(new RepositorioExcecao(error))
+            console.error('Erro ao salvar usuário:', error)
+            return ResultadoUtil.falha(
+                new RepositorioExcecao('Erro ao salvar usuário'),
+            )
         }
     }
 
@@ -52,7 +56,10 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
 
             return ResultadoUtil.sucesso(usuario.valor)
         } catch (error) {
-            return ResultadoUtil.falha(new RepositorioExcecao(error))
+            console.error('Erro ao buscar usuário:', error)
+            return ResultadoUtil.falha(
+                new RepositorioExcecao('Erro ao buscar usuário'),
+            )
         }
     }
 
@@ -103,17 +110,34 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
     }
 
     async update(
+        id: number,
         usuario: Usuario,
     ): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
         try {
             const model = this.usuarioMapper.domainToModel(usuario)
-            if (model.ehFalha()) return ResultadoUtil.falha(model.erro)
+            if (model.ehFalha()) {
+                return ResultadoUtil.falha(model.erro)
+            }
 
-            await model.valor.save()
+            const result = await UsuarioModel.update(
+                { usuario_id: id },
+                model.valor,
+            )
+
+            if (result.affected === 0) {
+                return ResultadoUtil.falha(
+                    new RepositorioSemDadosExcecao(
+                        'Usuário não encontrado para atualização',
+                    ),
+                )
+            }
+
             return ResultadoUtil.sucesso()
         } catch (error) {
-            console.error('Erro ao atualizar usuario', error)
-            return ResultadoUtil.falha(new RepositorioExcecao(error))
+            console.error('Erro ao atualizar usuário:', error)
+            return ResultadoUtil.falha(
+                new RepositorioExcecao('Erro ao atualizar usuário.'),
+            )
         }
     }
 

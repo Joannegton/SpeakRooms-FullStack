@@ -1,14 +1,20 @@
-import { ResultadoUtil, Resultado } from 'src/utils/result'
-import { UsuarioRepositoryExceptions } from '../repositories/usuario.repository'
+import { UsuarioRepositoryExceptions } from '../repositories/Usuario.repository'
 import {
     PropriedadesInvalidasExcecao,
     UsuarioBloqueadoException,
-} from 'src/utils/exception'
+    //UsuarioBloqueadoException,
+} from 'http-service-result'
+import { HashService } from '../services/Hash.service'
+import {
+    Resultado,
+    ResultadoUtil,
+    ResultadoAssincrono,
+} from 'http-service-result'
 
 export interface CriarUsuarioProps {
     nomeUsuario: string
     email: string
-    hashSenha: string
+    senha?: string
     primeiroNome: string
     sobrenome: string
     nivelInglesId: number
@@ -28,6 +34,15 @@ export interface CarregarUsuarioProps {
     created_at: Date
     updated_at: Date
     ativo: boolean
+}
+
+export interface AtualizarUsuarioProps {
+    primeiroNome?: string
+    sobrenome?: string
+    urlAvatar?: string
+    nivelInglesId?: number
+    interessesId?: number[]
+    ativo?: boolean
 }
 
 export class Usuario {
@@ -58,7 +73,7 @@ export class Usuario {
         const usuario = new Usuario()
         const setNomeUsuario = usuario.setNomeUsuario(props.nomeUsuario)
         const setEmail = usuario.setEmail(props.email)
-        const setHashSenha = usuario.setHashSenha(props.hashSenha)
+        const setHashSenha = usuario.setSenha(props.senha)
         const setPrimeiroNome = usuario.setPrimeiroNome(props.primeiroNome)
         const setSobrenome = usuario.setSobrenome(props.sobrenome)
         const setNivelInglesId = usuario.setNivelInglesId(props.nivelInglesId)
@@ -85,7 +100,7 @@ export class Usuario {
         const usuario = new Usuario(id)
         const setNomeUsuario = usuario.setNomeUsuario(props.nomeUsuario)
         const setEmail = usuario.setEmail(props.email)
-        const setHashSenha = usuario.setHashSenha(props.hashSenha)
+        const setHashSenha = usuario.setSenha(props.hashSenha)
         const setPrimeiroNome = usuario.setPrimeiroNome(props.primeiroNome)
         const setSobrenome = usuario.setSobrenome(props.sobrenome)
         const setUrlAvatar = usuario.setUrlAvatar(props.urlAvatar)
@@ -115,12 +130,63 @@ export class Usuario {
         )
     }
 
-    private setHashSenha(
+    public static atualizar(
+        id: number,
+        props: AtualizarUsuarioProps,
+    ): Resultado<UsuarioRepositoryExceptions, Usuario> {
+        const usuario = new Usuario(id)
+        const setPrimeiroNome = usuario.setPrimeiroNome(props.primeiroNome)
+        const setSobrenome = usuario.setSobrenome(props.sobrenome)
+        const setNivelInglesId = usuario.setNivelInglesId(props.nivelInglesId)
+        const setInteressesId = usuario.setInteressesId(props.interessesId)
+        const setUrlAvatar = usuario.setUrlAvatar(props.urlAvatar)
+        const setAtivo = usuario.setAtivo(props.ativo)
+
+        return ResultadoUtil.obterResultado(
+            [
+                setPrimeiroNome,
+                setSobrenome,
+                setNivelInglesId,
+                setInteressesId,
+                setUrlAvatar,
+                setAtivo,
+            ],
+            usuario,
+        )
+    }
+
+    public validarSenha(
+        password: string,
+    ): Resultado<UsuarioRepositoryExceptions, void> {
+        // arrumar para usar ele ao inves do em utils
+        const minimoCaracteres = 8
+        const temMaiuscula = /[A-Z]/.test(password)
+        const temMinuscula = /[a-z]/.test(password)
+        const temNumero = /[0-9]/.test(password)
+        const temCaractereEspecial = /[!@#$%^&*(),.?":{}|<>]/.test(password)
+
+        if (
+            password.length >= minimoCaracteres &&
+            temMaiuscula &&
+            temMinuscula &&
+            temNumero &&
+            temCaractereEspecial
+        )
+            return ResultadoUtil.sucesso()
+
+        return ResultadoUtil.falha(
+            new PropriedadesInvalidasExcecao(
+                'A senha deve conter pelo menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
+            ),
+        )
+    }
+
+    private setSenha(
         hashSenha: string,
     ): Resultado<UsuarioRepositoryExceptions, void> {
-        if (!hashSenha || hashSenha.trim().length < 5) {
+        if (!hashSenha) {
             return ResultadoUtil.falha(
-                new PropriedadesInvalidasExcecao('Senha inválida.'),
+                new PropriedadesInvalidasExcecao('Hash da senha inválido.'),
             )
         }
 
@@ -230,7 +296,7 @@ export class Usuario {
         this._updated_at = updated_at
         return ResultadoUtil.sucesso()
     }
-    //talvez não funcione pois tem que adc um novo campo no banco
+    //talvez não funcione pois tem que adc um novo campo no banco arrumar
     incrementarTentativasLogin(
         bloqueado: boolean,
     ): Resultado<UsuarioBloqueadoException, void> {
@@ -246,11 +312,46 @@ export class Usuario {
         return ResultadoUtil.sucesso()
     }
 
-    // melhorar implementação
+    // melhorar implementação arrumar
     bloquearUsuario(): void {
         this._hashSenha = ''
         this._hashRecuperarSenha = 'MelhorarAqui'
         this._bloqueado = true
+    }
+
+    public async alterarSenha(
+        novaSenha: string,
+        hashService: HashService,
+    ): ResultadoAssincrono<UsuarioRepositoryExceptions, void> {
+        const validarSenha = this.validarSenha(novaSenha)
+        if (validarSenha.ehFalha()) {
+            return ResultadoUtil.falha(validarSenha.erro)
+        }
+
+        const hashedPassword = await hashService.hashPassword(novaSenha)
+        this._hashSenha = hashedPassword
+        return ResultadoUtil.sucesso()
+    }
+
+    public async ativarContaUsuario(): ResultadoAssincrono<
+        UsuarioRepositoryExceptions,
+        void
+    > {
+        this._ativo = true
+        return ResultadoUtil.sucesso()
+    }
+
+    public alterarSenhaComHash(
+        hashedSenha: string,
+    ): Resultado<UsuarioRepositoryExceptions, void> {
+        if (!hashedSenha) {
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Hash da senha inválido'),
+            )
+        }
+
+        this._hashSenha = hashedSenha
+        return ResultadoUtil.sucesso()
     }
 
     get id(): number {
