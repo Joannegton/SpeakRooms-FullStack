@@ -1,9 +1,9 @@
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import { FileRepository } from '../../dominio/repositories/File.repository'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 import { FileMapperApplication } from '../mappers/File.mapper'
 import { FileDto } from '../dtos/FIle.dto'
 import { Inject } from '@nestjs/common'

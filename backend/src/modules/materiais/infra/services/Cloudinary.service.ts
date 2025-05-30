@@ -5,8 +5,8 @@ import {
     UploadApiResponse,
 } from 'cloudinary'
 import * as dotenv from 'dotenv'
-import { ServicoExcecao } from 'src/utils/exception'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ServicoExcecao } from 'http-service-result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import { VirusTotalService } from './VirusTotal.service'
 
 dotenv.config()
@@ -42,9 +42,7 @@ export class CloudinaryService {
             const verificarVirus =
                 await this.virusTotalService.verificarVirus(file)
             if (verificarVirus.ehFalha()) {
-                return ResultadoUtil.falha(
-                    new ServicoExcecao(verificarVirus.erro),
-                )
+                return ResultadoUtil.falha(verificarVirus.erro)
             }
 
             if (!verificarVirus.valor.limpo) {

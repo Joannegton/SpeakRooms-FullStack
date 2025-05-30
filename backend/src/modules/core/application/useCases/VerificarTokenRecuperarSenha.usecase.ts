@@ -1,10 +1,10 @@
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import { RecuperarSenhaRepository } from '../../domain/repositories/RecuperarSenha.repository'
 import { Inject } from '@nestjs/common'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 import { VerificarTokenRecuperarSenhaDto } from '../dtos/VerificarTokenRecuperarSenha.dto'
 import { AuthService } from '../../domain/services/Auth.service'
 

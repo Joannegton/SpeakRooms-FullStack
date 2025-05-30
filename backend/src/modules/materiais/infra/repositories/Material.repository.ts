@@ -1,11 +1,11 @@
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import {
     MaterialRepository,
     MaterialRepositoryExceptions,
 } from '../../dominio/repositories/Material.repository'
 import { Material } from '../../dominio/models/Materiais.model'
 import { MaterialMapper } from '../mappers/Material.mapper'
-import { RepositorioSemDadosExcecao, ServicoExcecao } from 'src/utils/exception'
+import { RepositorioSemDadosExcecao, ServicoExcecao } from 'http-service-result'
 import { Injectable } from '@nestjs/common'
 import { MaterialModel } from '../models/Materiais.model'
 import { In } from 'typeorm'

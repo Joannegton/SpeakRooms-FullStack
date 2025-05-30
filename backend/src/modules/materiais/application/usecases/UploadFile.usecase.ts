@@ -2,11 +2,11 @@ import { Inject } from '@nestjs/common'
 import { FileRepository } from '../../dominio/repositories/File.repository'
 import { UploadFileDTO } from '../dtos/FIle.dto'
 import { FileMapperApplication } from '../mappers/File.mapper'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 
 type UploadUsecaseExceptions = PropriedadesInvalidasExcecao | RepositorioExcecao
 

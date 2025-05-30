@@ -3,10 +3,10 @@ import { UsuarioRepository } from '../../domain/repositories/Usuario.repository'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 import { UsuarioMapperApplication } from '../mappers/Usuario.mapper'
 import { CriarUsuarioDto } from '../dtos/Usuario.dto'
-import { ResultadoUtil, ResultadoAssincrono } from 'src/utils/result'
+import { ResultadoUtil, ResultadoAssincrono } from 'http-service-result'
 import { HashService } from '../../domain/services/Hash.service'
 import { validarSenha } from 'src/utils/ValidarSenha'
 import { EmailService } from 'src/modules/shared/services/EmailService'

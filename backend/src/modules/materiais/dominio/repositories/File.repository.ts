@@ -3,8 +3,8 @@ import {
     RepositorioExcecao,
     RepositorioSemDadosExcecao,
     ServicoExcecao,
-} from 'src/utils/exception'
-import { ResultadoAssincrono } from 'src/utils/result'
+} from 'http-service-result'
+import { ResultadoAssincrono } from 'http-service-result'
 import { File } from '../models/File.model'
 import { UploadApiResponse } from 'cloudinary'
 import { AxiosResponse } from 'axios'

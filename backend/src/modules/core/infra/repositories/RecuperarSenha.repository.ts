@@ -1,4 +1,4 @@
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import { RecuperarSenha } from '../../domain/models/RecuperarSenha.model'
 import {
     RecuperarSenhaRepository,
@@ -7,7 +7,7 @@ import {
 import {
     RepositorioExcecao,
     RepositorioSemDadosExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 import { RecuperarSenhaMapper } from '../mappers/RecuperarSenha.mapper'
 import { RecuperarSenhaModel } from '../models/RecuperarSenha.model'
 import { Injectable } from '@nestjs/common'

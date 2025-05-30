@@ -8,7 +8,7 @@ import { Reflector } from '@nestjs/core'
 import { JwtService } from '@nestjs/jwt'
 import { Request } from 'express'
 import { HashService } from 'src/modules/core/domain/services/Hash.service'
-import { NaoAutorizadoException } from 'src/utils/exception'
+import { NaoAutorizadoExcecao } from 'http-service-result'
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -35,7 +35,7 @@ export class JwtAuthGuard implements CanActivate {
         const request = context.switchToHttp().getRequest()
         const token = this.extractTokenFromCookie(request)
         if (!token && !isPublicAuth) {
-            throw new NaoAutorizadoException('Token não informado')
+            throw new NaoAutorizadoExcecao('Token não informado')
         }
         try {
             const jwtVerify = await this.jwtService.verifyAsync(token, {
@@ -56,7 +56,7 @@ export class JwtAuthGuard implements CanActivate {
         } catch (error) {
             if (isPublicAuth) return true
             console.error('Token inválido ou expirado', error)
-            throw new NaoAutorizadoException('Token expirado ou inválido')
+            throw new NaoAutorizadoExcecao('Token expirado ou inválido')
         }
     }
 

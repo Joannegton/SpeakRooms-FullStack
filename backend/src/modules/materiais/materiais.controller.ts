@@ -22,7 +22,7 @@ import {
     ApiBody,
 } from '@nestjs/swagger'
 
-import { ResultadoUtil } from 'src/utils/result'
+import { ResultadoUtil } from 'http-service-result'
 
 import {
     AbstractController,

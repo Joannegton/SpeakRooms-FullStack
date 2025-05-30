@@ -1,5 +1,5 @@
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
-import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
+import { PropriedadesInvalidasExcecao } from 'http-service-result'
 //import { EmailService } from '../../infra/services/EmailService'
 import { RecuperarSenhaRepository } from '../../domain/repositories/RecuperarSenha.repository'
 import { UsuarioRepository } from '../../domain/repositories/Usuario.repository'

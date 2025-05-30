@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import axios from 'axios'
 import * as FormData from 'form-data'
-import { ServicoExcecao } from 'src/utils/exception'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ServicoExcecao } from 'http-service-result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 
 type ArquivoVerificado = {
     limpo: boolean

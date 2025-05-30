@@ -1,8 +1,8 @@
-import { Resultado, ResultadoUtil } from 'src/utils/result'
+import { Resultado, ResultadoUtil } from 'http-service-result'
 import { File } from '../../dominio/models/File.model'
 import { FileRepositoryExceptions } from '../../dominio/repositories/File.repository'
 import { FileModel } from '../models/Files.model'
-import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
+import { PropriedadesInvalidasExcecao } from 'http-service-result'
 
 export class FileMapper {
     public modelToDomain(
