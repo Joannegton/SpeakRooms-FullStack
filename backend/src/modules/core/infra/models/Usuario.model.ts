@@ -19,10 +19,11 @@ import {
     IsUrl,
     Min,
 } from 'class-validator'
-import { NivelModel } from './Niveis.model'
+import { NivelModel } from '../../../shared/infra/models/Niveis.model'
 import { MaterialModel } from '../../../materiais/infra/models/Materiais.model'
 import { InteressesModel } from './Interesses.model'
 import { FileModel } from 'src/modules/materiais/infra/models/Files.model'
+import { SessaoAprendizagemModel } from 'src/modules/sessoesAprendizado/infra/models/SessaoAprendizagem.model'
 
 @Entity('usuarios')
 export class UsuarioModel extends BaseEntity {
@@ -97,4 +98,7 @@ export class UsuarioModel extends BaseEntity {
         },
     })
     interesses: InteressesModel[]
+
+    @ManyToMany(() => SessaoAprendizagemModel, (sessao) => sessao.participantes)
+    sessoesParticipadas: SessaoAprendizagemModel[]
 }
