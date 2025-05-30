@@ -5,8 +5,9 @@ import { UsuarioRepository } from 'src/modules/core/domain/repositories/Usuario.
 import {
     PropriedadesInvalidasExcecao,
     ServicoExcecao,
-} from 'src/utils/exception'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+    ResultadoAssincrono,
+    ResultadoUtil,
+} from 'http-service-result'
 import {
     AutenticacaoResult,
     AutenticarExcecoes,

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { File } from '../../dominio/models/File.model'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import { CloudinaryService } from '../services/Cloudinary.service'
 import {
     DownloadFileResult,
@@ -8,11 +8,10 @@ import {
     FileRepositoryExceptions,
 } from '../../dominio/repositories/File.repository'
 import {
-    PropriedadesInvalidasExcecao,
     RepositorioExcecao,
     RepositorioSemDadosExcecao,
     ServicoExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 import { FileMapper } from '../mappers/File.mapper'
 import { UploadApiResponse } from 'cloudinary'
 import { FileModel } from '../models/Files.model'
@@ -81,9 +80,7 @@ export class FileRepositoryImpl implements FileRepository {
 
             const file = this.fileMapper.modelToDomain(model)
             if (file.ehFalha()) {
-                return ResultadoUtil.falha(
-                    new PropriedadesInvalidasExcecao(file.erro),
-                )
+                return ResultadoUtil.falha(file.erro)
             }
 
             return ResultadoUtil.sucesso({

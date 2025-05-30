@@ -1,6 +1,6 @@
-import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
+import { PropriedadesInvalidasExcecao } from 'http-service-result'
 import { RecuperarSenha } from '../../domain/models/RecuperarSenha.model'
-import { Resultado, ResultadoUtil } from 'src/utils/result'
+import { Resultado, ResultadoUtil } from 'http-service-result'
 
 export class RecuperarSenhaMapperApplication {
     toDomain(

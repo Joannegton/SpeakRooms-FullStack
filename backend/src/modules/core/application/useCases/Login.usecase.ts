@@ -1,11 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { LoginParamsDto, LoginResultDto } from '../dtos/Login.dto'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
     ServicoExcecao,
-} from 'src/utils/exception'
+    ResultadoAssincrono,
+    ResultadoUtil,
+} from 'http-service-result'
 import { UsuarioRepository } from 'src/modules/core/domain/repositories/Usuario.repository'
 import { AuthService } from '../../domain/services/Auth.service'
 

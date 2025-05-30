@@ -1,6 +1,5 @@
-import { Resultado, ResultadoUtil } from 'src/utils/result'
-import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
-
+import { Resultado, ResultadoUtil } from 'http-service-result'
+import { PropriedadesInvalidasExcecao } from 'http-service-result'
 interface RecuperarSenhaCarregarProps {
     usuarioId: number
     token: string

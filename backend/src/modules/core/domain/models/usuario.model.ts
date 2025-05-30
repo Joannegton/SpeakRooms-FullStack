@@ -1,10 +1,15 @@
-import { ResultadoUtil, Resultado, ResultadoAssincrono } from 'src/utils/result'
 import { UsuarioRepositoryExceptions } from '../repositories/Usuario.repository'
 import {
     PropriedadesInvalidasExcecao,
     UsuarioBloqueadoException,
-} from 'src/utils/exception'
+    //UsuarioBloqueadoException,
+} from 'http-service-result'
 import { HashService } from '../services/Hash.service'
+import {
+    Resultado,
+    ResultadoUtil,
+    ResultadoAssincrono,
+} from 'http-service-result'
 
 export interface CriarUsuarioProps {
     nomeUsuario: string

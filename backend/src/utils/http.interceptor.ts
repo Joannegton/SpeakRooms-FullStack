@@ -6,7 +6,11 @@ import {
     NestInterceptor,
 } from '@nestjs/common'
 import { Observable, map } from 'rxjs'
-import { HttpResponse, HttpResponseError, HttpResponseOK } from './httpResponse'
+import {
+    HttpResponse,
+    HttpResponseError,
+    HttpResponseOK,
+} from 'http-service-result'
 
 @Injectable()
 export class HttpInterceptor implements NestInterceptor {

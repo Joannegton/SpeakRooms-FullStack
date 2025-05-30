@@ -1,8 +1,8 @@
 import { config } from 'dotenv'
 import { Injectable } from '@nestjs/common'
 import { MailerService } from '@nestjs-modules/mailer'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
-import { ServicoExcecao } from 'src/utils/exception'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
+import { ServicoExcecao } from 'http-service-result'
 
 config()
 

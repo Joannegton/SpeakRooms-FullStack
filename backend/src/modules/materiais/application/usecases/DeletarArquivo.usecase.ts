@@ -1,10 +1,10 @@
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import { FileRepository } from '../../dominio/repositories/File.repository'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
     RepositorioSemDadosExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 import { Inject } from '@nestjs/common'
 
 export type ArquivoUseCaseExceptions =

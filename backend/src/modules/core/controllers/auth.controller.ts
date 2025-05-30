@@ -15,7 +15,7 @@ import {
     ApiTags,
 } from '@nestjs/swagger'
 import { Response } from 'express'
-import { ResultadoUtil } from 'src/utils/result'
+import { ResultadoUtil } from 'http-service-result'
 import { RecuperarSenhaUseCase } from '../application/useCases/RecuperarSenha.usecase'
 import { VerificarTokenRecuperarSenhaUseCase } from '../application/useCases/VerificarTokenRecuperarSenha.usecase'
 import { VerificarTokenRecuperarSenhaDto } from '../application/dtos/VerificarTokenRecuperarSenha.dto'
@@ -56,7 +56,7 @@ export class AuthController extends AbstractController {
         type: LoginResultDto,
     })
     @ApiBody({ type: LoginParamsDto })
-    @Post('/login')
+    @Post()
     async login(
         @Body() params: LoginParamsDto,
         @Res({ passthrough: true }) response: Response,

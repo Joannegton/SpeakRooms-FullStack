@@ -1,8 +1,8 @@
-import { Resultado, ResultadoUtil } from 'src/utils/result'
+import { Resultado, ResultadoUtil } from 'http-service-result'
 import { Material } from '../../dominio/models/Materiais.model'
 import { MaterialRepositoryExceptions } from '../../dominio/repositories/Material.repository'
 import { MaterialModel } from '../models/Materiais.model'
-import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
+import { PropriedadesInvalidasExcecao } from 'http-service-result'
 import { Injectable } from '@nestjs/common'
 
 @Injectable()

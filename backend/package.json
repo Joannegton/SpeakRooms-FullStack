@@ -42,6 +42,7 @@
     "file-type": "^20.4.1",
     "googleapis": "^148.0.0",
     "helmet": "^8.1.0",
+    "http-service-result": "^1.0.2",
     "i": "^0.3.7",
     "nodemailer": "^6.10.1",
     "npm": "^10.9.2",

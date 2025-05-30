@@ -1,11 +1,11 @@
 import { Inject } from '@nestjs/common'
 import { UsuarioRepository } from '../../domain/repositories/Usuario.repository'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
     ServicoExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 import { EmailService } from 'src/modules/shared/services/EmailService'
 
 type AtivarContaUsuarioUseCaseExcecao =

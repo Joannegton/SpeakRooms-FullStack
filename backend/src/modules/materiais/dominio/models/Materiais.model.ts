@@ -1,5 +1,5 @@
-import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
-import { Resultado, ResultadoUtil } from 'src/utils/result'
+import { PropriedadesInvalidasExcecao } from 'http-service-result'
+import { Resultado, ResultadoUtil } from 'http-service-result'
 
 /**
  * Representa um material no domínio.

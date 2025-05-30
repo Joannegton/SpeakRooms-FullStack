@@ -1,12 +1,12 @@
 import { Inject } from '@nestjs/common'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import { CriarMaterialDTO, MaterialDto } from '../dtos/Material.dto'
 import { MaterialRepository } from '../../dominio/repositories/Material.repository'
 import { MaterialMapperApplication } from '../mappers/Material.mapper'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 
 type CriarMaterialUsecaseExceptions =
     | PropriedadesInvalidasExcecao

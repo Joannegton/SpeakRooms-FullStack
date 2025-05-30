@@ -1,11 +1,11 @@
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 import { UsuarioRepository } from '../../domain/repositories/Usuario.repository'
 import { Inject } from '@nestjs/common'
 import { UsuarioMapperApplication } from '../mappers/Usuario.mapper'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import { AtualizarUsuarioDto } from '../dtos/Usuario.dto'
 
 export type AtualizarUsuarioUseCaseExceptions =

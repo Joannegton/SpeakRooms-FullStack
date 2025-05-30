@@ -1,4 +1,4 @@
-import { ResultadoUtil, Resultado } from 'src/utils/result'
+import { ResultadoUtil, Resultado } from 'http-service-result'
 import { Usuario } from '../../domain/models/Usuario.model'
 import {
     AtualizarUsuarioDto,
@@ -8,7 +8,7 @@ import {
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 
 export type UsuarioMapperExceptions =
     | RepositorioExcecao

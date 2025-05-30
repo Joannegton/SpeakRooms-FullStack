@@ -1,9 +1,9 @@
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 
-import { Resultado, ResultadoUtil } from 'src/utils/result'
+import { Resultado, ResultadoUtil } from 'http-service-result'
 import { Material } from '../../dominio/models/Materiais.model'
 import { CriarMaterialDTO, MaterialDto } from '../dtos/Material.dto'
 

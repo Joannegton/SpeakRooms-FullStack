@@ -2,9 +2,9 @@ import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
     RepositorioSemDadosExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 import { RecuperarSenha } from '../models/RecuperarSenha.model'
-import { ResultadoAssincrono } from 'src/utils/result'
+import { ResultadoAssincrono } from 'http-service-result'
 
 export type RecuperarSenhaRepositoryExceptions =
     | RepositorioExcecao

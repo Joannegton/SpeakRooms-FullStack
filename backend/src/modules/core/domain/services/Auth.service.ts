@@ -2,8 +2,8 @@ import { Usuario } from 'src/modules/core/domain/models/Usuario.model'
 import {
     PropriedadesInvalidasExcecao,
     ServicoExcecao,
-} from 'src/utils/exception'
-import { ResultadoAssincrono } from 'src/utils/result'
+    ResultadoAssincrono,
+} from 'http-service-result'
 
 export interface AutenticarProps {
     usuario: Usuario

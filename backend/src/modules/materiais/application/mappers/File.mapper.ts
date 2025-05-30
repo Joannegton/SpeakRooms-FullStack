@@ -1,10 +1,10 @@
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 import { File } from '../../dominio/models/File.model'
 import { FileDto, UploadFileDTO } from '../dtos/FIle.dto'
-import { Resultado, ResultadoUtil } from 'src/utils/result'
+import { Resultado, ResultadoUtil } from 'http-service-result'
 
 export type FileMapperExceptions =
     | RepositorioExcecao
