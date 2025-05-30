@@ -59,7 +59,7 @@ export class SessaoAprendizagemRepositoryImpl
         SessaoAprendizagemRepositoryExceptions,
         SessaoAprendizagem[]
     > {
-        throw new Error('Method not implemented.')
+        throw new Error('Method not implemented.') 
     }
     update(
         idSessao: number,
