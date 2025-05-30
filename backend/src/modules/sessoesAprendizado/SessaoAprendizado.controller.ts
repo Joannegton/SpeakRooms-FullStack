@@ -21,9 +21,9 @@ import {
 } from 'src/utils/AbstractControler'
 import { AgendarSessaoDto } from './application/dtos/sessaoAprendizagem.dto'
 import { AgendarSessaoUseCase } from './application/usecases/AgendarSessao.usecase'
-import { Public } from 'src/decorators/public.decorator'
 import { BuscarSessaoAprendizagemIdQuery } from './application/queries/BuscarSessaoAprendizagemId.query'
 import { DeletarSessaoAprendizagemUseCase } from './application/usecases/DeletarSessaoAprendizagem.usecase'
+import { BuscarSessoesAprendizagemQuery } from './application/queries/BuscarSessoesAprendizagem.query'
 
 const httpCodeMap: HttpCodeMap = {
     PropriedadesInvalidasExcecao: 400,
@@ -36,11 +36,12 @@ const httpCodeMap: HttpCodeMap = {
 @ApiResponse({ status: 401, description: 'Não autorizado' })
 @ApiResponse({ status: 500, description: 'Erro interno no servidor.' })
 @ApiTags('Sessão de Aprendizado')
-@Controller('sessao')
+@Controller('sessao-aprendizado')
 export class SessaoAprendizadoController extends AbstractController {
     constructor(
         private readonly agendarSessaoUseCase: AgendarSessaoUseCase,
         private readonly buscarSessaoAprendizagemIdQuery: BuscarSessaoAprendizagemIdQuery,
+        private readonly buscarSessoesAprendizagemQuery: BuscarSessoesAprendizagemQuery,
         private readonly deletarSessaoAprendizagemUseCase: DeletarSessaoAprendizagemUseCase,
     ) {
         const httpResponseConfig: HttpResponseConfig = {
@@ -50,7 +51,6 @@ export class SessaoAprendizadoController extends AbstractController {
         super(httpResponseConfig)
     }
 
-    @Public()
     @ApiOperation({ summary: 'Agenda uma sessão de aprendizagem' })
     @ApiBody({ type: AgendarSessaoDto })
     @ApiResponse({
@@ -64,7 +64,19 @@ export class SessaoAprendizadoController extends AbstractController {
         return super.buildResponse({ result })
     }
 
-    @Public()
+    @ApiOperation({ summary: 'Busca todas as sessões de aprendizagem' })
+    @ApiResponse({
+        status: 200,
+        description: 'Lista de sessões de aprendizagem',
+        type: [AgendarSessaoDto],
+    })
+    @Get()
+    async buscarTodasSessoes() {
+        const result = await this.buscarSessoesAprendizagemQuery.execute()
+
+        return super.buildResponse({ result })
+    }
+
     @ApiOperation({ summary: 'Busca Sessao de aprendizagem por id' })
     @ApiResponse({
         status: 200,
@@ -78,7 +90,6 @@ export class SessaoAprendizadoController extends AbstractController {
         return super.buildResponse({ result })
     }
 
-    @Public()
     @ApiOperation({ summary: 'Deletar uma sessão de aprendizagem' })
     @ApiResponse({
         status: 200,

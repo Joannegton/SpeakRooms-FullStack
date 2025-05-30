@@ -31,7 +31,6 @@ import {
 } from 'src/utils/AbstractControler'
 import { UploadFileUsecase } from './application/usecases/UploadFile.usecase'
 import { UploadFileDTO } from './application/dtos/FIle.dto'
-import { Public } from 'src/decorators/public.decorator'
 import { CriarMaterialDTO } from './application/dtos/Material.dto'
 import { CriarMaterialUsecase } from './application/usecases/CriarMaterial.usecase'
 import { DownloadFileQuery } from './application/queries/downloadFile.query'
@@ -178,7 +177,6 @@ export class MaterialController extends AbstractController {
     })
     @ApiResponse({ status: 200, description: 'Material deletado com sucesso.' })
     @ApiResponse({ status: 404, description: 'Material não encontrado.' })
-    @Public()
     @Delete('delete/:material_id')
     async deleteMaterial(@Param('material_id') material_id: number) {
         const result = await this.deletarMaterialUseCase.execute(material_id)
@@ -193,7 +191,6 @@ export class MaterialController extends AbstractController {
     })
     @ApiResponse({ status: 200, description: 'Materiais encontrados.' })
     @ApiResponse({ status: 400, description: 'Erro de validação.' })
-    @Public()
     @Get('buscar/nivel/')
     async buscarMateriaisPorNivel(
         @Query('niveisId') niveisId: string | string[],
@@ -211,7 +208,6 @@ export class MaterialController extends AbstractController {
     })
     @ApiResponse({ status: 200, description: 'Materiais encontrados.' })
     @ApiResponse({ status: 400, description: 'Erro de validação.' })
-    @Public()
     @Get('buscar/categoria/')
     async buscarMateriaisPorCategoria(
         @Query('categorias_id') categorias_id: string | string[],
@@ -234,7 +230,6 @@ export class MaterialController extends AbstractController {
     })
     @ApiResponse({ status: 200, description: 'Materiais encontrados.' })
     @ApiResponse({ status: 404, description: 'Usuário não encontrado.' })
-    @Public()
     @Get('buscar/usuario/:usuario_id')
     async buscarMateriaisPorUsuario(@Param('usuario_id') usuario_id: number) {
         const result =
@@ -250,7 +245,6 @@ export class MaterialController extends AbstractController {
     })
     @ApiResponse({ status: 200, description: 'Material encontrado.' })
     @ApiResponse({ status: 404, description: 'Material não encontrado.' })
-    @Public()
     @Get('buscar/:material_id')
     async buscarMaterialPorId(@Param('material_id') material_id: number) {
         const result = await this.buscarMaterialPorIdQuery.execute(material_id)

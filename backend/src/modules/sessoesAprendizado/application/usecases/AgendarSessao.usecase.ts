@@ -12,7 +12,6 @@ export class AgendarSessaoUseCase {
     constructor(
         @Inject('SessaoAprendizagemRepository')
         private readonly sessaoRepository: SessaoAprendizagemRepository,
-        private readonly sessaoAprendizagemMapper: SessaoAprendizagemMapperApplication,
         private readonly OAuthService: OAuthService,
     ) {}
 
@@ -35,7 +34,7 @@ export class AgendarSessaoUseCase {
             return ResultadoUtil.falha(reuniao.erro)
         }
 
-        const sessaoDomain = this.sessaoAprendizagemMapper.toDomain({
+        const sessaoDomain = SessaoAprendizagemMapperApplication.toDomain({
             ...props,
             linkVideo: reuniao.valor.join_url,
         })

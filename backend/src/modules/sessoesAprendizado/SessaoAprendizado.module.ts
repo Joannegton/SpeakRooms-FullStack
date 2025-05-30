@@ -1,4 +1,3 @@
-import { SessaoAprendizagemMapperApplication } from './application/mappers/SessaoAprendizagem.mapper'
 import { AgendarSessaoUseCase } from './application/usecases/AgendarSessao.usecase'
 import { SessaoAprendizagemMapper } from './infra/mappers/SessaoAprendizagem.mapper'
 import { SessaoAprendizagemRepositoryImpl } from './infra/repositories/SessaoAprendizagem.repository'
@@ -8,6 +7,7 @@ import { Module } from '@nestjs/common'
 import { OAuthController } from './infra/controllers/OAuth.controller'
 import { BuscarSessaoAprendizagemIdQuery } from './application/queries/BuscarSessaoAprendizagemId.query'
 import { DeletarSessaoAprendizagemUseCase } from './application/usecases/DeletarSessaoAprendizagem.usecase'
+import { BuscarSessoesAprendizagemQuery } from './application/queries/BuscarSessoesAprendizagem.query'
 
 @Module({
     imports: [],
@@ -16,8 +16,8 @@ import { DeletarSessaoAprendizagemUseCase } from './application/usecases/Deletar
         AgendarSessaoUseCase,
         DeletarSessaoAprendizagemUseCase,
         BuscarSessaoAprendizagemIdQuery,
+        BuscarSessoesAprendizagemQuery,
         SessaoAprendizagemMapper,
-        SessaoAprendizagemMapperApplication,
         {
             provide: 'SessaoAprendizagemRepository',
             useClass: SessaoAprendizagemRepositoryImpl,

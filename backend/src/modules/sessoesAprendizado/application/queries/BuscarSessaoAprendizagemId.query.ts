@@ -33,7 +33,7 @@ export class BuscarSessaoAprendizagemIdQuery {
             await this.sessaoAprendizagemRepository.findById(idSessao)
         if (result.ehFalha()) return ResultadoUtil.falha(result.erro)
 
-        const sessaoDto = new SessaoAprendizagemMapperApplication().toDto(
+        const sessaoDto = SessaoAprendizagemMapperApplication.toDto(
             result.valor,
         )
 

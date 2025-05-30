@@ -55,20 +55,27 @@ export class SessaoAprendizagemRepositoryImpl
         return ResultadoUtil.sucesso(domain.valor)
     }
 
-    findAll(): ResultadoAssincrono<
+    async findAll(): ResultadoAssincrono<
         SessaoAprendizagemRepositoryExceptions,
         SessaoAprendizagem[]
     > {
-        throw new Error('Method not implemented.') 
-    }
-    update(
-        idSessao: number,
-        sessao: SessaoAprendizagem,
-    ): ResultadoAssincrono<
-        SessaoAprendizagemRepositoryExceptions,
-        SessaoAprendizagem
-    > {
-        throw new Error('Method not implemented.')
+        const sessoes = await SessaoAprendizagemModel.find({
+            relations: ['participantes', 'criador'],
+        })
+
+        if (!sessoes) {
+            return ResultadoUtil.falha(
+                new RepositorioSemDadosExcecao('Nenhuma sessão encontrada'),
+            )
+        }
+
+        const sessoesDomain =
+            this.sessaoAprendizagemMapper.modelToDomainList(sessoes)
+        if (sessoesDomain.ehFalha()) {
+            return ResultadoUtil.falha(sessoesDomain.erro)
+        }
+
+        return ResultadoUtil.sucesso(sessoesDomain.valor)
     }
 
     async delete(
@@ -86,5 +93,15 @@ export class SessaoAprendizagemRepositoryImpl
             )
 
         ResultadoUtil.sucesso()
+    }
+
+    update(
+        idSessao: number,
+        sessao: SessaoAprendizagem,
+    ): ResultadoAssincrono<
+        SessaoAprendizagemRepositoryExceptions,
+        SessaoAprendizagem
+    > {
+        throw new Error('Method not implemented.')
     }
 }

@@ -50,4 +50,24 @@ export class SessaoAprendizagemMapper {
 
         return ResultadoUtil.sucesso(domain.valor)
     }
+
+    public modelToDomainList(
+        modelList: SessaoAprendizagemModel[],
+    ): Resultado<PropriedadesInvalidasExcecao, SessaoAprendizagem[]> {
+        if (!modelList || modelList.length === 0)
+            return ResultadoUtil.falha(
+                new PropriedadesInvalidasExcecao('Lista de modelos vazia.'),
+            )
+
+        const domainList: SessaoAprendizagem[] = []
+        for (const model of modelList) {
+            const resultado = this.modelToDomain(model)
+            if (resultado.ehFalha()) {
+                return ResultadoUtil.falha(resultado.erro)
+            }
+            domainList.push(resultado.valor)
+        }
+
+        return ResultadoUtil.sucesso(domainList)
+    }
 }

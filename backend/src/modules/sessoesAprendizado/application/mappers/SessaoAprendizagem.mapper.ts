@@ -7,7 +7,7 @@ import { Resultado } from 'http-service-result'
 import { PropriedadesInvalidasExcecao } from 'http-service-result'
 
 export class SessaoAprendizagemMapperApplication {
-    toDto(domain: SessaoAprendizagem): SessaoAprendizagemDto {
+    static toDto(domain: SessaoAprendizagem): SessaoAprendizagemDto {
         return {
             id: domain.id,
             criadorId: domain.criadorId,
@@ -23,7 +23,7 @@ export class SessaoAprendizagemMapperApplication {
         }
     }
 
-    toDomain(
+    static toDomain(
         dto: AgendarSessaoDto,
     ): Resultado<PropriedadesInvalidasExcecao, SessaoAprendizagem> {
         return SessaoAprendizagem.criar({
@@ -36,5 +36,11 @@ export class SessaoAprendizagemMapperApplication {
             linkVideo: dto.linkVideo,
             status: dto.status,
         })
+    }
+
+    static toDtoList(
+        domainList: SessaoAprendizagem[],
+    ): SessaoAprendizagemDto[] {
+        return domainList.map((domain) => this.toDto(domain))
     }
 }
