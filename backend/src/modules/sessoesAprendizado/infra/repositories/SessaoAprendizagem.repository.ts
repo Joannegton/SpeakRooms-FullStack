@@ -1,4 +1,4 @@
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import { SessaoAprendizagem } from '../../domain/models/SessaoAprendizagem.model'
 import {
     SessaoAprendizagemRepository,
@@ -6,7 +6,7 @@ import {
 } from '../../domain/repositories/SessaoAprendizagem.repository'
 import { SessaoAprendizagemMapper } from '../mappers/SessaoAprendizagem.mapper'
 import { SessaoAprendizagemModel } from '../models/SessaoAprendizagem.model'
-import { RepositorioSemDadosExcecao } from 'src/utils/exception'
+import { RepositorioSemDadosExcecao } from 'http-service-result'
 import { Injectable } from '@nestjs/common'
 
 @Injectable()

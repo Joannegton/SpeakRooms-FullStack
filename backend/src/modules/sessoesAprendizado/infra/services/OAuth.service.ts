@@ -1,8 +1,8 @@
 import { google } from 'googleapis'
 import * as dotenv from 'dotenv'
 import axios from 'axios'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
-import { ServicoExcecao } from 'src/utils/exception'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
+import { ServicoExcecao } from 'http-service-result'
 
 dotenv.config()
 

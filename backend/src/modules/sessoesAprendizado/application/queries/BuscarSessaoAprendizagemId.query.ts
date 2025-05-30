@@ -1,10 +1,10 @@
 import { Inject } from '@nestjs/common'
 import { SessaoAprendizagemRepository } from '../../domain/repositories/SessaoAprendizagem.repository'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import {
     PropriedadesInvalidasExcecao,
     RepositorioSemDadosExcecao,
-} from 'src/utils/exception'
+} from 'http-service-result'
 import { SessaoAprendizagemMapperApplication } from '../mappers/SessaoAprendizagem.mapper'
 import { SessaoAprendizagemDto } from '../dtos/sessaoAprendizagem.dto'
 

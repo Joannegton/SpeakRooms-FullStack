@@ -1,8 +1,8 @@
 import { Inject } from '@nestjs/common'
-import { ResultadoAssincrono, ResultadoUtil } from 'src/utils/result'
+import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import { AgendarSessaoDto } from '../dtos/sessaoAprendizagem.dto'
 import { SessaoAprendizagemMapperApplication } from '../mappers/SessaoAprendizagem.mapper'
-import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
+import { PropriedadesInvalidasExcecao } from 'http-service-result'
 import { SessaoAprendizagemRepository } from '../../domain/repositories/SessaoAprendizagem.repository'
 import { OAuthService } from '../../infra/services/OAuth.service'
 

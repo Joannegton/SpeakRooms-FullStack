@@ -3,8 +3,8 @@ import {
     SessaoAprendizagemDto,
 } from '../dtos/sessaoAprendizagem.dto'
 import { SessaoAprendizagem } from '../../domain/models/SessaoAprendizagem.model'
-import { Resultado } from 'src/utils/result'
-import { PropriedadesInvalidasExcecao } from 'src/utils/exception'
+import { Resultado } from 'http-service-result'
+import { PropriedadesInvalidasExcecao } from 'http-service-result'
 
 export class SessaoAprendizagemMapperApplication {
     toDto(domain: SessaoAprendizagem): SessaoAprendizagemDto {

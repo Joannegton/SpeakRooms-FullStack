@@ -1,8 +1,8 @@
 import {
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
-} from 'src/utils/exception'
-import { ResultadoAssincrono } from 'src/utils/result'
+} from 'http-service-result'
+import { ResultadoAssincrono } from 'http-service-result'
 import { SessaoAprendizagem } from '../models/SessaoAprendizagem.model'
 
 export type SessaoAprendizagemRepositoryExceptions =
