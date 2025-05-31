@@ -18,10 +18,13 @@
         "@mui/material": "^7.0.1",
         "@tailwindcss/vite": "^4.1.2",
         "@tanstack/react-query": "^5.79.0",
+        "dayjs": "^1.11.13",
         "http-service-result": "^1.0.4",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-hook-form": "^7.55.0",
+        "simplebar": "^6.3.0",
+        "simplebar-react": "^3.3.0",
         "tailwindcss": "^4.1.2",
         "zustand": "^5.0.3"
     },

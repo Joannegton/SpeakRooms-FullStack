@@ -1,8 +1,8 @@
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
-import { Input } from '../atomo/input'
-import { Botao } from '../atomo/Botao'
+import { Input } from '../../atomo/input'
+import { Botao } from '../../atomo/Botao'
 import { useState } from 'react'
-import { useLogin } from '../../hooks/Login.hook'
+import { useLogin } from '../../../hooks/Login.hook'
 
 interface LoginFormFields {
     userName: string

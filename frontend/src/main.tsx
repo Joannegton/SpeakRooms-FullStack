@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { App } from './pages/App'
 import './index.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import 'simplebar-react/dist/simplebar.min.css'
 
 const queryClient = new QueryClient()
 

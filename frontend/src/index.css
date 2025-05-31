@@ -18,3 +18,39 @@
 
 }
 
+.custom-scrollbar .simplebar-scrollbar::before {
+  background: rgba(100, 100, 100, 0.5);
+  border-radius: 10px;
+  transition: opacity 0.6s ease-in-out, background 0.3s ease-in-out;
+  opacity: 0;
+}
+
+.custom-scrollbar .simplebar-scrollbar.simplebar-visible::before {
+  opacity: 1;
+}
+
+.custom-scrollbar .simplebar-track.simplebar-vertical {
+  width: 8px;
+  right: 2px;
+}
+
+.custom-scrollbar .simplebar-track.simplebar-horizontal {
+  height: 8px;
+  bottom: 2px;
+}
+
+.custom-scrollbar .simplebar-track {
+  background: transparent;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #fff inset !important;
+  box-shadow: 0 0 0 1000px #fff inset !important;
+  -webkit-text-fill-color: #222 !important;
+  caret-color: #222 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+

@@ -39,7 +39,7 @@ export function Botao({
             `}
         >
             {icone && iconePosicao === 'esquerda' && <span>{icone}</span>}
-            {texto && <span className='text-text-white font-semibold'>{texto}</span>}
+            {texto && <span className='text-white font-semibold'>{texto}</span>}
             {icone && iconePosicao === 'direita' && <span>{icone}</span>}
         </button>
     )
