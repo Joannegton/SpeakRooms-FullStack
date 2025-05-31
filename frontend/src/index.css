@@ -4,12 +4,14 @@
     --color-primary: #3B82F6; 
     --color-primary-hover: #2563EB; 
     --color-secondary: #8B5CF6; 
-    --color-success: #10B981; 
-    --color-error: #F87171; 
+    --color-secondary-hover: #7C3AED;
+    --color-success: #10ca4e; 
+    --color-error: #f82828; 
     --color-background: #F9FAFB; 
     --color-surface: #F3F4F6; 
-    --color-text-black: #111827; 
-    --color-text-white: #ffffff; 
+    --color-black: #050202; 
+    --color-gray-primary: #1C222E; 
+    --color-gray-secondary: #4D5A62; 
     --color-border-color: #D1D5DB; 
 
     --font-poppins: Poppins, sans-serif;

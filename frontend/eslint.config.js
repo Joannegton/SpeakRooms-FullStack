@@ -31,7 +31,7 @@ export default tseslint.config(
             'no-console': 'warn',
             'no-undef': 'error',
             'no-debugger': 'error',
-            'curly': ['error', 'all'],
+            'curly': ['error', 'multi-line'],
             'consistent-return': 'error',
             'prefer-const': 'error',
             'no-multiple-empty-lines': ['error', { max: 1 }],
