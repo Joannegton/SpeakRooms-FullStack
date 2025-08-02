@@ -13,21 +13,23 @@ export interface AutenticarProps {
 
 export interface AutenticacaoResult {
     access_token: string
-    usuario_id: number
-    email: string
+    refresh_token: string
     nome_usuario: string
 }
 
 export type AutenticarExcecoes = PropriedadesInvalidasExcecao | ServicoExcecao
 
-export interface AuthService {
+export interface AuthRepository {
     autenticar(
         credenciais: AutenticarProps,
-    ): ResultadoAssincrono<AutenticarExcecoes, AutenticacaoResult>
-    gerarToken(
-        usuario: Usuario,
     ): ResultadoAssincrono<AutenticarExcecoes, AutenticacaoResult>
     gerarJwtMomentaneo(
         usuarioId: number,
     ): ResultadoAssincrono<ServicoExcecao, string>
+    renovarToken(
+        refreshToken: string,
+    ): ResultadoAssincrono<AutenticarExcecoes, AutenticacaoResult>
+    revogarRefreshToken(
+        refreshToken: string,
+    ): ResultadoAssincrono<ServicoExcecao, void>
 }

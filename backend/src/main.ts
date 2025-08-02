@@ -31,7 +31,7 @@ async function bootstrap() {
         .addCookieAuth('accessToken')
         .build()
     const document = SwaggerModule.createDocument(app, config)
-    SwaggerModule.setup('api', app, document)
+    SwaggerModule.setup('doc', app, document)
 
     app.useGlobalPipes(
         new ValidationPipe({
@@ -39,6 +39,7 @@ async function bootstrap() {
             forbidNonWhitelisted: true,
         }),
     )
+    app.setGlobalPrefix('api')
 
     await app.listen(process.env.PORT ?? 3000)
 }

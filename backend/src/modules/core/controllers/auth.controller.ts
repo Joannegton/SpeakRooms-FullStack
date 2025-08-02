@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Res } from '@nestjs/common'
+import { Body, Controller, Param, Post, Res, Req } from '@nestjs/common'
 import {
     AbstractController,
     HttpCodeMap,
@@ -14,13 +14,19 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger'
-import { Response } from 'express'
+import { Response, Request } from 'express'
 import { ResultadoUtil } from 'http-service-result'
 import { RecuperarSenhaUseCase } from '../application/useCases/RecuperarSenha.usecase'
 import { VerificarTokenRecuperarSenhaUseCase } from '../application/useCases/VerificarTokenRecuperarSenha.usecase'
 import { VerificarTokenRecuperarSenhaDto } from '../application/dtos/VerificarTokenRecuperarSenha.dto'
 import { AlterarSenhaDto } from '../application/dtos/AlterarSenha.dto'
 import { AlterarSenhaUseCase } from '../application/useCases/ALterarSenha.usecase'
+import {
+    RefreshTokenDto,
+    RefreshTokenProps,
+} from '../application/dtos/RefreshToken.dto'
+import { RenovarTokenUseCase } from '../application/useCases/RenovarToken.usecase'
+import { LogoutUseCase } from '../application/useCases/Logout.usecase'
 
 const httpCodeMap: HttpCodeMap = {
     PropriedadesInvalidasExcecao: 400,
@@ -40,6 +46,8 @@ export class AuthController extends AbstractController {
         private readonly recuperarSenhaUseCase: RecuperarSenhaUseCase,
         private readonly verificarTokenRecuperarSenhaUseCase: VerificarTokenRecuperarSenhaUseCase,
         private readonly alterarSenhaUseCase: AlterarSenhaUseCase,
+        private readonly renovarTokenUseCase: RenovarTokenUseCase,
+        private readonly logoutUseCase: LogoutUseCase,
     ) {
         const httpResponseConfig: HttpResponseConfig = {
             httpCodeMap,
@@ -60,10 +68,19 @@ export class AuthController extends AbstractController {
     async login(
         @Body() params: LoginParamsDto,
         @Res({ passthrough: true }) response: Response,
+        @Req() request: Request,
     ) {
-        const result = await this.loginUseCase.execute(params)
+        const ipAddress =
+            request.ip || request.socket.remoteAddress || 'unknown'
+        const userAgent = request.get('User-Agent') || 'unknown'
+
+        const result = await this.loginUseCase.execute({
+            ...params,
+            ipAddress,
+            userAgent,
+        })
         if (result.ehFalha()) {
-            return ResultadoUtil.falha(result.erro)
+            return super.buildResponse({ result })
         }
 
         response.cookie('acessToken', result.valor.accessToken, {
@@ -73,9 +90,14 @@ export class AuthController extends AbstractController {
             maxAge: 3600000, // 1 hora
         })
 
-        return super.buildResponse({
-            result: ResultadoUtil.sucesso(result.valor.usuario),
-        }) // arrumar o retorno
+        response.cookie('refreshToken', result.valor.refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
+        })
+
+        return super.buildResponse({ result }) // TODO arrumar o retorno para não devolver os tokens
     }
 
     @ApiOperation({ summary: 'Recupera a senha do usuário' })
@@ -143,6 +165,61 @@ export class AuthController extends AbstractController {
     @Post('/alterarSenha')
     async alterarSenha(@Body() alterarSenhaDto: AlterarSenhaDto) {
         const result = await this.alterarSenhaUseCase.execute(alterarSenhaDto)
+        return super.buildResponse({ result })
+    }
+
+    @Public()
+    @ApiOperation({ summary: 'Renova o access token usando o refresh token' })
+    @ApiResponse({
+        status: 200,
+        description: 'Token renovado com sucesso',
+        type: RefreshTokenDto,
+    })
+    @ApiBody({ type: RefreshTokenProps })
+    @Post('/refresh')
+    async refreshToken(
+        @Body() refreshTokenDto: RefreshTokenProps,
+        @Res({ passthrough: true }) response: Response,
+    ) {
+        const result = await this.renovarTokenUseCase.execute(refreshTokenDto)
+        if (result.ehFalha()) {
+            return super.buildResponse({ result })
+        }
+
+        response.cookie('acessToken', result.valor.accessToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: 3600000, // 1 hora
+        })
+
+        response.cookie('refreshToken', result.valor.refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
+        })
+
+        return super.buildResponse({ result })
+    }
+
+    @Public()
+    @ApiOperation({ summary: 'Realiza logout revogando o refresh token' })
+    @ApiResponse({
+        status: 200,
+        description: 'Logout realizado com sucesso',
+    })
+    @ApiBody({ type: RefreshTokenProps })
+    @Post('/logout')
+    async logout(
+        @Body() refreshTokenDto: RefreshTokenProps,
+        @Res({ passthrough: true }) response: Response,
+    ) {
+        const result = await this.logoutUseCase.execute(refreshTokenDto)
+
+        response.clearCookie('acessToken')
+        response.clearCookie('refreshToken')
+
         return super.buildResponse({ result })
     }
 }

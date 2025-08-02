@@ -1,23 +1,24 @@
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { UsuarioController } from './controllers/usuario.controller'
 import { Module } from '@nestjs/common'
-import { OrmConfig } from 'ormConfig'
 import { UsuarioRepositoryImpl } from './infra/repositories/Usuario.repository'
-import { UsuarioMapper } from './infra/mappers/Usuario.mapper'
 import { UsuarioMapperApplication } from './application/mappers/Usuario.mapper'
 import { JwtModule, JwtService } from '@nestjs/jwt'
 import { AuthController } from './controllers/auth.controller'
 import { UseCases } from './application/useCases'
 import { Queries } from './application/queries'
 import { HashServiceImpl } from './infra/services/Hash.service'
-import { AuthServiceImpl } from './infra/services/Auth.service'
+import { AuthRepositoryImpl } from './infra/repositories/Auth.repository'
 import { APP_GUARD, APP_INTERCEPTOR, Reflector } from '@nestjs/core'
 import { JwtAuthGuard } from 'src/middlewares/jwt-auth.guard'
 import { HttpInterceptor } from 'src/utils/http.interceptor'
-import { RecuperarSenhaMapper } from './infra/mappers/RecuperarSenha.mapper'
 import { RecuperarSenhaRepositoryImpl } from './infra/repositories/RecuperarSenha.repository'
 import { RecuperarSenhaMapperApplication } from './application/mappers/RecuperarSenha.mapper'
 import { EmailService } from '../shared/services/EmailService'
+import { RefreshTokenRepositoryImpl } from './infra/repositories/RefreshToken.repository.impl'
+import { mappers } from './infra/mappers'
+import { TentativaLoginRepositoryImpl } from './infra/repositories/TentativaLogin.repository.impl'
+import { OrmConfig } from 'ormConfig'
 
 @Module({
     imports: [
@@ -31,9 +32,8 @@ import { EmailService } from '../shared/services/EmailService'
     providers: [
         ...UseCases,
         ...Queries,
-        UsuarioMapper,
+        ...mappers,
         UsuarioMapperApplication,
-        RecuperarSenhaMapper,
         RecuperarSenhaMapperApplication,
         JwtService,
         EmailService,
@@ -46,12 +46,20 @@ import { EmailService } from '../shared/services/EmailService'
             useClass: RecuperarSenhaRepositoryImpl,
         },
         {
-            provide: 'AuthService',
-            useClass: AuthServiceImpl,
+            provide: 'RefreshTokenRepository',
+            useClass: RefreshTokenRepositoryImpl,
+        },
+        {
+            provide: 'AuthRepository',
+            useClass: AuthRepositoryImpl,
         },
         {
             provide: 'HashService',
             useClass: HashServiceImpl,
+        },
+        {
+            provide: 'TentativaLoginRepository',
+            useClass: TentativaLoginRepositoryImpl,
         },
         {
             provide: APP_GUARD,

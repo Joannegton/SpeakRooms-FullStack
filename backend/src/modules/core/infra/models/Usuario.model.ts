@@ -24,7 +24,10 @@ import { MaterialModel } from '../../../materiais/infra/models/Materiais.model'
 import { InteressesModel } from './Interesses.model'
 import { FileModel } from 'src/modules/materiais/infra/models/Files.model'
 import { SessaoAprendizagemModel } from 'src/modules/sessoesAprendizado/infra/models/SessaoAprendizagem.model'
+import { TentativaLoginModel } from './TentativaLogin.model'
 
+//TODO uuid e adicionar index() para melhorar performance
+//TODO adicionar unique para email e nome_usuario
 @Entity('usuarios')
 export class UsuarioModel extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -101,4 +104,7 @@ export class UsuarioModel extends BaseEntity {
 
     @ManyToMany(() => SessaoAprendizagemModel, (sessao) => sessao.participantes)
     sessoesParticipadas: SessaoAprendizagemModel[]
+
+    @OneToMany(() => TentativaLoginModel, (tentativa) => tentativa.usuario)
+    tentativasLogin: TentativaLoginModel[]
 }
