@@ -13,10 +13,10 @@ import { NaoAutorizadoExcecao } from 'http-service-result'
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
     constructor(
-        private jwtService: JwtService,
-        private reflector: Reflector,
+        private readonly jwtService: JwtService,
+        private readonly reflector: Reflector,
         @Inject('HashService')
-        private hashService: HashService,
+        private readonly hashService: HashService,
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -42,14 +42,13 @@ export class JwtAuthGuard implements CanActivate {
                 secret: process.env.JWT_SECRET,
             })
 
-            // Verificar se o token é de acesso ou de reset de senha
             if (request.cookies['acessToken']) {
                 const payload = JSON.parse(
                     this.hashService.decryptString(jwtVerify.encrypt),
                 )
                 request.user = payload
             } else if (request.cookies['resetSenhaToken']) {
-                request.user = { usuarioId: jwtVerify.usuarioId } // Payload simples do resetSenhaToken
+                request.user = { usuarioId: jwtVerify.usuarioId }
             }
 
             return true
@@ -63,11 +62,16 @@ export class JwtAuthGuard implements CanActivate {
     private extractTokenFromCookie(request: Request): string | null {
         const acessToken = request.cookies['acessToken']
         const resetSenhaToken = request.cookies['resetSenhaToken']
+        const refreshToken = request.cookies['refreshToken']
+
         if (acessToken) {
             return acessToken
         }
         if (resetSenhaToken) {
             return resetSenhaToken
+        }
+        if (refreshToken) {
+            return refreshToken
         }
         return null
     }

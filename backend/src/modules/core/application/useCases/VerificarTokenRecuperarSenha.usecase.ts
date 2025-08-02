@@ -1,12 +1,13 @@
-import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
-import { RecuperarSenhaRepository } from '../../domain/repositories/RecuperarSenha.repository'
-import { Inject } from '@nestjs/common'
 import {
+    ResultadoAssincrono,
+    ResultadoUtil,
     PropriedadesInvalidasExcecao,
     RepositorioExcecao,
 } from 'http-service-result'
+import { RecuperarSenhaRepository } from '../../domain/repositories/RecuperarSenha.repository'
+import { Inject } from '@nestjs/common'
 import { VerificarTokenRecuperarSenhaDto } from '../dtos/VerificarTokenRecuperarSenha.dto'
-import { AuthService } from '../../domain/services/Auth.service'
+import { AuthRepository } from '../../domain/repositories/Auth.repository'
 
 type RecuperarSenhaRepositoryExceptions =
     | RepositorioExcecao
@@ -16,8 +17,8 @@ export class VerificarTokenRecuperarSenhaUseCase {
     constructor(
         @Inject('RecuperarSenhaRepository')
         private readonly recuperarSenhaRepository: RecuperarSenhaRepository,
-        @Inject('AuthService')
-        private readonly authService: AuthService,
+        @Inject('AuthRepository')
+        private readonly authRepository: AuthRepository,
     ) {}
 
     async execute(
@@ -39,7 +40,7 @@ export class VerificarTokenRecuperarSenhaUseCase {
             return ResultadoUtil.falha(verificarToken.erro)
         }
 
-        const tokenJwt = await this.authService.gerarJwtMomentaneo(
+        const tokenJwt = await this.authRepository.gerarJwtMomentaneo(
             props.usuarioId,
         )
         if (tokenJwt.ehFalha()) {

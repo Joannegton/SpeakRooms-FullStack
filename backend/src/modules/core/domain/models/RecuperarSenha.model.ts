@@ -9,7 +9,7 @@ interface RecuperarSenhaCarregarProps {
 }
 
 export class RecuperarSenha {
-    private _id: number
+    private readonly _id: number
     private _usuarioId: number
     private _token: string
     private _expiracao: Date

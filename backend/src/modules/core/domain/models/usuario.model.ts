@@ -1,14 +1,10 @@
 import { UsuarioRepositoryExceptions } from '../repositories/Usuario.repository'
-import {
-    PropriedadesInvalidasExcecao,
-    UsuarioBloqueadoException,
-    //UsuarioBloqueadoException,
-} from 'http-service-result'
 import { HashService } from '../services/Hash.service'
 import {
     Resultado,
     ResultadoUtil,
     ResultadoAssincrono,
+    PropriedadesInvalidasExcecao,
 } from 'http-service-result'
 
 export interface CriarUsuarioProps {
@@ -59,9 +55,6 @@ export class Usuario {
     private _created_at: Date
     private _updated_at: Date
     private _ativo: boolean
-    private _quantidadeTentativasLogin: number = 0
-    private _hashRecuperarSenha: string
-    private _bloqueado: boolean = false
 
     private constructor(id?: number) {
         this._id = id
@@ -162,7 +155,7 @@ export class Usuario {
         const minimoCaracteres = 8
         const temMaiuscula = /[A-Z]/.test(password)
         const temMinuscula = /[a-z]/.test(password)
-        const temNumero = /[0-9]/.test(password)
+        const temNumero = /\d/.test(password)
         const temCaractereEspecial = /[!@#$%^&*(),.?":{}|<>]/.test(password)
 
         if (
@@ -296,28 +289,6 @@ export class Usuario {
         this._updated_at = updated_at
         return ResultadoUtil.sucesso()
     }
-    //talvez não funcione pois tem que adc um novo campo no banco arrumar
-    incrementarTentativasLogin(
-        bloqueado: boolean,
-    ): Resultado<UsuarioBloqueadoException, void> {
-        this._quantidadeTentativasLogin++
-        if (this._quantidadeTentativasLogin === 3 && !bloqueado) {
-            return ResultadoUtil.falha(
-                new UsuarioBloqueadoException(
-                    'Usuário bloqueado. Favor entre em /esqueci-senha para desbloquear.',
-                ),
-            )
-        }
-
-        return ResultadoUtil.sucesso()
-    }
-
-    // melhorar implementação arrumar
-    bloquearUsuario(): void {
-        this._hashSenha = ''
-        this._hashRecuperarSenha = 'MelhorarAqui'
-        this._bloqueado = true
-    }
 
     public async alterarSenha(
         novaSenha: string,
@@ -406,19 +377,7 @@ export class Usuario {
         return this._updated_at
     }
 
-    get hashRecuperarSenha(): string {
-        return this._hashRecuperarSenha
-    }
-
-    get bloqueado(): boolean {
-        return this._bloqueado
-    }
-
     get interessesId(): number[] {
         return this._interessesId
-    }
-
-    get quantidadeTentativasLogin(): number {
-        return this._quantidadeTentativasLogin
     }
 }

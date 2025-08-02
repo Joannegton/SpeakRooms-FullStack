@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common'
 import {
     Resultado,
     ResultadoUtil,
@@ -7,6 +8,7 @@ import { Usuario } from '../../domain/models/Usuario.model'
 import { UsuarioRepositoryExceptions } from '../../domain/repositories/Usuario.repository'
 import { UsuarioModel } from '../models/Usuario.model'
 
+@Injectable()
 export class UsuarioMapper {
     public modelToDomain(
         model: UsuarioModel,

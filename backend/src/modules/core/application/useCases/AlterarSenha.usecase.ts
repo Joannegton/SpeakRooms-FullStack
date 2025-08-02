@@ -3,24 +3,19 @@ import {
     RecuperarSenhaRepository,
     RecuperarSenhaRepositoryExceptions,
 } from '../../domain/repositories/RecuperarSenha.repository'
-import { AuthService } from '../../domain/services/Auth.service'
 import { AlterarSenhaDto } from '../dtos/AlterarSenha.dto'
 import { ResultadoAssincrono, ResultadoUtil } from 'http-service-result'
 import { UsuarioRepository } from '../../domain/repositories/Usuario.repository'
 import { HashService } from '../../domain/services/Hash.service'
-import { UsuarioMapperApplication } from '../mappers/Usuario.mapper'
 
 export class AlterarSenhaUseCase {
     constructor(
         @Inject('RecuperarSenhaRepository')
         private readonly recuperarSenhaRepository: RecuperarSenhaRepository,
-        @Inject('AuthService')
-        private readonly authService: AuthService,
         @Inject('UsuarioRepository')
         private readonly usuarioRepository: UsuarioRepository,
         @Inject('HashService')
         private readonly hashService: HashService,
-        private readonly usuarioMapper: UsuarioMapperApplication,
     ) {}
 
     async execute(

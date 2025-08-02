@@ -1,8 +1,10 @@
+import { Injectable } from '@nestjs/common'
 import { Resultado, ResultadoUtil } from 'http-service-result'
 import { PropriedadesInvalidasExcecao } from 'http-service-result'
 import { RecuperarSenha } from '../../domain/models/RecuperarSenha.model'
 import { RecuperarSenhaModel } from '../models/RecuperarSenha.model'
 
+@Injectable()
 export class RecuperarSenhaMapper {
     public modelToDomain(
         model: RecuperarSenhaModel,

@@ -6,6 +6,8 @@ import { LoginUseCase } from './Login.usecase'
 import { RecuperarSenhaUseCase } from './RecuperarSenha.usecase'
 import { SalvarUsuarioUseCase } from './SalvarUsuario.usecase'
 import { VerificarTokenRecuperarSenhaUseCase } from './VerificarTokenRecuperarSenha.usecase'
+import { RenovarTokenUseCase } from './RenovarToken.usecase'
+import { LogoutUseCase } from './Logout.usecase'
 
 export const UseCases = [
     SalvarUsuarioUseCase,
@@ -16,4 +18,6 @@ export const UseCases = [
     VerificarTokenRecuperarSenhaUseCase,
     AlterarSenhaUseCase,
     AtivarContaUsuarioUseCase,
+    RenovarTokenUseCase,
+    LogoutUseCase,
 ]

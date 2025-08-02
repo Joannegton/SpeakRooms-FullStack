@@ -21,10 +21,16 @@ export class LoginParamsDto {
 
 export class LoginResultDto {
     @ApiProperty({
-        description: 'ID do usuário',
-        example: 1,
+        description: 'Token de acesso',
+        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
     })
-    usuario_id: number
+    accessToken: string
+
+    @ApiProperty({
+        description: 'Token de atualização',
+        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+    })
+    refreshToken: string
 
     @ApiProperty({
         description: 'Nome do usuário',
